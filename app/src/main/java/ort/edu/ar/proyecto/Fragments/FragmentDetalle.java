@@ -106,7 +106,7 @@ public class FragmentDetalle extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        String url = "http://proyectofinal2016.hol.es/bd/detalletour.php?id=";
+        String url = "http://viajarort.azurewebsites.net/detalletour.php?id=";
         url += tour.getId();
         new DetalleTask().execute(url);  // Llamo a clase async con url
         Log.d("HOLA", "llamando url:" + url);
