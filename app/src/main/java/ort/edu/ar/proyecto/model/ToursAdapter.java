@@ -20,6 +20,7 @@ public class ToursAdapter  extends BaseAdapter {
 
     ArrayList<Tour> tours;
     Context context;
+    String stringgustos;
 
     public ToursAdapter(Context context, ArrayList<Tour> tours) {
         this.context = context;
@@ -57,6 +58,7 @@ public class ToursAdapter  extends BaseAdapter {
         TextView LikesTV = (TextView)view.findViewById(R.id.cantlikes);
         TextView NombreuTV= (TextView)view.findViewById(R.id.NombreUsuario);
         ImageView fotoUsuarioTV = (ImageView) view.findViewById(R.id.FotoUsuario);
+        TextView GustosTour= (TextView) view.findViewById(R.id.GustosTour);
 
         Tour t = tours.get(position);
         Usuario usu= t.getUsuario();
@@ -65,7 +67,17 @@ public class ToursAdapter  extends BaseAdapter {
         ubicacionTV.setText(t.getUbicacion());
         LikesTV.setText(t.getLikes());
 
+
+
+        stringgustos="";
+        for (Gusto g : t.getGustos()){
+            stringgustos += g.getNombre() + ", ";
+        }
+        stringgustos=stringgustos.substring(0,stringgustos.length()-2);
+        GustosTour.setText(stringgustos);
+
         NombreuTV.setText(usu.getNombre());
+
         Picasso
                 .with(context)
                 .load(usu.getFoto())
@@ -75,7 +87,7 @@ public class ToursAdapter  extends BaseAdapter {
         Picasso
                 .with(context)
                 .load(t.getFoto())
-                .resize(700,250)
+                //.resize(700,250)
                 .into(fotoTV);
         //Picasso.with(context).load(t.getFoto()).into(fotoTV);
         return view;

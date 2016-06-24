@@ -7,8 +7,8 @@ import java.io.Serializable;
  */
 public class Punto implements Serializable {
     int Id;
-    int Longitud;
-    int Latitud;
+    double Longitud;
+    double Latitud;
     String Foto;
     String Direccion;
     String Nombre;
@@ -18,7 +18,7 @@ public class Punto implements Serializable {
     String Descripcion;
     int Dia;
 
-    public Punto(int id, int longitud, int latitud, String direccion, String foto, String nombre, int idTour, String fotoGoogle, String idGoogle, String descripcion, int dia) {
+    public Punto(int id, double longitud, double latitud, String direccion, String foto, String nombre, int idTour, String fotoGoogle, String idGoogle, String descripcion, int dia) {
         Id = id;
         Longitud = longitud;
         Latitud = latitud;
@@ -40,19 +40,19 @@ public class Punto implements Serializable {
         Id = id;
     }
 
-    public int getLongitud() {
+    public double getLongitud() {
         return Longitud;
     }
 
-    public void setLongitud(int longitud) {
+    public void setLongitud(double longitud) {
         Longitud = longitud;
     }
 
-    public int getLatitud() {
+    public double getLatitud() {
         return Latitud;
     }
 
-    public void setLatitud(int latitud) {
+    public void setLatitud(double latitud) {
         Latitud = latitud;
     }
 

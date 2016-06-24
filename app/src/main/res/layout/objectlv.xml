@@ -8,10 +8,10 @@
     android:paddingTop="@dimen/activity_vertical_margin">
 
     <FrameLayout
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content">
         <ImageView
-            android:layout_width="fill_parent"
+            android:layout_width="350dp"
             android:layout_height="150dp"
             android:id="@+id/FotoTour"
             android:scaleType="centerCrop"/>
@@ -33,7 +33,7 @@
             android:text="Ubicacion Tour"
             android:layout_marginTop="185dp"
             android:id="@+id/UbicacionTour"
-            android:textColor="#5DDAED"/>
+            android:textColor="@android:color/holo_blue_light"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -44,10 +44,21 @@
             android:scaleType="centerCrop"
             android:textColor="@android:color/black"/>
 
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gustos Tour"
+            android:layout_marginTop="250dp"
+            android:id="@+id/GustosTour"
+            android:textStyle="italic"
+            android:textColor="@android:color/black"/>
+
+
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginTop="270dp"
+            android:layout_marginTop="280dp"
             android:scaleType="centerCrop"
             android:id="@+id/FotoUsuario" />
 
@@ -55,7 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nombre Usuario"
-            android:layout_marginTop="280dp"
+            android:layout_marginTop="290dp"
             android:layout_marginLeft="50dp"
             android:id="@+id/NombreUsuario"
             android:textColor="@android:color/black"/>

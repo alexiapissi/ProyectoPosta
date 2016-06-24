@@ -1,12 +1,11 @@
 package ort.edu.ar.proyecto;
 
+import ort.edu.ar.proyecto.model.Gusto;
 import ort.edu.ar.proyecto.model.Tour;
 import ort.edu.ar.proyecto.model.ToursAdapter;
 import ort.edu.ar.proyecto.model.Usuario;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,24 +15,17 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Array;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 
 
 public class Busqueda extends AppCompatActivity {
@@ -50,6 +42,7 @@ public class Busqueda extends AppCompatActivity {
 
     ToursAdapter toursAdapter;
     ArrayList<Tour> tours;
+    ArrayList<Gusto> gustos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +79,7 @@ public class Busqueda extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        String url = "http://10.152.2.37/Proyecto-Backend/tours.php";
+        String url = "http://proyectofinal2016.hol.es/bd/tours.php";
         new ToursTask().execute(url);  // Llamo a clase async con url
     }
 
@@ -138,7 +131,18 @@ public class Busqueda extends AppCompatActivity {
                 String fotoUsuario = jsonResultadoUsuario.getString("FotoURL");
 
                 Usuario usu = new Usuario(nomUsuario, fotoUsuario, idUsuario);
-                Tour t = new Tour(jsonNombre, jsonDescripcion, jsonFoto, jsonUbicacion, jsonId, jsonLikes, usu);
+
+                gustos=new ArrayList<>();
+                JSONArray jsongustos = jsonResultado.getJSONArray("Gusto");
+                for (int j = 0; j < jsongustos.length(); j++) {
+                    JSONObject jsonresultadoGustos = jsongustos.getJSONObject(j);
+                    int jsonIdGusto = jsonresultadoGustos.getInt("Id");
+                    String jsonnombregustos = jsonresultadoGustos.getString("Nombre");
+                    Gusto gus= new Gusto(jsonIdGusto,jsonnombregustos);
+                    gustos.add(gus);
+                }
+
+                Tour t = new Tour(jsonNombre, jsonDescripcion, jsonFoto, jsonUbicacion, jsonId, jsonLikes, usu, null, gustos);
                 tours.add(t);
             }
             return tours;

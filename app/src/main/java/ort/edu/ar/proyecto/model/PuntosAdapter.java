@@ -1,6 +1,7 @@
 package ort.edu.ar.proyecto.model;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +51,7 @@ public class PuntosAdapter extends BaseAdapter {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.objectpunto, viewGroup, false);
         }
+        Log.d("HOLA","llega a adapter");
 
         TextView nombre = (TextView)view.findViewById(R.id.nomPunto);
         TextView direccion = (TextView)view.findViewById(R.id.direccionPunto);
@@ -57,8 +59,18 @@ public class PuntosAdapter extends BaseAdapter {
         TextView descripcion = (TextView)view.findViewById(R.id.descripcionPunto);
         ImageView foto = (ImageView) view.findViewById(R.id.fotoPunto);
 
-        //nombre.setText();
+        Punto p = puntos.get(position);
+        nombre.setText(p.getNombre());
+        direccion.setText(p.getDireccion());
+        dia.setText("Día "+p.getDia());
+        descripcion.setText(p.getDescripcion());
+        Picasso
+                .with(context)
+                .load(p.getFoto())
+                //.resize(180,130)
+                .into(foto);
 
+        Log.d("HOLA", "cargo tour");
         return view;
     }
 
