@@ -18,6 +18,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.lang.reflect.Array;
@@ -35,6 +36,7 @@ public class FragmentMapa extends Fragment implements OnMapReadyCallback {
 
     GoogleMap map;
     ArrayList<Punto> listapuntos;
+    public LatLngBounds AUSTRALIA;
 
     public FragmentMapa() {
     }
@@ -87,15 +89,21 @@ public class FragmentMapa extends Fragment implements OnMapReadyCallback {
                                 .position(new LatLng(lat, lng))
                                 .title(p.getNombre())
                                 .icon(BitmapDescriptorFactory.defaultMarker(new Random().nextInt(360))));
+
                         CameraUpdate center =
                                 CameraUpdateFactory.newLatLng(new LatLng(lat, lng));
-                        CameraUpdate zoom = CameraUpdateFactory.zoomTo(1);
+                       // CameraUpdate zoom = CameraUpdateFactory.zoomTo(5);
                         map.moveCamera(center);
-                        map.animateCamera(zoom);
+                        //map.animateCamera(zoom);
 
                     }
 
                 }
+                  /*AUSTRALIA = new LatLngBounds(
+                         new LatLng(listapuntos.get(0).getLatitud(), listapuntos.get(0).getLongitud()), new LatLng(listapuntos.get(1).getLatitud(), listapuntos.get(1).getLongitud()));
+
+                map.moveCamera(CameraUpdateFactory.newLatLngBounds(AUSTRALIA, 0));
+            //map.moveCamera(CameraUpdateFactory.newLatLngZoom(AUSTRALIA.getCenter(), 10));*/
         }
     }
 
