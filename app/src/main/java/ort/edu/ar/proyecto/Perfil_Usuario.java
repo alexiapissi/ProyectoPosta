@@ -41,6 +41,7 @@ public class Perfil_Usuario extends AppCompatActivity {
     Usuario usu;
     ArrayList<Tour> toursUsuarioAL;
     ArrayList<Tour> toursRecibidos;
+    String resid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +63,6 @@ public class Perfil_Usuario extends AppCompatActivity {
         usu = usuario;
 
         nombreUsuario.setText(usu.getNombre());
-        residenciaUsuario.setText(usu.getResidencia());
         Picasso
                 .with(getApplicationContext())
                 .load(usu.getFoto())
@@ -105,6 +105,9 @@ public class Perfil_Usuario extends AppCompatActivity {
             super.onPostExecute(resultado);
             toursUsuarioAL.clear();
             toursUsuarioAL.addAll(resultado.getToursCreados());
+            resid = "";
+            resid = resultado.getResidencia();
+            residenciaUsuario.setText(resid);
             adapter.notifyDataSetChanged();
         }
 
