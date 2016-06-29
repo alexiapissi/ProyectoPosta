@@ -11,8 +11,8 @@
     android:orientation="vertical">
 
     <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:id="@+id/fotoUsu"
         android:scaleType="centerCrop"
         android:layout_gravity="center" />
@@ -30,7 +30,6 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Lugar Residencia"
         android:id="@+id/residenciaUsu"
         android:gravity="center"
         android:textStyle="italic"/>
@@ -42,7 +41,7 @@
         android:layout_marginTop="15dp"/>
 
     <ListView
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/listToursUsu"></ListView>
 
