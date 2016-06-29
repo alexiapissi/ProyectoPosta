@@ -1,5 +1,6 @@
 package ort.edu.ar.proyecto.Fragments;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,6 +26,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import ort.edu.ar.proyecto.Detalle_Tour;
+import ort.edu.ar.proyecto.Perfil_Usuario;
 import ort.edu.ar.proyecto.R;
 import ort.edu.ar.proyecto.model.CircleTransform;
 import ort.edu.ar.proyecto.model.Punto;
@@ -37,7 +40,7 @@ public class FragmentDetalle extends Fragment {
 
 
     ImageView fototour;
-    ImageView fotoUsuario;
+    ImageButton fotoUsuario;
     TextView nombre;
     //TextView descripcion;
     TextView ubicacion;
@@ -56,16 +59,17 @@ public class FragmentDetalle extends Fragment {
     }
 
     @Override
-    public void onCreate (Bundle savedInstantState) {
+    public void onCreate(Bundle savedInstantState) {
         super.onCreate(savedInstantState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle saveInstantState){
+                             Bundle saveInstantState) {
         View view = inflater.inflate(R.layout.fragment_detalle, container, false);
         fototour = (ImageView) view.findViewById(R.id.Fototourd);
-        fotoUsuario = (ImageView) view.findViewById(R.id.FotoUsuariod);
+        fotoUsuario = (ImageButton) view.findViewById(R.id.FotoUsuariod);
+        addListenerOnButton();
         nombre = (TextView) view.findViewById(R.id.NombreTourd);
         //descripcion = (TextView) findViewById(R.id.DescripcionTourd);
         ubicacion = (TextView) view.findViewById(R.id.UbicacionTourd);
@@ -77,11 +81,8 @@ public class FragmentDetalle extends Fragment {
         puntos = new ArrayList<>();
         puntosAdapter = new PuntosAdapter(getActivity().getApplicationContext(), puntos);
         listPuntosVW.setAdapter(puntosAdapter);
-        dt = (Detalle_Tour)getActivity();
-        tours = dt.getTours();
-        pos=dt.getPos();
-        tour = tours.get(pos);
-
+        dt = (Detalle_Tour) getActivity();
+        tour = dt.getTour();
 
         nombre.setText(tour.getNombre());
         Picasso
@@ -106,7 +107,7 @@ public class FragmentDetalle extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        String url = "http://proyectofinal2016.hol.es/bd/detalletour.php?id=";
+        String url = "http://viajarort.azurewebsites.net/detalletour.php?id=";
         url += tour.getId();
         new DetalleTask().execute(url);  // Llamo a clase async con url
         Log.d("HOLA", "llamando url:" + url);
@@ -145,7 +146,7 @@ public class FragmentDetalle extends Fragment {
 
         // Convierte un JSON
         ArrayList<Punto> parsearResultado(String JSONstr) throws JSONException {
-            ArrayList<Punto> puntosLocal= new ArrayList<>();
+            ArrayList<Punto> puntosLocal = new ArrayList<>();
             JSONObject detalle = new JSONObject(JSONstr);
             JSONArray jsonPuntos = detalle.getJSONArray("Puntos");
             for (int i = 0; i < jsonPuntos.length(); i++) {
@@ -170,6 +171,23 @@ public class FragmentDetalle extends Fragment {
 
     }
 
+
+    public void addListenerOnButton() {
+        fotoUsuario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+             //dt.setUsuario(tour.getUsuario());
+                dt.setUsuario(tour.getUsuario());
+                dt.mandarUsuario();
+            }
+        });
+
+    }
+
+    public void clickNombreUsuario (View view){
+        dt.setUsuario(tour.getUsuario());
+        dt.mandarUsuario();
+    }
 
 }
 

@@ -19,6 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Detalle_Tour"></activity>
+        <activity android:name=".Perfil_Usuario"></activity>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBUerbb5Jr5JoRsDcrp_OPh6tp9mLrbkU0"/>

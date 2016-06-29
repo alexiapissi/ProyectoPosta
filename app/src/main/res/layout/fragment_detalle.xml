@@ -55,13 +55,15 @@
             android:textColor="@android:color/black"
             android:textSize="15dp"/>
 
-        <ImageView
+        <ImageButton
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginTop="220dp"
             android:layout_marginLeft="240dp"
+            android:id="@+id/FotoUsuariod"
             android:scaleType="centerCrop"
-            android:id="@+id/FotoUsuariod" />
+            android:background="@drawable/selectable_button_bg"
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -71,6 +73,8 @@
             android:layout_marginLeft="285dp"
             android:id="@+id/NombreUsuariod"
             android:textColor="@android:color/black"
+            android:clickable="true"
+            android:onClick="clickNombreUsuario"
             android:textSize="12dp"/>
 
         <ImageView

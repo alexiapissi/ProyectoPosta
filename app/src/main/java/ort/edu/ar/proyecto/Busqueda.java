@@ -79,7 +79,7 @@ public class Busqueda extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        String url = "http://proyectofinal2016.hol.es/bd/tours.php";
+        String url = "http://viajarort.azurewebsites.net/tours.php";
         new ToursTask().execute(url);  // Llamo a clase async con url
     }
 
@@ -130,7 +130,7 @@ public class Busqueda extends AppCompatActivity {
                 String nomUsuario = jsonResultadoUsuario.getString("Nombre");
                 String fotoUsuario = jsonResultadoUsuario.getString("FotoURL");
 
-                Usuario usu = new Usuario(nomUsuario, fotoUsuario, idUsuario);
+                Usuario usu = new Usuario(nomUsuario, fotoUsuario, idUsuario, "", null);
 
                 gustos=new ArrayList<>();
                 JSONArray jsongustos = jsonResultado.getJSONArray("Gusto");
