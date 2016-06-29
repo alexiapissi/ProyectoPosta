@@ -1,8 +1,10 @@
 package ort.edu.ar.proyecto;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 import java.util.ArrayList;
 
@@ -10,6 +12,7 @@ import ort.edu.ar.proyecto.Fragments.FragmentDetalle;
 import ort.edu.ar.proyecto.Fragments.FragmentMapa;
 import ort.edu.ar.proyecto.model.Punto;
 import ort.edu.ar.proyecto.model.Tour;
+import ort.edu.ar.proyecto.model.Usuario;
 
 public class Detalle_Tour extends AppCompatActivity {
 
@@ -17,6 +20,8 @@ public class Detalle_Tour extends AppCompatActivity {
     ArrayList<Tour> tours;
     int posicion;
     ArrayList<Punto> puntos;
+    Tour tour;
+    Usuario usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,12 +30,22 @@ public class Detalle_Tour extends AppCompatActivity {
 
         inicializarTabs();
 
+
         Bundle extras = getIntent().getExtras();
-        if (extras == null) {
-            return ;
-        }
-        tours = (ArrayList<Tour>) extras.getSerializable("listatours");
-         posicion = extras.getInt("pos");
+        if (extras != null) {
+            tours = (ArrayList<Tour>) extras.getSerializable("listatours");
+            if (extras.containsKey("pos")){
+                posicion = extras.getInt("pos");
+                tour = tours.get(posicion);
+            } else {
+                int id = extras.getInt("idTour");
+                for (Tour t : tours){
+                    if (t.getId() == id){
+                        tour = t;
+                    }
+                }
+            }
+        } else { return; }
 
     }
 
@@ -44,6 +59,13 @@ public class Detalle_Tour extends AppCompatActivity {
         tabHost.addTab(
                 tabHost.newTabSpec("tab2").setIndicator("Mapa", null),
                 FragmentMapa.class, null);
+    }
+
+    public void mandarUsuario(){
+        Intent intent = new Intent(getApplicationContext(), Perfil_Usuario.class);
+        intent.putExtra("usuario", this.getUsuario());
+        intent.putExtra("listatours", tours);
+        startActivity(intent);
     }
 
     public ArrayList<Tour> getTours(){
@@ -60,5 +82,17 @@ public class Detalle_Tour extends AppCompatActivity {
         puntos=(tours.get(posicion)).getPuntos();
         return puntos;
     }
+
+    public Tour getTour(){ return tour; }
+
+    public void setTour(Tour t){
+        tour = t;
+    }
+
+    public void setUsuario(Usuario usu){
+        usuario = usu;
+    }
+
+    public Usuario getUsuario(){ return usuario; }
 
 }

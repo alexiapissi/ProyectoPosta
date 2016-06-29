@@ -130,7 +130,7 @@ public class Busqueda extends AppCompatActivity {
                 String nomUsuario = jsonResultadoUsuario.getString("Nombre");
                 String fotoUsuario = jsonResultadoUsuario.getString("FotoURL");
 
-                Usuario usu = new Usuario(nomUsuario, fotoUsuario, idUsuario);
+                Usuario usu = new Usuario(nomUsuario, fotoUsuario, idUsuario, "", null);
 
                 gustos=new ArrayList<>();
                 JSONArray jsongustos = jsonResultado.getJSONArray("Gusto");
