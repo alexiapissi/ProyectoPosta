@@ -37,6 +37,7 @@ import ort.edu.ar.proyecto.model.Punto;
  */
 public class FragmentMapa extends Fragment implements OnMapReadyCallback {
 
+    View mapview;
     GoogleMap map;
     ArrayList<Punto> listapuntos;
     FragmentManager fm;
@@ -53,14 +54,15 @@ public class FragmentMapa extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle saveInstantState) {
-        View view = inflater.inflate(R.layout.fragment_mapa, container, false);
-
+        //View view = inflater.inflate(R.layout.fragment_mapa, container, false);
+        if(mapview==null)
+             mapview = inflater.inflate(R.layout.fragment_mapa, container, false);
 
         Detalle_Tour dt = (Detalle_Tour) getActivity();
         listapuntos = new ArrayList<Punto>();
         listapuntos = dt.getPuntos();
 
-        return view;
+        return mapview;
     }
 
     @Override
@@ -76,7 +78,6 @@ public class FragmentMapa extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap map) {
         fm = getFragmentManager();
         if (listapuntos == null) {
-            //fm.popBackStack();
             Toast toast = Toast.makeText(getActivity(),"Espere a que se muestren los puntos", Toast.LENGTH_LONG);
             toast.show();
             fm.popBackStack();
