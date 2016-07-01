@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+        android:id="@+id/nav_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Viaj.ar"
+        android:textColor="@android:color/black"
+        android:textStyle="bold" />
+    <group android:checkableBehavior="single"><item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_house_black_24dp"
+            android:title="Home"/>
+        </group>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_user"
+            android:icon="@drawable/ic_person_black_24dp"
+            android:title="Perfil" />
+    </group>
+
+    <item android:title="Login">
+        <menu>
+
+        </menu>
+    </item>
+</menu>

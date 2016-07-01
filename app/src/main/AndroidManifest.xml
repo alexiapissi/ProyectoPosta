@@ -8,7 +8,7 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/avion"
-        android:label="@string/app_name"
+        android:label="Viaj.ar"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Busqueda">
@@ -22,7 +22,8 @@
         <activity android:name=".Perfil_Usuario"></activity>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBUerbb5Jr5JoRsDcrp_OPh6tp9mLrbkU0"/>
+            android:value="AIzaSyBUerbb5Jr5JoRsDcrp_OPh6tp9mLrbkU0"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
