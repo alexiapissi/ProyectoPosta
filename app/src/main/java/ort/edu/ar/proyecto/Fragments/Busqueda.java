@@ -1,5 +1,7 @@
-package ort.edu.ar.proyecto;
+package ort.edu.ar.proyecto.Fragments;
 
+import ort.edu.ar.proyecto.Detalle_Tour;
+import ort.edu.ar.proyecto.R;
 import ort.edu.ar.proyecto.model.Gusto;
 import ort.edu.ar.proyecto.model.Tour;
 import ort.edu.ar.proyecto.model.ToursAdapter;
@@ -9,7 +11,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;

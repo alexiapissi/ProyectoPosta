@@ -5,10 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="5dp"
-    android:paddingLeft="2dp"
-    android:paddingRight="2dp"
     android:paddingBottom="5dp"
-    tools:context="ort.edu.ar.proyecto.Busqueda">
+    tools:context=".Fragments.Busqueda">
 
         <ListView
             android:id="@+id/listv"

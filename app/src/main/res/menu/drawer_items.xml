@@ -19,9 +19,5 @@
             android:title="Perfil" />
     </group>
 
-    <item android:title="Login">
-        <menu>
 
-        </menu>
-    </item>
 </menu>
