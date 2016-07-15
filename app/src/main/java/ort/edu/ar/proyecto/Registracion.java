@@ -8,6 +8,7 @@ import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -21,34 +22,45 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import ort.edu.ar.proyecto.model.Usuario;
 
 public class Registracion extends AppCompatActivity {
 
-    ImageButton fotoUsuario;
+    //ImageButton fotoUsuario;
     EditText nomUsuario, mailUsuario, residenciaUsuario, contraUsuario, repContraUsuario;
-    TextView uriTV;
+    //TextView uriTV;
     static public int REQUEST_IMAGE_GET = 1;
+    String contraseña;
+    String nombre;
+    String repContraseña;
+    String foto;
+    String mail;
+    String residencia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registracion);
 
-        fotoUsuario = (ImageButton) findViewById(R.id.fotoUsuario);
+        //fotoUsuario = (ImageButton) findViewById(R.id.fotoUsuario);
         nomUsuario = (EditText) findViewById(R.id.nombreUsuario);
         residenciaUsuario = (EditText) findViewById(R.id.residenciaUsuario);
         contraUsuario = (EditText) findViewById(R.id.contraseñaUsuario);
         repContraUsuario = (EditText) findViewById(R.id.repContraseñaUsuario);
         mailUsuario = (EditText) findViewById(R.id.mailUsuario);
-        uriTV = (TextView) findViewById(R.id.uriFotoUsuario);
+        //uriTV = (TextView) findViewById(R.id.uriFotoUsuario);
+
     }
 
+    /*
     public void seleccionarFotoUsuario(View view) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
@@ -71,6 +83,7 @@ public class Registracion extends AppCompatActivity {
             }
         }
     }
+    */
 
     public void btnAceptar(View view) {
         if (android.os.Build.VERSION.SDK_INT > 9) {
@@ -78,76 +91,38 @@ public class Registracion extends AppCompatActivity {
             StrictMode.setThreadPolicy(policy);
         }
 
-        String contraseña = contraUsuario.getText().toString();
-        String repContraseña = repContraUsuario.getText().toString();
-        String nombre = nomUsuario.getText().toString();
-        String foto = uriTV.getText().toString();
-        String mail = mailUsuario.getText().toString();
-        String residencia = residenciaUsuario.getText().toString();
-        if (contraseña.length() == 0 || repContraseña.length() == 0 || nombre.length() == 0 || mail.length() == 0 || residencia.length() == 0 || foto.length() == 0) {
+        contraseña = contraUsuario.getText().toString();
+        repContraseña = repContraUsuario.getText().toString();
+        nombre = nomUsuario.getText().toString();
+        //foto = uriTV.getText().toString();
+        foto = "";
+        mail = mailUsuario.getText().toString();
+        residencia = residenciaUsuario.getText().toString();
+
+        //validar el mail
+
+        if (contraseña.length() == 0 || repContraseña.length() == 0 || nombre.length() == 0 || mail.length() == 0 || residencia.length() == 0 /* || foto.length() == 0 */) {
             Toast error = Toast.makeText(this, "Debe completar todos los campos", Toast.LENGTH_SHORT);
             error.show();
         } else {
-            if (contraseña == repContraseña) {
-                try {
-
-                    /*hacerlo en un asynctask
-                    private class ToursTask extends AsyncTask<String, Void, ACA IRIA STRING> {
-        private OkHttpClient client = new OkHttpClient();
-
-        @Override
-        protected void onPostExecute(STRING resultado) {
-            super.onPostExecute(resultado);
-            if (!resultado.isEmpty()) {
-                tours.clear();
-                tours.addAll(resultado);
-                toursAdapter.notifyDataSetChanged();
-            }
-        }
-
-
-        @Override
-        protected STRING doInBackground(String... params) {
-            String url = params[0];
-            Request request = new Request.Builder()
-                    .url(url)
-                    .build();
-            try {
-                Response response = client.newCall(request).execute();
-                return RESPONSE.BODY().STRING();
-            } catch (IOException | JSONException e) {
-                Log.d("Error", e.getMessage());                          // Error de Network o al parsear JSON
-                return STRING;
-                    */
-
-                    OkHttpClient client = new OkHttpClient();
+            if (validateEmailAddress(mail).equals("Valid Email Address")){
+                if (contraseña.equals(repContraseña)) {
                     String url = "http://viajarort.azurewebsites.net/RegistroUsuario.php";
-                    JSONObject json = new JSONObject();
-                    json.put("Nombre", nombre);
-                    json.put("Foto", foto);
-                    json.put("Lugar_residencia", residencia);
-                    json.put("Email", mail);
-                    json.put("Contraseña", contraseña);
-
-                    RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
-
-                    Request request = new Request.Builder()
-                            .url(url)
-                            .post(body)
-                            .build();
-
-                    Response response = client.newCall(request).execute();
-                    Log.d("Response", response.body().string());
-                    Intent intent = new Intent(this, Busqueda.class);
-                    startActivity(intent);
-                } catch (IOException e) {
-                    Log.d("Error", e.getMessage());
+                    new UsuarioTask().execute(url);
+                } else {
+                    Toast error = Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT);
+                    error.show();
                 }
             } else {
-                Toast error = Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT);
+                Toast error = Toast.makeText(this, "Mail no valido", Toast.LENGTH_SHORT);
                 error.show();
             }
 
+            if (contraseña.isEmpty() || contraseña.length() < 4 || contraseña.length() > 10) {
+                contraUsuario.setError("between 4 and 10 alphanumeric characters");
+            } else {
+                contraUsuario.setError(null);
+            }
         }
     }
 
@@ -157,15 +132,29 @@ public class Registracion extends AppCompatActivity {
         @Override
         protected void onPostExecute(String resultado) {
             super.onPostExecute(resultado);
+            Toast registro;
             if (!resultado.isEmpty()) {
-                //fijate que poner aca
+                if (resultado.equals("0")){
+                registro = Toast.makeText(getApplicationContext(), "Hubo un problema en la registración, intente de nuevo", Toast.LENGTH_SHORT);
+                } else {
+                    if (resultado.equals("El mail ya existe")){
+                        registro = Toast.makeText(getApplicationContext(), "El mail ya existe", Toast.LENGTH_SHORT);
+                    } else {
+                        registro = Toast.makeText(getApplicationContext(), "Registración completada", Toast.LENGTH_SHORT);
+                        nomUsuario.setText("");
+                        mailUsuario.setText("");
+                        residenciaUsuario.setText("");
+                        contraUsuario.setText("");
+                        repContraUsuario.setText("");
+                        //ir al inicio
+                    }
+                }
+                registro.show();
             }
         }
 
         @Override
         protected String doInBackground(String... params) {
-            //cambiar esto por lo que esta arriba
-
             String url = params[0];
             RequestBody body = generarJSON();
             Request request = new Request.Builder()
@@ -174,18 +163,16 @@ public class Registracion extends AppCompatActivity {
                     .build();
             try {
                 Response response = client.newCall(request).execute();
-                return response.body().string();
-            } catch (IOException | JSONException e) {
+                return parsearRespuesta(response.body().string());
+            } catch (IOException | JSONException  e) {
                 Log.d("Error", e.getMessage());
                 return "";
             }
         }
 
         RequestBody generarJSON (){
-            String url = "http://viajarort.azurewebsites.net/RegistroUsuario.php";
             JSONObject json = new JSONObject();
             json.put("Nombre", nombre);
-            json.put("Foto", foto);
             json.put("Lugar_residencia", residencia);
             json.put("Email", mail);
             json.put("Contraseña", contraseña);
@@ -193,6 +180,30 @@ public class Registracion extends AppCompatActivity {
             RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
 
             return body;
+        }
+
+        String parsearRespuesta(String JSONstr) throws JSONException {
+            org.json.JSONObject respuesta = new org.json.JSONObject(JSONstr);
+            if (respuesta.has("Id")){
+                String id = respuesta.getString("Id");
+                return id;
+            } else {
+                String error = respuesta.getString("Error");
+                return error;
+            }
+
+            //parsear si es "Error": El mail ya existe
+            //arreglar esto
+        }
+    }
+
+    public String validateEmailAddress(String emailAddress) {
+        Pattern regexPattern = Pattern.compile("^[(a-zA-Z-0-9-\\_\\+\\.)]+@[(a-z-A-z)]+\\.[(a-zA-z)]{2,3}$");
+        Matcher regMatcher   = regexPattern.matcher(emailAddress);
+        if(regMatcher.matches()){
+            return "Valid Email Address";
+        } else {
+            return "Invalid Email Address";
         }
     }
 

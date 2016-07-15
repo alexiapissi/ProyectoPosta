@@ -1,72 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+   <ImageButton
+       android:layout_width="80dp"
+       android:layout_height="80dp"
+       android:id="@+id/fotoUsuario"
+       android:scaleType="centerCrop"
+       android:background="@drawable/selectable_button_bg"
+       android:layout_gravity="center"
+       android:src="@drawable/fotousuariodefault"
+       android:onClick="seleccionarFotoUsuario"/>
+
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:visibility="gone"
+       android:id="@+id/uriFotoUsuario"/>
+-->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+   xmlns:tools="http://schemas.android.com/tools"
+   android:layout_width="match_parent"
+   android:layout_height="match_parent"
+   android:paddingBottom="@dimen/activity_vertical_margin"
+   android:paddingLeft="@dimen/activity_horizontal_margin"
+   android:paddingRight="@dimen/activity_horizontal_margin"
+   android:paddingTop="@dimen/activity_vertical_margin"
+   tools:context="ort.edu.ar.proyecto.Registracion">
+
+<LinearLayout
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="ort.edu.ar.proyecto.Registracion">
-
-    <ImageButton
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:id="@+id/fotoUsuario"
-        android:scaleType="centerCrop"
-        android:background="@drawable/selectable_button_bg"
-        android:layout_gravity="center"
-        android:src="@drawable/fotousuariodefault"
-        android:onClick="seleccionarFotoUsuario"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:id="@+id/uriFotoUsuario"/>
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:hint="Nombre Usuario"
-        android:id="@+id/nombreUsuario"/>
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="140dp"
-        android:hint="Mail"
-        android:id="@+id/mailUsuario"/>
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="180dp"
-        android:hint="Lugar de Residencia"
-        android:id="@+id/residenciaUsuario"/>
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="220dp"
-        android:hint="Contraseña"
-        android:id="@+id/contraseñaUsuario"/>
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="260dp"
-        android:hint="Repetir Contraseña"
-        android:id="@+id/repContraseñaUsuario"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Aceptar"
-        android:layout_marginTop="310dp"
-        android:onClick="btnAceptar"/>
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:padding="10dp"
+    >
 
 
+   <EditText
+       android:hint="Nombre"
+       android:id="@+id/nombreUsuario"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:background="@drawable/edittext_top_bg"
+       android:padding="10dp"
+       android:textColorHint="#bbbbbb"
+       android:drawableLeft="@drawable/user" />
+
+   <EditText
+       android:hint="Mail"
+       android:id="@+id/mailUsuario"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:background="@drawable/edittext_default_bg"
+       android:padding="10dp"
+       android:textColorHint="#bbbbbb"
+       android:drawableLeft="@drawable/email"/>
+
+   <EditText
+       android:hint="Lugar de Residencia"
+       android:id="@+id/residenciaUsuario"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:background="@drawable/edittext_default_bg"
+       android:padding="10dp"
+       android:textColorHint="#bbbbbb"
+       android:drawableLeft="@drawable/residencia"/>
+
+   <EditText
+       android:hint="Contraseña"
+       android:id="@+id/contraseñaUsuario"
+       android:inputType="textPassword"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:background="@drawable/edittext_default_bg"
+       android:layout_marginTop="-2dp"
+       android:padding="10dp"
+       android:textColorHint="#bbbbbb"
+       android:drawableLeft="@drawable/password"/>
+
+   <EditText
+       android:hint="Repetir Contraseña"
+       android:id="@+id/repContraseñaUsuario"
+       android:inputType="textPassword"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:background="@drawable/edittext_bottom_bg"
+       android:layout_marginTop="-2dp"
+       android:padding="10dp"
+       android:textColorHint="#bbbbbb"
+       android:drawableLeft="@drawable/password"/>
+
+   <Button
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:padding="10dp"
+       android:layout_marginTop="10dp"
+       android:text="Sign Up"
+       android:textColor="@android:color/white"
+       android:theme="@style/MyButton"
+       android:onClick="btnAceptar"
+       />
+
+</LinearLayout>
 
 </RelativeLayout>
