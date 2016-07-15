@@ -1,7 +1,8 @@
-package ort.edu.ar.proyecto;
+package ort.edu.ar.proyecto.Fragments;
 
 import android.content.Intent;
 import android.sax.StartElementListener;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTabHost;
 import android.support.design.widget.NavigationView;
@@ -12,19 +13,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import ort.edu.ar.proyecto.Fragments.FragmentDetalle;
 import ort.edu.ar.proyecto.Fragments.FragmentMapa;
+import ort.edu.ar.proyecto.R;
 import ort.edu.ar.proyecto.model.Punto;
 import ort.edu.ar.proyecto.model.Tour;
 import ort.edu.ar.proyecto.model.Usuario;
 
-public class Detalle_Tour extends AppCompatActivity {
+public class Detalle_Tour extends Fragment {
 
     static public int REQUEST_LIST = 2;
     ArrayList<Tour> tours;
@@ -32,15 +36,15 @@ public class Detalle_Tour extends AppCompatActivity {
     ArrayList<Punto> puntos;
     Tour tour;
     Usuario usuario;
+    private FragmentTabHost tabHost;
 
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detalle__tour);
 
-        Bundle extras = getIntent().getExtras();
+        /*Bundle extras = getIntent().getExtras();
         if (extras != null) {
             tours = (ArrayList<Tour>) extras.getSerializable("listatours");
             if (extras.containsKey("pos")){
@@ -54,26 +58,27 @@ public class Detalle_Tour extends AppCompatActivity {
                     }
                 }
             }
-        } else { return; }
+        } else { return; }*/
 
     }
-
-
-
-    private FragmentTabHost tabHost;
-    private void inicializarTabs() {
-        tabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
-        tabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.activity_detalle__tour, container, false);
+        tabHost = (FragmentTabHost) v.findViewById(android.R.id.tabhost);
+        tabHost.setup(getContext(), getChildFragmentManager(), android.R.id.tabcontent);
         tabHost.addTab(
                 tabHost.newTabSpec("tab1").setIndicator("Detalle", null),
                 FragmentDetalle.class, null);
         tabHost.addTab(
                 tabHost.newTabSpec("tab2").setIndicator("Mapa", null),
                 FragmentMapa.class, null);
+        return v;
     }
 
-    public void mandarUsuario(){
-        Intent intent = new Intent(getApplicationContext(), Perfil_Usuario.class);
+
+
+    /*public void mandarUsuario(){
+        Intent intent = new Intent(getActivity(), Perfil_Usuario.class);
         intent.putExtra("usuario", this.getUsuario());
         intent.putExtra("listatours", tours);
         startActivity(intent);
@@ -94,7 +99,9 @@ public class Detalle_Tour extends AppCompatActivity {
         return puntos;
     }
 
-
+    public void setPos (int pos){
+        posicion=pos;
+    }
 
     public Tour getTour(){ return tour; }
 
@@ -106,6 +113,6 @@ public class Detalle_Tour extends AppCompatActivity {
         usuario = usu;
     }
 
-    public Usuario getUsuario(){ return usuario; }
+    public Usuario getUsuario(){ return usuario; }*/
 
 }

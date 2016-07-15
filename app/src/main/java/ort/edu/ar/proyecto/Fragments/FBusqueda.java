@@ -1,21 +1,19 @@
 package ort.edu.ar.proyecto.Fragments;
 
-import ort.edu.ar.proyecto.Detalle_Tour;
-import ort.edu.ar.proyecto.R;
-import ort.edu.ar.proyecto.model.Gusto;
-import ort.edu.ar.proyecto.model.Tour;
-import ort.edu.ar.proyecto.model.ToursAdapter;
-import ort.edu.ar.proyecto.model.Usuario;
 
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.okhttp.OkHttpClient;
@@ -29,9 +27,17 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import ort.edu.ar.proyecto.MainActivity;
+import ort.edu.ar.proyecto.R;
+import ort.edu.ar.proyecto.model.Gusto;
+import ort.edu.ar.proyecto.model.Tour;
+import ort.edu.ar.proyecto.model.ToursAdapter;
+import ort.edu.ar.proyecto.model.Usuario;
 
-public class Busqueda extends AppCompatActivity {
-
+/**
+ * Created by 41824471 on 15/7/2016.
+ */
+public class FBusqueda extends Fragment {
     ImageView foto;
     ImageView fotoUsuario;
     TextView nombre;
@@ -41,46 +47,54 @@ public class Busqueda extends AppCompatActivity {
     ImageView likes;
     TextView cantLikes;
     ListView listVW;
+    ProgressBar cargando;
 
     ToursAdapter toursAdapter;
     ArrayList<Tour> tours;
     ArrayList<Gusto> gustos;
+    public FBusqueda(){
+
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_busqueda);
+    }
 
-        listVW = (ListView) findViewById(R.id.listv);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v =inflater.inflate(R.layout.activity_busqueda,container,false);
 
-        foto = (ImageView) findViewById(R.id.FotoTour);
-        fotoUsuario = (ImageView) findViewById(R.id.FotoUsuario);
-        nombre = (TextView) findViewById(R.id.NombreTour);
-        descripcion = (TextView) findViewById(R.id.DescripcionTour);
-        ubicacion = (TextView) findViewById(R.id.UbicacionTour);
-        nombreUsuario = (TextView) findViewById(R.id.NombreUsuario);
-        cantLikes = (TextView) findViewById(R.id.cantlikes);
+        listVW = (ListView) v.findViewById(R.id.listv);
 
-        likes = (ImageView) findViewById(R.id.Like);
+        foto = (ImageView) v.findViewById(R.id.FotoTour);
+        fotoUsuario = (ImageView) v.findViewById(R.id.FotoUsuario);
+        nombre = (TextView) v.findViewById(R.id.NombreTour);
+        descripcion = (TextView) v.findViewById(R.id.DescripcionTour);
+        ubicacion = (TextView) v.findViewById(R.id.UbicacionTour);
+        nombreUsuario = (TextView) v.findViewById(R.id.NombreUsuario);
+        cantLikes = (TextView) v.findViewById(R.id.cantlikes);
+        likes = (ImageView) v.findViewById(R.id.Like);
+        cargando= (ProgressBar) v.findViewById(R.id.progress);
         //likes.setImageResource(R.drawable.likes);
 
         listVW.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             public void onItemClick (AdapterView<?> adapter, View V, int position, long l) {
-                Intent intent = new Intent(Busqueda.this, Detalle_Tour.class);
+                /*Intent intent = new Intent(Busqueda.this, Detalle_Tour.class);
                 intent.putExtra("pos", position);
                 intent.putExtra("listatours", tours);
-                startActivity(intent);
+                startActivity(intent);*/
+                //IR AL OTRO FRAGMENT
+                MainActivity ma= (MainActivity)getActivity();
+                ma.IraDetalle(tours.get(position));
             }
         });
         tours = new ArrayList<>();
-        toursAdapter = new ToursAdapter(getApplicationContext(), tours);
+        toursAdapter = new ToursAdapter(getActivity(), tours);
         listVW.setAdapter(toursAdapter);
 
+        return v;
     }
-
-
-
-
 
     @Override
     public void onStart() {
@@ -91,7 +105,11 @@ public class Busqueda extends AppCompatActivity {
 
     private class ToursTask extends AsyncTask<String, Void, ArrayList<Tour>> {
         private OkHttpClient client = new OkHttpClient();
-
+        @Override
+        protected void onPreExecute() {
+            // SHOW THE SPINNER WHILE LOADING FEEDS
+            cargando.setVisibility(View.VISIBLE);
+        }
         @Override
         protected void onPostExecute(ArrayList<Tour> resultado) {
             super.onPostExecute(resultado);
@@ -99,6 +117,7 @@ public class Busqueda extends AppCompatActivity {
                 tours.clear();
                 tours.addAll(resultado);
                 toursAdapter.notifyDataSetChanged();
+                cargando.setVisibility(View.GONE);
             }
         }
 
@@ -155,11 +174,4 @@ public class Busqueda extends AppCompatActivity {
         }
 
     }
-
 }
-
-
-
-
-
-

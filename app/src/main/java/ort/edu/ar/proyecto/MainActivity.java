@@ -16,13 +16,20 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-import ort.edu.ar.proyecto.Fragments.FragmentDetalle;
-import ort.edu.ar.proyecto.R;
+import ort.edu.ar.proyecto.Fragments.Detalle_Tour;
+import ort.edu.ar.proyecto.Fragments.FBusqueda;
+import ort.edu.ar.proyecto.model.Punto;
 import ort.edu.ar.proyecto.model.Tour;
+import ort.edu.ar.proyecto.model.Usuario;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     TextView navUsuario;
+    Tour tour;
+    ArrayList<Tour> tours;
+    int posicion;
+    ArrayList<Punto> puntos;
+    Usuario usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +45,57 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
 
     }
-    public void IraDetalle(int pos, ArrayList<Tour> tours){
-        Fragment fragment = new FragmentDetalle();
+
+    public void IraDetalle(Tour tour){
+        Detalle_Tour fragment = new Detalle_Tour();
+        //fragment.setTour(tour);
+        this.tour=tour;
         FragmentManager fm= getSupportFragmentManager();
         fm.beginTransaction()
                 .replace(R.id.contenido,fragment)
                 .commit();
     }
+    public Tour getTour(){ return tour; }
+    public ArrayList<Tour> getTours(){
+        return tours;
+    }
+    public int getPos(){
+        return posicion;
+    }
+    public void setPuntos(ArrayList<Punto> puntos) {
+        tour.setPuntos(puntos);
+    }
+    public ArrayList<Punto> getPuntos(){
+
+        puntos=tour.getPuntos();
+        return puntos;
+    }
+
+    public void setPos (int pos){
+        posicion=pos;
+    }
+
+    public void mandarUsuario(){
+        /*Intent intent = new Intent(this, Perfil_Usuario.class);
+        intent.putExtra("usuario", this.getUsuario());
+        intent.putExtra("listatours", tours);
+        startActivity(intent);*/
+        Perfil_Usuario fragment = new Perfil_Usuario();
+        //fragment.setTour(tour);
+        this.tour=tour;
+        FragmentManager fm= getSupportFragmentManager();
+        fm.beginTransaction()
+                .replace(R.id.contenido,fragment)
+                .commit();
+    }
+
+    public void setUsuario(Usuario usu){
+        usuario = usu;
+    }
+
+    public Usuario getUsuario(){ return usuario; }
+
+
 
     private void inicializarToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -59,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
         navUsuario = (TextView)navigationView.getHeaderView(0).findViewById(R.id.nav_username);
 
     }
+
 
     private void setearListener(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {

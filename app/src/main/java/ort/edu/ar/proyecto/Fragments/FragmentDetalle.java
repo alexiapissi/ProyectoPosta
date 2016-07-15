@@ -1,6 +1,5 @@
 package ort.edu.ar.proyecto.Fragments;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,8 +24,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import ort.edu.ar.proyecto.Detalle_Tour;
-import ort.edu.ar.proyecto.Perfil_Usuario;
+import ort.edu.ar.proyecto.MainActivity;
 import ort.edu.ar.proyecto.R;
 import ort.edu.ar.proyecto.model.CircleTransform;
 import ort.edu.ar.proyecto.model.Punto;
@@ -53,7 +51,7 @@ public class FragmentDetalle extends Fragment {
     ArrayList<Tour> tours;
     int pos;
     Tour tour;
-    Detalle_Tour dt;
+    MainActivity ma;
 
     public FragmentDetalle() {
     }
@@ -81,8 +79,8 @@ public class FragmentDetalle extends Fragment {
         puntos = new ArrayList<>();
         puntosAdapter = new PuntosAdapter(getActivity().getApplicationContext(), puntos);
         listPuntosVW.setAdapter(puntosAdapter);
-        dt = (Detalle_Tour) getActivity();
-        tour = dt.getTour();
+        ma = (MainActivity) getActivity();
+        tour = ma.getTour();
 
         nombre.setText(tour.getNombre());
         Picasso
@@ -115,6 +113,11 @@ public class FragmentDetalle extends Fragment {
 
     private class DetalleTask extends AsyncTask<String, Void, ArrayList<Punto>> {
         private OkHttpClient client = new OkHttpClient();
+        @Override
+        protected void onPreExecute() {
+            // SHOW THE SPINNER WHILE LOADING FEEDS
+            //cargando.setVisibility(View.VISIBLE);
+        }
 
         @Override
         protected void onPostExecute(ArrayList<Punto> resultado) {
@@ -165,7 +168,7 @@ public class FragmentDetalle extends Fragment {
             }
             tour.setPuntos(puntosLocal);
             Log.d("HOLA", "parseo listo");
-            dt.setPuntos(puntosLocal);
+            ma.setPuntos(puntosLocal);
             return puntosLocal;
         }
 
@@ -177,17 +180,23 @@ public class FragmentDetalle extends Fragment {
             @Override
             public void onClick(View view) {
              //dt.setUsuario(tour.getUsuario());
-                dt.setUsuario(tour.getUsuario());
-                dt.mandarUsuario();
+                ma.setUsuario(tour.getUsuario());
+                ma.mandarUsuario();
+            }
+        });
+
+    }
+    public void addListenerOnText() {
+        nombreUsuario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ma.setUsuario(tour.getUsuario());
+                ma.mandarUsuario();
             }
         });
 
     }
 
-    public void clickNombreUsuario (View view){
-        dt.setUsuario(tour.getUsuario());
-        dt.mandarUsuario();
-    }
 
 }
 
