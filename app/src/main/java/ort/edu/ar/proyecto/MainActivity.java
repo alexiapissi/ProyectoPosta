@@ -1,6 +1,5 @@
 package ort.edu.ar.proyecto;
 
-import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,6 +17,7 @@ import java.util.ArrayList;
 
 import ort.edu.ar.proyecto.Fragments.Detalle_Tour;
 import ort.edu.ar.proyecto.Fragments.FBusqueda;
+import ort.edu.ar.proyecto.Fragments.Perfil_Usuario;
 import ort.edu.ar.proyecto.model.Punto;
 import ort.edu.ar.proyecto.model.Tour;
 import ort.edu.ar.proyecto.model.Usuario;
@@ -42,7 +42,9 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fm= getSupportFragmentManager();
         fm.beginTransaction()
                 .replace(R.id.contenido,fragment)
+                .addToBackStack(null)
                 .commit();
+
 
     }
 
@@ -52,10 +54,14 @@ public class MainActivity extends AppCompatActivity {
         this.tour=tour;
         FragmentManager fm= getSupportFragmentManager();
         fm.beginTransaction()
+                .addToBackStack(null)
                 .replace(R.id.contenido,fragment)
                 .commit();
     }
     public Tour getTour(){ return tour; }
+    public void setTour (Tour t){
+        tour=t;
+    }
     public ArrayList<Tour> getTours(){
         return tours;
     }
@@ -75,6 +81,17 @@ public class MainActivity extends AppCompatActivity {
         posicion=pos;
     }
 
+    public void IraBusqueda() {
+        FBusqueda fragment = new FBusqueda();
+        //fragment.setTour(tour);
+        FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.contenido, fragment)
+                .commit();
+    }
+
+
     public void mandarUsuario(){
         /*Intent intent = new Intent(this, Perfil_Usuario.class);
         intent.putExtra("usuario", this.getUsuario());
@@ -85,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
         this.tour=tour;
         FragmentManager fm= getSupportFragmentManager();
         fm.beginTransaction()
+                .addToBackStack(null)
                 .replace(R.id.contenido,fragment)
                 .commit();
     }
@@ -120,11 +138,11 @@ public class MainActivity extends AppCompatActivity {
                 switch(item.getItemId()) {
                     case R.id.nav_home:
                         Log.d("Choose:","Home");
-                        //Intent intent = new Intent(Detalle_Tour.this, Busqueda.class);
-                        //startActivity(intent);
+                        IraBusqueda();
                         break;
                     case R.id.nav_user:
                         Log.d("Choose:","user");
+
                         break;
                 }
 
@@ -134,6 +152,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+    @Override
+    public void onBackPressed() {
+        if (getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

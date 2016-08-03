@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.okhttp.OkHttpClient;
@@ -52,6 +53,7 @@ public class FragmentDetalle extends Fragment {
     int pos;
     Tour tour;
     MainActivity ma;
+    ProgressBar progressbar;
 
     public FragmentDetalle() {
     }
@@ -66,6 +68,7 @@ public class FragmentDetalle extends Fragment {
                              Bundle saveInstantState) {
         View view = inflater.inflate(R.layout.fragment_detalle, container, false);
         fototour = (ImageView) view.findViewById(R.id.Fototourd);
+        progressbar=(ProgressBar) view.findViewById(R.id.progress);
         fotoUsuario = (ImageButton) view.findViewById(R.id.FotoUsuariod);
         addListenerOnButton();
         nombre = (TextView) view.findViewById(R.id.NombreTourd);
@@ -116,7 +119,7 @@ public class FragmentDetalle extends Fragment {
         @Override
         protected void onPreExecute() {
             // SHOW THE SPINNER WHILE LOADING FEEDS
-            //cargando.setVisibility(View.VISIBLE);
+            progressbar.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -127,6 +130,7 @@ public class FragmentDetalle extends Fragment {
                 puntos.clear();
                 puntos.addAll(resultado);
                 puntosAdapter.notifyDataSetChanged();
+                progressbar.setVisibility(View.GONE);
             }
         }
 

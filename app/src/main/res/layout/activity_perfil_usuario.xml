@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="ort.edu.ar.proyecto.Perfil_Usuario"
+    tools:context=".Fragments.Perfil_Usuario"
     android:orientation="vertical">
 
     <ImageView
@@ -39,6 +39,13 @@
         android:layout_height="wrap_content"
         android:text="Tour creados:"
         android:layout_marginTop="15dp"/>
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        >
+    </ProgressBar>
 
     <ListView
         android:layout_width="fill_parent"

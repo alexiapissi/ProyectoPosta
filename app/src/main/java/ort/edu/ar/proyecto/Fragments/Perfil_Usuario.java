@@ -1,4 +1,4 @@
-package ort.edu.ar.proyecto;
+package ort.edu.ar.proyecto.Fragments;
 
 /**
  * Created by 41400475 on 29/6/2016.
@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.okhttp.OkHttpClient;
@@ -31,6 +32,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import ort.edu.ar.proyecto.Fragments.Detalle_Tour;
+import ort.edu.ar.proyecto.MainActivity;
+import ort.edu.ar.proyecto.R;
 import ort.edu.ar.proyecto.model.CircleTransform;
 import ort.edu.ar.proyecto.model.Tour;
 import ort.edu.ar.proyecto.model.ToursUsuarioAdapter;
@@ -47,6 +50,7 @@ public class Perfil_Usuario extends Fragment {
     ArrayList<Tour> toursUsuarioAL;
     ArrayList<Tour> toursRecibidos;
     String resid;
+    ProgressBar progressbar;
 
 
 
@@ -54,6 +58,7 @@ public class Perfil_Usuario extends Fragment {
     public View onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         View v=inflater.inflate(R.layout.activity_perfil_usuario,container,false);
         nombreUsuario = (TextView) v.findViewById(R.id.nomUsu);
+        progressbar=(ProgressBar)v.findViewById(R.id.progress);
         residenciaUsuario = (TextView) v.findViewById(R.id.residenciaUsu);
         fotoUsuario = (ImageView) v.findViewById(R.id.fotoUsu);
         toursUsuario = (ListView) v.findViewById(R.id.listToursUsu);
@@ -86,8 +91,9 @@ public class Perfil_Usuario extends Fragment {
                 intent.putExtra("idTour", toursUsuarioAL.get(position).getId());
                 startActivity(intent);*/
                 MainActivity ma= (MainActivity) getActivity();
-                Tour t = (Tour) toursUsuario.getSelectedItem();
-                ma.IraDetalle(t);
+                toursRecibidos = new ArrayList<>();
+                toursRecibidos=ma.getTours();
+                ma.IraDetalle(toursRecibidos.get(position));
             }
         });
         return v;
@@ -106,6 +112,12 @@ public class Perfil_Usuario extends Fragment {
         private OkHttpClient client = new OkHttpClient();
 
         @Override
+        protected void onPreExecute() {
+            // SHOW THE SPINNER WHILE LOADING FEEDS
+            progressbar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
         protected void onPostExecute(Usuario resultado) {
             super.onPostExecute(resultado);
             toursUsuarioAL.clear();
@@ -114,6 +126,7 @@ public class Perfil_Usuario extends Fragment {
             resid = resultado.getResidencia();
             residenciaUsuario.setText(resid);
             adapter.notifyDataSetChanged();
+            progressbar.setVisibility(View.GONE);
         }
 
         @Override

@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Fragments.Detalle_Tour" />
-        <activity android:name=".Perfil_Usuario" />
+        <activity android:name=".Fragments.Perfil_Usuario" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
