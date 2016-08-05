@@ -12,5 +12,8 @@
         <item name="colorControlHighlight">#BCA9F5</item>
         <item name="colorButtonNormal">#9F81F7</item>
     </style>
-
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ort.edu.ar.proyecto.Detalle_Tour">
+    tools:context=".Fragments.Detalle_Tour">
 
     <TabWidget
         android:id="@android:id/tabs"
@@ -74,7 +74,6 @@
             android:id="@+id/NombreUsuariod"
             android:textColor="@android:color/black"
             android:clickable="true"
-            android:onClick="clickNombreUsuario"
             android:textSize="12dp"/>
 
         <ImageView
@@ -98,6 +97,14 @@
             android:shadowDy="1"
             android:shadowRadius="2"
             android:textStyle="bold"/>
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="100dp"
+            >
+        </ProgressBar>
 
         <ListView
             android:layout_width="fill_parent"

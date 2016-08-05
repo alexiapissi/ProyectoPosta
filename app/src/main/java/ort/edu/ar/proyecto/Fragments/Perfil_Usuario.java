@@ -1,17 +1,22 @@
-package ort.edu.ar.proyecto;
+package ort.edu.ar.proyecto.Fragments;
 
 /**
  * Created by 41400475 on 29/6/2016.
  */
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.okhttp.OkHttpClient;
@@ -26,12 +31,15 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import ort.edu.ar.proyecto.Fragments.Detalle_Tour;
+import ort.edu.ar.proyecto.MainActivity;
+import ort.edu.ar.proyecto.R;
 import ort.edu.ar.proyecto.model.CircleTransform;
 import ort.edu.ar.proyecto.model.Tour;
 import ort.edu.ar.proyecto.model.ToursUsuarioAdapter;
 import ort.edu.ar.proyecto.model.Usuario;
 
-public class Perfil_Usuario extends AppCompatActivity {
+public class Perfil_Usuario extends Fragment {
 
     TextView nombreUsuario;
     ImageView fotoUsuario;
@@ -42,29 +50,27 @@ public class Perfil_Usuario extends AppCompatActivity {
     ArrayList<Tour> toursUsuarioAL;
     ArrayList<Tour> toursRecibidos;
     String resid;
+    ProgressBar progressbar;
+
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_perfil_usuario);
+    public View onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
+        View v=inflater.inflate(R.layout.activity_perfil_usuario,container,false);
+        nombreUsuario = (TextView) v.findViewById(R.id.nomUsu);
+        progressbar=(ProgressBar)v.findViewById(R.id.progress);
+        residenciaUsuario = (TextView) v.findViewById(R.id.residenciaUsu);
+        fotoUsuario = (ImageView) v.findViewById(R.id.fotoUsu);
+        toursUsuario = (ListView) v.findViewById(R.id.listToursUsu);
 
-        nombreUsuario = (TextView) findViewById(R.id.nomUsu);
-        residenciaUsuario = (TextView) findViewById(R.id.residenciaUsu);
-        fotoUsuario = (ImageView) findViewById(R.id.fotoUsu);
-        toursUsuario = (ListView) findViewById(R.id.listToursUsu);
-
-        Bundle extras = getIntent().getExtras();
-        if (extras == null) {
-            return;
-        }
-
-        Usuario usuario = (Usuario) extras.getSerializable("usuario");
-        toursRecibidos = (ArrayList<Tour>) extras.getSerializable("listatours");
+        MainActivity ma= (MainActivity) getActivity();
+        Usuario usuario = ma.getUsuario();
         usu = usuario;
+
 
         nombreUsuario.setText(usu.getNombre());
         Picasso
-                .with(getApplicationContext())
+                .with(getContext())
                 .load(usu.getFoto())
                 //.resize(40,40)
                 .transform(new CircleTransform())
@@ -73,19 +79,24 @@ public class Perfil_Usuario extends AppCompatActivity {
         //adapter = new ToursUsuarioAdapter(getApplicationContext(), usu.getToursCreados());
 
         toursUsuarioAL = new ArrayList<>();
-        adapter = new ToursUsuarioAdapter(getApplicationContext(), toursUsuarioAL);
+        adapter = new ToursUsuarioAdapter(getContext(), toursUsuarioAL);
         //if (usu.getToursCreados() != null) {
         toursUsuario.setAdapter(adapter);
         //}
 
         toursUsuario.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             public void onItemClick (AdapterView<?> adapter, View V, int position, long l) {
-                Intent intent = new Intent(Perfil_Usuario.this, Detalle_Tour.class);
+                /*Intent intent = new Intent(Perfil_Usuario.this, Detalle_Tour.class);
                 intent.putExtra("listatours", toursRecibidos);
                 intent.putExtra("idTour", toursUsuarioAL.get(position).getId());
-                startActivity(intent);
+                startActivity(intent);*/
+                MainActivity ma= (MainActivity) getActivity();
+                toursRecibidos = new ArrayList<>();
+                toursRecibidos=ma.getTours();
+                ma.IraDetalle(toursRecibidos.get(position));
             }
         });
+        return v;
     }
 
     @Override
@@ -101,6 +112,12 @@ public class Perfil_Usuario extends AppCompatActivity {
         private OkHttpClient client = new OkHttpClient();
 
         @Override
+        protected void onPreExecute() {
+            // SHOW THE SPINNER WHILE LOADING FEEDS
+            progressbar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
         protected void onPostExecute(Usuario resultado) {
             super.onPostExecute(resultado);
             toursUsuarioAL.clear();
@@ -109,6 +126,7 @@ public class Perfil_Usuario extends AppCompatActivity {
             resid = resultado.getResidencia();
             residenciaUsuario.setText(resid);
             adapter.notifyDataSetChanged();
+            progressbar.setVisibility(View.GONE);
         }
 
         @Override

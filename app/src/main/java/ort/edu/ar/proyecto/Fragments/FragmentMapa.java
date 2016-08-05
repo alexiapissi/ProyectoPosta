@@ -1,12 +1,9 @@
 package ort.edu.ar.proyecto.Fragments;
 
-import android.content.ClipData;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.LayoutInflaterCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,18 +14,15 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
-import ort.edu.ar.proyecto.Detalle_Tour;
+import ort.edu.ar.proyecto.MainActivity;
 import ort.edu.ar.proyecto.R;
 import ort.edu.ar.proyecto.model.Punto;
 
@@ -58,9 +52,9 @@ public class FragmentMapa extends Fragment implements OnMapReadyCallback {
         if(mapview==null)
              mapview = inflater.inflate(R.layout.fragment_mapa, container, false);
 
-        Detalle_Tour dt = (Detalle_Tour) getActivity();
+        MainActivity ma = (MainActivity) getActivity();
         listapuntos = new ArrayList<Punto>();
-        listapuntos = dt.getPuntos();
+        listapuntos = ma.getPuntos();
 
         return mapview;
     }
