@@ -1,13 +1,11 @@
 package ort.edu.ar.proyecto.Fragments;
 
-/**
- * Created by 41400475 on 29/6/2016.
- */
-import android.content.Intent;
+
+
 import android.os.AsyncTask;
-import android.support.annotation.Nullable;
+
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -51,7 +49,7 @@ public class Perfil_Usuario extends Fragment {
     ArrayList<Tour> toursRecibidos;
     String resid;
     ProgressBar progressbar;
-
+    Tour Tourmandar;
 
 
     @Override
@@ -66,8 +64,6 @@ public class Perfil_Usuario extends Fragment {
         MainActivity ma= (MainActivity) getActivity();
         Usuario usuario = ma.getUsuario();
         usu = usuario;
-
-
         nombreUsuario.setText(usu.getNombre());
         Picasso
                 .with(getContext())
@@ -82,18 +78,19 @@ public class Perfil_Usuario extends Fragment {
         adapter = new ToursUsuarioAdapter(getContext(), toursUsuarioAL);
         //if (usu.getToursCreados() != null) {
         toursUsuario.setAdapter(adapter);
+        toursRecibidos=ma.getTours();
         //}
 
         toursUsuario.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             public void onItemClick (AdapterView<?> adapter, View V, int position, long l) {
-                /*Intent intent = new Intent(Perfil_Usuario.this, Detalle_Tour.class);
-                intent.putExtra("listatours", toursRecibidos);
-                intent.putExtra("idTour", toursUsuarioAL.get(position).getId());
-                startActivity(intent);*/
-                MainActivity ma= (MainActivity) getActivity();
-                toursRecibidos = new ArrayList<>();
-                toursRecibidos=ma.getTours();
-                ma.IraDetalle(toursRecibidos.get(position));
+
+                MainActivity ma= (MainActivity)getActivity();
+                for (Tour t : toursRecibidos){
+                    if (t.getId() == toursUsuarioAL.get(position).getId()){
+                        Tourmandar = t;
+                    }
+                }
+                ma.IraDetalle(Tourmandar);
             }
         });
         return v;

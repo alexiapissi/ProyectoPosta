@@ -28,7 +28,7 @@ import java.net.CookiePolicy;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ort.edu.ar.proyecto.model.SessionManager;
+//import ort.edu.ar.proyecto.model.SessionManager;
 
 public class Login extends AppCompatActivity  {
 
@@ -36,7 +36,7 @@ public class Login extends AppCompatActivity  {
     TextView registrarse;
     String mail, contraseña;
     private static final int REQUEST_SIGNUP = 0;
-    SessionManager session;
+    //SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +56,7 @@ public class Login extends AppCompatActivity  {
             }
         });
 
-        session = new SessionManager(getApplicationContext());
+        //session = new SessionManager(getApplicationContext());
     }
 
     public void btnIngresar (View view){
@@ -76,7 +76,7 @@ public class Login extends AppCompatActivity  {
             }
 
             if (mailUsuario.getError() == null && contraseñaUsuario.getError() == null){
-                session.createLoginSession(contraseñaUsuario.getText().toString(), mailUsuario.getText().toString());
+                //session.createLoginSession(contraseñaUsuario.getText().toString(), mailUsuario.getText().toString());
 
                 String url = "http://viajarort.azurewebsites.net/LogueoUsuario.php";
                 new LoginTask().execute(url);

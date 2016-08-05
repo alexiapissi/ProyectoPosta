@@ -1,12 +1,11 @@
 package ort.edu.ar.proyecto.Fragments;
 
 
-import android.content.Intent;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,9 +34,7 @@ import ort.edu.ar.proyecto.model.Tour;
 import ort.edu.ar.proyecto.model.ToursAdapter;
 import ort.edu.ar.proyecto.model.Usuario;
 
-/**
- * Created by 41824471 on 15/7/2016.
- */
+
 public class FBusqueda extends Fragment {
     ImageView foto;
     ImageView fotoUsuario;
@@ -49,55 +46,79 @@ public class FBusqueda extends Fragment {
     TextView cantLikes;
     ListView listVW;
     ProgressBar cargando;
-
     ToursAdapter toursAdapter;
     ArrayList<Tour> tours;
     ArrayList<Gusto> gustos;
+    SwipeRefreshLayout swipeLayout;
+    boolean actualiza=false;
+    View v;
     public FBusqueda(){
+
 
     }
 
     @Override
     public void onCreate( Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
     }
 
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v =inflater.inflate(R.layout.activity_busqueda,container,false);
+        if (v == null) {
+            v = inflater.inflate(R.layout.activity_busqueda, container, false);
 
-        listVW = (ListView) v.findViewById(R.id.listv);
+            listVW = (ListView) v.findViewById(R.id.listv);
 
-        foto = (ImageView) v.findViewById(R.id.FotoTour);
-        fotoUsuario = (ImageView) v.findViewById(R.id.FotoUsuario);
-        nombre = (TextView) v.findViewById(R.id.NombreTour);
-        descripcion = (TextView) v.findViewById(R.id.DescripcionTour);
-        ubicacion = (TextView) v.findViewById(R.id.UbicacionTour);
-        nombreUsuario = (TextView) v.findViewById(R.id.NombreUsuario);
-        cantLikes = (TextView) v.findViewById(R.id.cantlikes);
-        likes = (ImageView) v.findViewById(R.id.Like);
-        cargando= (ProgressBar) v.findViewById(R.id.progress);
-        //likes.setImageResource(R.drawable.likes);
+            foto = (ImageView) v.findViewById(R.id.FotoTour);
+            fotoUsuario = (ImageView) v.findViewById(R.id.FotoUsuario);
+            nombre = (TextView) v.findViewById(R.id.NombreTour);
+            swipeLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_container);
+            descripcion = (TextView) v.findViewById(R.id.DescripcionTour);
+            ubicacion = (TextView) v.findViewById(R.id.UbicacionTour);
+            nombreUsuario = (TextView) v.findViewById(R.id.NombreUsuario);
+            cantLikes = (TextView) v.findViewById(R.id.cantlikes);
+            likes = (ImageView) v.findViewById(R.id.Like);
+            cargando = (ProgressBar) v.findViewById(R.id.progress);
+            //likes.setImageResource(R.drawable.likes);
 
-        listVW.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            public void onItemClick (AdapterView<?> adapter, View V, int position, long l) {
+            swipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+                    android.R.color.holo_green_light,
+                    android.R.color.holo_orange_light,
+                    android.R.color.holo_red_light);
+            swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+                @Override
+                public void onRefresh() {
+                    actualiza=true;
+                    new ToursTask().execute("http://viajarort.azurewebsites.net/tours.php");
+                }
+            });
+
+
+            listVW.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> adapter, View V, int position, long l) {
                 /*Intent intent = new Intent(Busqueda.this, Detalle_Tour.class);
                 intent.putExtra("pos", position);
                 intent.putExtra("listatours", tours);
                 startActivity(intent);*/
-                //IR AL OTRO FRAGMENT
-                MainActivity ma= (MainActivity)getActivity();
-                ma.IraDetalle(tours.get(position));
-            }
-        });
-        tours = new ArrayList<>();
-        toursAdapter = new ToursAdapter(getActivity(), tours);
-        listVW.setAdapter(toursAdapter);
-        String url = "http://viajarort.azurewebsites.net/tours.php";
-        new ToursTask().execute(url);  // Llamo a clase async con url
+                    //IR AL OTRO FRAGMENT
+                    MainActivity ma = (MainActivity) getActivity();
+                    ma.IraDetalle(tours.get(position));
+                }
+            });
+            tours = new ArrayList<>();
+            toursAdapter = new ToursAdapter(getActivity(), tours);
+            listVW.setAdapter(toursAdapter);
+            String url = "http://viajarort.azurewebsites.net/tours.php";
+            new ToursTask().execute(url);  // Llamo a clase async con url
 
+            MainActivity ma = (MainActivity)getActivity();
+            ma.setTours(tours);
+        }
         return v;
     }
 
@@ -107,7 +128,13 @@ public class FBusqueda extends Fragment {
         @Override
         protected void onPreExecute() {
             // SHOW THE SPINNER WHILE LOADING FEEDS
-            cargando.setVisibility(View.VISIBLE);
+            if (!actualiza){
+                cargando.setVisibility(View.VISIBLE);
+            }else{
+                cargando.setVisibility(View.GONE);
+                actualiza=false;
+            }
+
         }
         @Override
         protected void onPostExecute(ArrayList<Tour> resultado) {
@@ -117,6 +144,7 @@ public class FBusqueda extends Fragment {
                 tours.addAll(resultado);
                 toursAdapter.notifyDataSetChanged();
                 cargando.setVisibility(View.GONE);
+                swipeLayout.setRefreshing(false);
             }
         }
 
@@ -132,7 +160,7 @@ public class FBusqueda extends Fragment {
                 return parsearResultado(response.body().string());      // Convierto el resultado en ArrayList<Direccion>
             } catch (IOException | JSONException e) {
                 Log.d("Error", e.getMessage());                          // Error de Network o al parsear JSON
-                return new ArrayList<Tour>();
+                return new ArrayList<>();
             }
         }
 

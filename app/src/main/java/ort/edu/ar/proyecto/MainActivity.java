@@ -1,5 +1,6 @@
 package ort.edu.ar.proyecto;
 
+import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -27,21 +28,20 @@ public class MainActivity extends AppCompatActivity {
     TextView navUsuario;
     Tour tour;
     ArrayList<Tour> tours;
-    int posicion;
+    //int posicion;
     ArrayList<Punto> puntos;
     Usuario usuario;
-
+    Fragment Busquedafragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         inicializarToolbar();
-        Fragment fragment = new FBusqueda();
+        Busquedafragment = new FBusqueda();
         FragmentManager fm= getSupportFragmentManager();
         fm.beginTransaction()
-                .replace(R.id.contenido,fragment)
+                .replace(R.id.contenido,Busquedafragment)
                 .addToBackStack(null)
                 .commit();
 
@@ -65,9 +65,9 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<Tour> getTours(){
         return tours;
     }
-    public int getPos(){
+    /*public int getPos(){
         return posicion;
-    }
+    }*/
     public void setPuntos(ArrayList<Punto> puntos) {
         tour.setPuntos(puntos);
     }
@@ -77,28 +77,23 @@ public class MainActivity extends AppCompatActivity {
         return puntos;
     }
 
-    public void setPos (int pos){
+    /*public void setPos (int pos){
         posicion=pos;
-    }
+    }*/
 
     public void IraBusqueda() {
-        FBusqueda fragment = new FBusqueda();
+
         //fragment.setTour(tour);
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
                 .addToBackStack(null)
-                .replace(R.id.contenido, fragment)
+                .replace(R.id.contenido, Busquedafragment)
                 .commit();
     }
 
 
     public void mandarUsuario(){
-        /*Intent intent = new Intent(this, Perfil_Usuario.class);
-        intent.putExtra("usuario", this.getUsuario());
-        intent.putExtra("listatours", tours);
-        startActivity(intent);*/
         Perfil_Usuario fragment = new Perfil_Usuario();
-        //fragment.setTour(tour);
         this.tour=tour;
         FragmentManager fm= getSupportFragmentManager();
         fm.beginTransaction()
@@ -113,6 +108,19 @@ public class MainActivity extends AppCompatActivity {
 
     public Usuario getUsuario(){ return usuario; }
 
+    public void setTours (ArrayList<Tour> tourss){
+        tours = tourss;
+    }
+
+    public void IraLogin() {
+        Intent intent= new Intent(this,Login.class);
+        startActivity(intent);
+    }
+
+    public void IraCerrarSesion() {
+        Intent intent= new Intent(this,CerrarSesion.class);
+        startActivity(intent);
+    }
 
 
     private void inicializarToolbar() {
@@ -141,8 +149,17 @@ public class MainActivity extends AppCompatActivity {
                         IraBusqueda();
                         break;
                     case R.id.nav_user:
+                        //mostrar cuando ya inicio sesion
                         Log.d("Choose:","user");
-
+                        break;
+                    case R.id.login:
+                        Log.d("Choose:","Login");
+                        IraLogin();
+                        break;
+                    case R.id.logout:
+                        //mostrar cuando ya inicio sesion
+                        Log.d("Choose:","Logout");
+                        IraCerrarSesion();
                         break;
                 }
 

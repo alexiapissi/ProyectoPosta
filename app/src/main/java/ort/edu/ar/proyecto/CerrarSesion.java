@@ -21,14 +21,13 @@ import java.io.IOException;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
 
-import ort.edu.ar.proyecto.model.SessionManager;
 
 /**
  * Created by 41400475 on 5/8/2016.
  */
 public class CerrarSesion extends AppCompatActivity {
 
-    SessionManager session;
+    //SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +36,7 @@ public class CerrarSesion extends AppCompatActivity {
         String url = "http://viajarort.azurewebsites.net/CerrarSesion.php";
         new Logout().execute(url);
 
-        session = new SessionManager(getApplicationContext());
+        //session = new SessionManager(getApplicationContext());
     }
 
     private class Logout extends AsyncTask<String, Void, String> {
@@ -48,7 +47,7 @@ public class CerrarSesion extends AppCompatActivity {
             super.onPostExecute(resultado);
             Toast toast = Toast.makeText(getApplicationContext(), "Sesion cerrada", Toast.LENGTH_SHORT);
             toast.show();
-            session.logoutUser();
+            //session.logoutUser();
             //ir al inicio
             finish();
         }
