@@ -95,16 +95,13 @@ public class FBusqueda extends Fragment {
         tours = new ArrayList<>();
         toursAdapter = new ToursAdapter(getActivity(), tours);
         listVW.setAdapter(toursAdapter);
+        String url = "http://viajarort.azurewebsites.net/tours.php";
+        new ToursTask().execute(url);  // Llamo a clase async con url
 
         return v;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        String url = "http://viajarort.azurewebsites.net/tours.php";
-        new ToursTask().execute(url);  // Llamo a clase async con url
-    }
+
     private class ToursTask extends AsyncTask<String, Void, ArrayList<Tour>> {
         private OkHttpClient client = new OkHttpClient();
         @Override
