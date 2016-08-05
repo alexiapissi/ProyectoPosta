@@ -1,6 +1,8 @@
 package ort.edu.ar.proyecto;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,11 +18,17 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
+import org.json.JSONException;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import ort.edu.ar.proyecto.model.SessionManager;
 
 public class Login extends AppCompatActivity  {
 
@@ -28,6 +36,7 @@ public class Login extends AppCompatActivity  {
     TextView registrarse;
     String mail, contraseña;
     private static final int REQUEST_SIGNUP = 0;
+    SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +55,8 @@ public class Login extends AppCompatActivity  {
                 startActivityForResult(intent, REQUEST_SIGNUP);
             }
         });
+
+        session = new SessionManager(getApplicationContext());
     }
 
     public void btnIngresar (View view){
@@ -65,7 +76,9 @@ public class Login extends AppCompatActivity  {
             }
 
             if (mailUsuario.getError() == null && contraseñaUsuario.getError() == null){
-                String url = "http://viajarort.azurewebsites.net/LoginUsuario.php";
+                session.createLoginSession(contraseñaUsuario.getText().toString(), mailUsuario.getText().toString());
+
+                String url = "http://viajarort.azurewebsites.net/LogueoUsuario.php";
                 new LoginTask().execute(url);
             }
         }
@@ -78,15 +91,13 @@ public class Login extends AppCompatActivity  {
         protected void onPostExecute(String resultado) {
             super.onPostExecute(resultado);
             if (!resultado.isEmpty()) {
-                if (resultado.equals("Llego")){
-                    //ir al inicio
-                    Intent intent = new Intent(Login.this, Busqueda.class);
-                    startActivity(intent);
-                } else {
+                if (resultado.equals("No existe el usuario")){
                     Toast registro = Toast.makeText(getApplicationContext(), "El usuario y la contraseña no coinciden", Toast.LENGTH_SHORT);
                     registro.show();
+                } else {
+                    //ir al inicio
+                    finish();
                 }
-
             }
         }
 
@@ -100,8 +111,11 @@ public class Login extends AppCompatActivity  {
                     .build();
             try {
                 Response response = client.newCall(request).execute();
-                return response.body().string();
-            } catch (IOException /* | JSONException */ e) {
+                CookieManager cookieManager = new CookieManager();
+                cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+                client.setCookieHandler(cookieManager);
+                return parsearRespuesta(response.body().string());
+            } catch (IOException | JSONException e) {
                 Log.d("Error", e.getMessage());
                 return "";
             }
@@ -116,6 +130,17 @@ public class Login extends AppCompatActivity  {
 
             return body;
         }
+
+        String parsearRespuesta(String JSONstr) throws JSONException {
+            org.json.JSONObject respuesta = new org.json.JSONObject(JSONstr);
+            if (respuesta.has("Id")){
+                String id = respuesta.getString("Id");
+                return id;
+            } else {
+                String error = respuesta.getString("Error");
+                return error;
+            }
+        }
     }
 
     public String validateEmailAddress(String emailAddress) {
@@ -127,46 +152,6 @@ public class Login extends AppCompatActivity  {
             return "Invalid Email Address";
         }
     }
-
-    /*
-    protected void processRequestPOST(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        HttpSession sesion = request.getSession();
-        String usu, pass;
-        usu = request.getParameter("user");
-        pass = request.getParameter("password");
-        //deberíamos buscar el usuario en la base de datos, pero dado que se escapa de este tema, ponemos un ejemplo en el mismo código
-        if(usu.equals("admin") && pass.equals("admin") && sesion.getAttribute("usuario") == null){
-            //si coincide usuario y password y además no hay sesión iniciada
-            sesion.setAttribute("usuario", usu);
-            //redirijo a página con información de login exitoso
-            response.sendRedirect("loginExito.jsp");
-        }else{
-            //lógica para login inválido
-        }
-    }
-
-    //método encargado de la gestión del método GET
-    protected void processRequestGET(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        //me llega la url "proyecto/login/out"
-        String action=(request.getPathInfo()!=null?request.getPathInfo():"");
-        HttpSession sesion = request.getSession();
-        if(action.equals("/out")){
-            sesion.invalidate();
-            response.sendRedirect("/home.jsp");
-        }else{
-
-        }
-    }
-    ...
-}
-*/
-
-
-
 
 }
 

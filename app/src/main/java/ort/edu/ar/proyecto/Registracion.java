@@ -151,8 +151,7 @@ public class Registracion extends AppCompatActivity {
                         contraUsuario.setText("");
                         repContraUsuario.setText("");
                         //ir al inicio
-                        Intent intent = new Intent(Registracion.this, Busqueda.class);
-                        startActivity(intent);
+                        finish();
                     }
                 }
             }
