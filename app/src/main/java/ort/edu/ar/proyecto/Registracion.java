@@ -99,13 +99,23 @@ public class Registracion extends AppCompatActivity {
         mail = mailUsuario.getText().toString();
         residencia = residenciaUsuario.getText().toString();
 
-        //validar el mail
-
         if (contraseña.length() == 0 || repContraseña.length() == 0 || nombre.length() == 0 || mail.length() == 0 || residencia.length() == 0 /* || foto.length() == 0 */) {
             Toast error = Toast.makeText(this, "Debe completar todos los campos", Toast.LENGTH_SHORT);
             error.show();
         } else {
-            if (validateEmailAddress(mail).equals("Valid Email Address")){
+            if (contraseña.length() < 4 || contraseña.length() > 10) {
+                contraUsuario.setError("La contraseña debe tener entre 4 y 10 caracteres");
+            }
+
+            if (repContraseña.length() < 4 || repContraseña.length() > 10) {
+                repContraUsuario.setError("La contraseña debe tener entre 4 y 10 caracteres");
+            }
+
+            if (validateEmailAddress(mail).equals("Invalid Email Address")) {
+                mailUsuario.setError("Mail no valido");
+            }
+
+            if (contraUsuario.getError() == null && repContraUsuario.getError() == null && mailUsuario.getError() == null) {
                 if (contraseña.equals(repContraseña)) {
                     String url = "http://viajarort.azurewebsites.net/RegistroUsuario.php";
                     new UsuarioTask().execute(url);
@@ -113,15 +123,6 @@ public class Registracion extends AppCompatActivity {
                     Toast error = Toast.makeText(this, "Las contraseñas no coinciden", Toast.LENGTH_SHORT);
                     error.show();
                 }
-            } else {
-                Toast error = Toast.makeText(this, "Mail no valido", Toast.LENGTH_SHORT);
-                error.show();
-            }
-
-            if (contraseña.isEmpty() || contraseña.length() < 4 || contraseña.length() > 10) {
-                contraUsuario.setError("between 4 and 10 alphanumeric characters");
-            } else {
-                contraUsuario.setError(null);
             }
         }
     }
@@ -136,20 +137,24 @@ public class Registracion extends AppCompatActivity {
             if (!resultado.isEmpty()) {
                 if (resultado.equals("0")){
                 registro = Toast.makeText(getApplicationContext(), "Hubo un problema en la registración, intente de nuevo", Toast.LENGTH_SHORT);
+                registro.show();
                 } else {
-                    if (resultado.equals("El mail ya existe")){
-                        registro = Toast.makeText(getApplicationContext(), "El mail ya existe", Toast.LENGTH_SHORT);
+                    if (resultado.equals("El email ya existe.")){
+                        mailUsuario.setError("El mail ya existe");
+                        //registro = Toast.makeText(getApplicationContext(), "El mail ya existe", Toast.LENGTH_SHORT);
                     } else {
                         registro = Toast.makeText(getApplicationContext(), "Registración completada", Toast.LENGTH_SHORT);
+                        registro.show();
                         nomUsuario.setText("");
                         mailUsuario.setText("");
                         residenciaUsuario.setText("");
                         contraUsuario.setText("");
                         repContraUsuario.setText("");
                         //ir al inicio
+                        Intent intent = new Intent(Registracion.this, Busqueda.class);
+                        startActivity(intent);
                     }
                 }
-                registro.show();
             }
         }
 
@@ -191,9 +196,6 @@ public class Registracion extends AppCompatActivity {
                 String error = respuesta.getString("Error");
                 return error;
             }
-
-            //parsear si es "Error": El mail ya existe
-            //arreglar esto
         }
     }
 

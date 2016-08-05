@@ -18,11 +18,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Detalle_Tour"></activity>
-        <activity android:name=".Perfil_Usuario"></activity>
+        <activity android:name=".Detalle_Tour" />
+        <activity android:name=".Perfil_Usuario" />
+        <activity android:name=".Registracion" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBUerbb5Jr5JoRsDcrp_OPh6tp9mLrbkU0"/>
+            android:value="AIzaSyBUerbb5Jr5JoRsDcrp_OPh6tp9mLrbkU0" />
+
+        <activity android:name=".Login"></activity>
     </application>
 
 </manifest>

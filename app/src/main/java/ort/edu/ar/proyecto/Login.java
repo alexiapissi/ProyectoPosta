@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Login extends AppCompatActivity {
+public class Login extends AppCompatActivity  {
 
     EditText mailUsuario, contraseñaUsuario;
     TextView registrarse;
@@ -56,13 +56,17 @@ public class Login extends AppCompatActivity {
             Toast error = Toast.makeText(this, "Debe completar todos los campos", Toast.LENGTH_SHORT);
             error.show();
         } else {
-            if (validateEmailAddress(mail).equals("Valid Email Address")) {
+            if (validateEmailAddress(mail).equals("Invalid Email Address")) {
+                mailUsuario.setError("Mail no valido");
+            }
+
+            if (contraseña.length() < 4 || contraseña.length() > 10){
+                contraseñaUsuario.setError("La contraseña debe tener entre 4 y 10 caracteres");
+            }
+
+            if (mailUsuario.getError() == null && contraseñaUsuario.getError() == null){
                 String url = "http://viajarort.azurewebsites.net/LoginUsuario.php";
                 new LoginTask().execute(url);
-            }
-            else {
-                Toast error = Toast.makeText(this, "Mail no valido", Toast.LENGTH_SHORT);
-                error.show();
             }
         }
     }
@@ -76,6 +80,8 @@ public class Login extends AppCompatActivity {
             if (!resultado.isEmpty()) {
                 if (resultado.equals("Llego")){
                     //ir al inicio
+                    Intent intent = new Intent(Login.this, Busqueda.class);
+                    startActivity(intent);
                 } else {
                     Toast registro = Toast.makeText(getApplicationContext(), "El usuario y la contraseña no coinciden", Toast.LENGTH_SHORT);
                     registro.show();
@@ -121,6 +127,45 @@ public class Login extends AppCompatActivity {
             return "Invalid Email Address";
         }
     }
+
+    /*
+    protected void processRequestPOST(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        HttpSession sesion = request.getSession();
+        String usu, pass;
+        usu = request.getParameter("user");
+        pass = request.getParameter("password");
+        //deberíamos buscar el usuario en la base de datos, pero dado que se escapa de este tema, ponemos un ejemplo en el mismo código
+        if(usu.equals("admin") && pass.equals("admin") && sesion.getAttribute("usuario") == null){
+            //si coincide usuario y password y además no hay sesión iniciada
+            sesion.setAttribute("usuario", usu);
+            //redirijo a página con información de login exitoso
+            response.sendRedirect("loginExito.jsp");
+        }else{
+            //lógica para login inválido
+        }
+    }
+
+    //método encargado de la gestión del método GET
+    protected void processRequestGET(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        //me llega la url "proyecto/login/out"
+        String action=(request.getPathInfo()!=null?request.getPathInfo():"");
+        HttpSession sesion = request.getSession();
+        if(action.equals("/out")){
+            sesion.invalidate();
+            response.sendRedirect("/home.jsp");
+        }else{
+
+        }
+    }
+    ...
+}
+*/
+
+
 
 
 }
