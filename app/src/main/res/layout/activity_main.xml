@@ -42,5 +42,5 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header"
-        app:menu="@menu/drawer_items" />
+        app:menu="@menu/drawer_items_login" />
 </android.support.v4.widget.DrawerLayout>

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,7 +29,7 @@ import java.net.CookiePolicy;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//import ort.edu.ar.proyecto.model.SessionManager;
+import ort.edu.ar.proyecto.model.SessionManager;
 
 public class Login extends AppCompatActivity  {
 
@@ -36,7 +37,7 @@ public class Login extends AppCompatActivity  {
     TextView registrarse;
     String mail, contraseña;
     private static final int REQUEST_SIGNUP = 0;
-    //SessionManager session;
+    SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +57,7 @@ public class Login extends AppCompatActivity  {
             }
         });
 
-        //session = new SessionManager(getApplicationContext());
+        session = new SessionManager(getApplicationContext());
     }
 
     public void btnIngresar (View view){
@@ -76,8 +77,6 @@ public class Login extends AppCompatActivity  {
             }
 
             if (mailUsuario.getError() == null && contraseñaUsuario.getError() == null){
-                //session.createLoginSession(contraseñaUsuario.getText().toString(), mailUsuario.getText().toString());
-
                 String url = "http://viajarort.azurewebsites.net/LogueoUsuario.php";
                 new LoginTask().execute(url);
             }
@@ -95,8 +94,10 @@ public class Login extends AppCompatActivity  {
                     Toast registro = Toast.makeText(getApplicationContext(), "El usuario y la contraseña no coinciden", Toast.LENGTH_SHORT);
                     registro.show();
                 } else {
+                    session.createLoginSession(contraseñaUsuario.getText().toString(), mailUsuario.getText().toString());
                     //ir al inicio
-                    finish();
+                    Intent intent= new Intent(getApplicationContext(),MainActivity.class);
+                    startActivity(intent);
                 }
             }
         }
