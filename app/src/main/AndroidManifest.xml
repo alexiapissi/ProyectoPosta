@@ -13,10 +13,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".Login" />
         <activity android:name=".Registracion" />
-
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBUerbb5Jr5JoRsDcrp_OPh6tp9mLrbkU0" />
+        <activity android:name=".CerrarSesion" />
 
         <activity android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -26,6 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBUerbb5Jr5JoRsDcrp_OPh6tp9mLrbkU0" />
+
     </application>
 
 </manifest>

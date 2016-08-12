@@ -1,6 +1,7 @@
 package ort.edu.ar.proyecto;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -49,7 +50,8 @@ public class CerrarSesion extends AppCompatActivity {
             toast.show();
             //session.logoutUser();
             //ir al inicio
-            finish();
+            Intent intent= new Intent(getApplicationContext(),MainActivity.class);
+            startActivity(intent);
         }
 
         @Override

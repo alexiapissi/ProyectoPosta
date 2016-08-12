@@ -14,24 +14,9 @@
         </group>
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_user"
-            android:icon="@drawable/ic_person_black_24dp"
-            android:title="Perfil"
-            android:visible="false"/>
-    </group>
-    <group android:checkableBehavior="single">
-        <item
             android:id="@+id/login"
-            android:title="Login"
-            android:icon="@drawable/ic_person_black_24dp"
-            android:visible="true"/>
+            android:title="Iniciar sesión"
+            android:icon="@drawable/ic_person_black_24dp" />
     </group>
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/logout"
-            android:title="Logout"
-            android:visible="false"/>
-    </group>
-
 
 </menu>

@@ -1,5 +1,6 @@
 package ort.edu.ar.proyecto;
 
+import android.content.ClipData;
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
@@ -20,6 +22,7 @@ import ort.edu.ar.proyecto.Fragments.Detalle_Tour;
 import ort.edu.ar.proyecto.Fragments.FBusqueda;
 import ort.edu.ar.proyecto.Fragments.Perfil_Usuario;
 import ort.edu.ar.proyecto.model.Punto;
+import ort.edu.ar.proyecto.model.SessionManager;
 import ort.edu.ar.proyecto.model.Tour;
 import ort.edu.ar.proyecto.model.Usuario;
 
@@ -31,7 +34,11 @@ public class MainActivity extends AppCompatActivity {
     //int posicion;
     ArrayList<Punto> puntos;
     Usuario usuario;
+    SessionManager session;
+    NavigationView navigationView;
+    MenuItem usu, login, logout;
     Fragment Busquedafragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +52,22 @@ public class MainActivity extends AppCompatActivity {
                 .addToBackStack(null)
                 .commit();
 
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navUsuario = (TextView)navigationView.getHeaderView(0).findViewById(R.id.nav_username);
+
+        session = new SessionManager(this);
+
+        //usu = navigationView.getMenu().findItem(R.id.nav_user);
+        //login = navigationView.getMenu().findItem(R.id.login);
+        //logout = navigationView.getMenu().findItem(R.id.logout);
+        if (session.checkLogin() == 0){
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.drawer_items_login);
+        } else {
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.drawer_items_logout);
+            navUsuario.setText(session.getUserDetails().get("email"));
+        }
 
     }
 
@@ -122,8 +145,8 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
     private void inicializarToolbar() {
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -131,10 +154,7 @@ public class MainActivity extends AppCompatActivity {
                 this, drawerLayout, toolbar, 0, 0);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         setearListener(navigationView);
-        navUsuario = (TextView)navigationView.getHeaderView(0).findViewById(R.id.nav_username);
-
     }
 
 
@@ -177,7 +197,6 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
         }
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

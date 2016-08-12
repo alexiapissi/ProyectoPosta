@@ -51,6 +51,7 @@ public class Perfil_Usuario extends Fragment {
     Tour Tourmandar;
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         View v=inflater.inflate(R.layout.activity_perfil_usuario,container,false);
