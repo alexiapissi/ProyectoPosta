@@ -29,7 +29,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import ort.edu.ar.proyecto.Fragments.Detalle_Tour;
 import ort.edu.ar.proyecto.MainActivity;
 import ort.edu.ar.proyecto.R;
 import ort.edu.ar.proyecto.model.CircleTransform;
