@@ -1,6 +1,5 @@
 package ort.edu.ar.proyecto;
 
-import android.content.ClipData;
 import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -12,14 +11,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import ort.edu.ar.proyecto.Fragments.Detalle_Tour;
-import ort.edu.ar.proyecto.Fragments.FBusqueda;
+import ort.edu.ar.proyecto.Fragments.FHome;
+import ort.edu.ar.proyecto.Fragments.FragmentBuscar;
 import ort.edu.ar.proyecto.Fragments.Perfil_Usuario;
 import ort.edu.ar.proyecto.model.Punto;
 import ort.edu.ar.proyecto.model.SessionManager;
@@ -37,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     SessionManager session;
     NavigationView navigationView;
     MenuItem usu, login, logout;
-    Fragment Busquedafragment;
+    Fragment HomeFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +44,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         inicializarToolbar();
-        Busquedafragment = new FBusqueda();
+        HomeFragment = new FHome();
+
         FragmentManager fm= getSupportFragmentManager();
         fm.beginTransaction()
-                .replace(R.id.contenido,Busquedafragment)
+                .replace(R.id.contenido,HomeFragment)
                 .addToBackStack(null)
                 .commit();
 
@@ -104,13 +104,22 @@ public class MainActivity extends AppCompatActivity {
         posicion=pos;
     }*/
 
-    public void IraBusqueda() {
+    public void IraHome() {
 
         //fragment.setTour(tour);
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
                 .addToBackStack(null)
-                .replace(R.id.contenido, Busquedafragment)
+                .replace(R.id.contenido, HomeFragment)
+                .commit();
+    }
+
+    public void IraBusqueda(){
+        FragmentBuscar fbusqueda=new FragmentBuscar();
+        FragmentManager fm=getSupportFragmentManager();
+        fm.beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.contenido, fbusqueda)
                 .commit();
     }
 
@@ -166,10 +175,11 @@ public class MainActivity extends AppCompatActivity {
                 switch(item.getItemId()) {
                     case R.id.nav_home:
                         Log.d("Choose:","Home");
-                        IraBusqueda();
+                        IraHome();
                         break;
                     case R.id.nav_user:
                         //mostrar cuando ya inicio sesion
+
                         Log.d("Choose:","user");
                         break;
                     case R.id.login:
@@ -181,6 +191,11 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("Choose:","Logout");
                         IraCerrarSesion();
                         break;
+                    case R.id.nav_busqueda:
+                        IraBusqueda();
+                        break;
+
+
                 }
 
                 drawerLayout.closeDrawers();
@@ -204,6 +219,7 @@ public class MainActivity extends AppCompatActivity {
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
