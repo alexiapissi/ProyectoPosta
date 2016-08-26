@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
                         IraBusqueda();
                         break;
                     case R.id.nav_user:
-                        //mostrar cuando ya inicio sesion
+                        //mostrar cuando inicio sesion
                         Log.d("Choose:","user");
                         IraMiPerfil();
                         break;

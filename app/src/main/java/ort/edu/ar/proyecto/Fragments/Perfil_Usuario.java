@@ -128,7 +128,7 @@ public class Perfil_Usuario extends Fragment {
             foto = "";
             foto= resultado.getFoto();
 
-            //que no venga una foto sin nada, que venga "" asi se muestra la default
+            //que no venga una foto sin nada, que venga "" asi se muestra la foto default
             if (!foto.isEmpty()) {
                 Picasso
                         .with(getContext())

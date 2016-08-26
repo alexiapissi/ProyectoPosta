@@ -96,8 +96,6 @@ public class FragmentDetalle extends Fragment {
         darlike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //si esta registrado dar like sino avisar que no se puede
-
                 //que quede el like maracado cuando se va a otro lado
                 if (session.checkLogin() == 1){
                     if (darlike.getTag().equals("nolike")){
