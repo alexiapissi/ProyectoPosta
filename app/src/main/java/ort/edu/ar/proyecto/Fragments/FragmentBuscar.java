@@ -1,8 +1,10 @@
 package ort.edu.ar.proyecto.Fragments;
 
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -17,7 +19,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -39,6 +40,7 @@ import ort.edu.ar.proyecto.model.Usuario;
 
 
 public class FragmentBuscar extends Fragment {
+    ArrayList<Gusto> gustosparc;
     ArrayList<Gusto> gustos;
     ProgressBar cargando;
     ToursAdapter toursAdapter;
@@ -46,7 +48,7 @@ public class FragmentBuscar extends Fragment {
     EditText inputSearch;
     ListView listviewt;
     TextView mensaje;
-    boolean vacio=true;
+    boolean iswaiting =false;
 
     @Override
     public void onCreate(Bundle savedInstantState) {
@@ -65,7 +67,7 @@ public class FragmentBuscar extends Fragment {
         mensaje=(TextView) view.findViewById(R.id.msj);
         toursAdapter = new ToursAdapter(getActivity(), tours);
         listviewt.setAdapter(toursAdapter);
-
+        setHasOptionsMenu(true);
         inputSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -77,12 +79,19 @@ public class FragmentBuscar extends Fragment {
                 if(cs.length()>=3){
                     new ToursTask().execute("http://viajarort.azurewebsites.net/tours.php");
                     cargando.setVisibility(View.VISIBLE);
-                    vacio=false;
+                    iswaiting=true;
                     mensaje.setVisibility(View.GONE);
                 }
                 if(cs.length()==0){
-                    vacio=true;
+
                     mensaje.setVisibility(View.VISIBLE);
+                }
+                if(cs.length()<3){
+                    cargando.setVisibility(View.GONE);
+                    mensaje.setVisibility(View.VISIBLE);
+                    tours.clear();
+                    toursAdapter.notifyDataSetChanged();
+                    iswaiting =false;
                 }
 
 
@@ -126,15 +135,18 @@ public class FragmentBuscar extends Fragment {
         switch (item.getItemId()) {
             case R.id.nav_opciones:
                 Log.d("opciones", "ison");
-                Toast.makeText(getContext(), "opciones", Toast.LENGTH_SHORT).show();
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                GustosDialog gustosDialog = new GustosDialog();
+                gustosDialog.Setgustos(gustos);
+                gustosDialog.show(fm,"fragment_gustos");
                 break;
-        }
+    }
         return true;
     }
 
     private class ToursTask extends AsyncTask<String, Void, ArrayList<Tour>> {
         private OkHttpClient client = new OkHttpClient();
-        private boolean estaCargando=false;
+
 
        /* public boolean getEstaCargando() {
             return estaCargando;
@@ -143,26 +155,20 @@ public class FragmentBuscar extends Fragment {
         @Override
         protected void onPreExecute() {
             // SHOW THE SPINNER WHILE LOADING FEEDS
-            estaCargando = true;
-            if (vacio=true){
-                mensaje.setVisibility(View.VISIBLE);
-            }
-            else{
-                mensaje.setVisibility(View.GONE);
-            }
+
         }
 
 
         @Override
         protected void onPostExecute(ArrayList<Tour> resultado) {
             super.onPostExecute(resultado);
-            if (!resultado.isEmpty()) {
+
+            if (!resultado.isEmpty()&& iswaiting) {
                 tours.clear();
                 tours.addAll(resultado);
                 toursAdapter.notifyDataSetChanged();
             }
             cargando.setVisibility(View.GONE);
-            estaCargando = false;
         }
 
         @Override
@@ -201,22 +207,26 @@ public class FragmentBuscar extends Fragment {
 
                 Usuario usu = new Usuario(nomUsuario, fotoUsuario, idUsuario, "", null);
 
-                gustos = new ArrayList<>();
+                gustosparc = new ArrayList<>();
                 JSONArray jsongustos = jsonResultado.getJSONArray("Gusto");
                 for (int j = 0; j < jsongustos.length(); j++) {
                     JSONObject jsonresultadoGustos = jsongustos.getJSONObject(j);
                     int jsonIdGusto = jsonresultadoGustos.getInt("Id");
                     String jsonnombregustos = jsonresultadoGustos.getString("Nombre");
                     Gusto gus = new Gusto(jsonIdGusto, jsonnombregustos);
-                    gustos.add(gus);
+                    gustosparc.add(gus);
                 }
 
-                Tour t = new Tour(jsonNombre, jsonDescripcion, jsonFoto, jsonUbicacion, jsonId, jsonLikes, usu, null, gustos);
+                Tour t = new Tour(jsonNombre, jsonDescripcion, jsonFoto, jsonUbicacion, jsonId, jsonLikes, usu, null, gustosparc);
                 tours.add(t);
             }
             return tours;
         }
 
+    }
+
+    public void Setbusqueda (ArrayList<Gusto> gustos){
+        this.gustos=gustos;
     }
 
 }
