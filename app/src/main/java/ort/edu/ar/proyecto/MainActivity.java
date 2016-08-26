@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import ort.edu.ar.proyecto.Fragments.Detalle_Tour;
 import ort.edu.ar.proyecto.Fragments.FBusqueda;
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     NavigationView navigationView;
     MenuItem usu, login, logout;
     Fragment Busquedafragment;
+    String miId;
+    int idUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +69,13 @@ public class MainActivity extends AppCompatActivity {
         } else {
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.drawer_items_logout);
-            navUsuario.setText(session.getUserDetails().get("email"));
+            String email = session.getUserDetails().get(100)[0];
+            navUsuario.setText(email);
+        }
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            miId = extras.getString("miId");
         }
 
     }
@@ -131,6 +140,10 @@ public class MainActivity extends AppCompatActivity {
 
     public Usuario getUsuario(){ return usuario; }
 
+    public int getIdUsuario() { return idUsuario; }
+
+    public void setIdUsuario(int id) { idUsuario = id; }
+
     public void setTours (ArrayList<Tour> tourss){
         tours = tourss;
     }
@@ -144,6 +157,19 @@ public class MainActivity extends AppCompatActivity {
         Intent intent= new Intent(this,CerrarSesion.class);
         startActivity(intent);
     }
+
+
+    public void IraMiPerfil(){
+        idUsuario = Integer.parseInt(session.getUserDetails().get(100)[2]);
+        this.setIdUsuario(idUsuario);
+        Perfil_Usuario fragment = new Perfil_Usuario();
+        FragmentManager fm= getSupportFragmentManager();
+        fm.beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.contenido,fragment)
+                .commit();
+    }
+
 
     private void inicializarToolbar() {
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -171,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_user:
                         //mostrar cuando ya inicio sesion
                         Log.d("Choose:","user");
+                        IraMiPerfil();
                         break;
                     case R.id.login:
                         Log.d("Choose:","Login");

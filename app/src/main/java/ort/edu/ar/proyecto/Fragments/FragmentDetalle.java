@@ -1,7 +1,10 @@
 package ort.edu.ar.proyecto.Fragments;
 
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.IntegerRes;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,9 +15,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 import com.squareup.picasso.Picasso;
 
@@ -23,13 +29,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.HttpCookie;
 import java.util.ArrayList;
+import java.util.List;
 
+import ort.edu.ar.proyecto.Login;
 import ort.edu.ar.proyecto.MainActivity;
 import ort.edu.ar.proyecto.R;
 import ort.edu.ar.proyecto.model.CircleTransform;
 import ort.edu.ar.proyecto.model.Punto;
 import ort.edu.ar.proyecto.model.PuntosAdapter;
+import ort.edu.ar.proyecto.model.SessionManager;
 import ort.edu.ar.proyecto.model.Tour;
 
 /**
@@ -44,7 +54,7 @@ public class FragmentDetalle extends Fragment {
     //TextView descripcion;
     TextView ubicacion;
     TextView nombreUsuario;
-    ImageView likes;
+    ImageButton darlike;
     TextView cantLikes;
     ListView listPuntosVW;
     PuntosAdapter puntosAdapter;
@@ -54,6 +64,8 @@ public class FragmentDetalle extends Fragment {
     Tour tour;
     MainActivity ma;
     ProgressBar progressbar;
+    int cantidadLikes;
+    SessionManager session;
 
     public FragmentDetalle() {
     }
@@ -76,8 +88,43 @@ public class FragmentDetalle extends Fragment {
         ubicacion = (TextView) view.findViewById(R.id.UbicacionTourd);
         nombreUsuario = (TextView) view.findViewById(R.id.NombreUsuariod);
         cantLikes = (TextView) view.findViewById(R.id.cantlikesd);
-        likes = (ImageView) view.findViewById(R.id.Liked);
+        darlike = (ImageButton) view.findViewById(R.id.Liked);
         listPuntosVW = (ListView) view.findViewById(R.id.listPuntos);
+
+        session = new SessionManager(getContext());
+
+        darlike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //si esta registrado dar like sino avisar que no se puede
+
+                //que quede el like maracado cuando se va a otro lado
+                if (session.checkLogin() == 1){
+                    if (darlike.getTag().equals("nolike")){
+                        darlike.setImageResource(R.drawable.likes);
+                        cantidadLikes = Integer.parseInt(cantLikes.getText().toString());
+                        cantidadLikes++;
+                        cantLikes.setText(Integer.toString(cantidadLikes));
+                        tour.setLikes(Integer.toString(cantidadLikes));
+                        darlike.setTag("like");
+                        String url = "http://viajarort.azurewebsites.net/actu.php";
+                        new EditarTour().execute(url);
+                    } else {
+                        darlike.setImageResource(R.drawable.nolike);
+                        darlike.setTag("nolike");
+                        cantidadLikes = Integer.parseInt(cantLikes.getText().toString());
+                        cantidadLikes--;
+                        cantLikes.setText(Integer.toString(cantidadLikes));
+                        tour.setLikes(Integer.toString(cantidadLikes));
+                        String url = "http://viajarort.azurewebsites.net/actu.php";
+                        new EditarTour().execute(url);
+                    }
+                } else {
+                    Toast mensaje = Toast.makeText(getContext(), "Inicie sesion para dar likes", Toast.LENGTH_SHORT);
+                    mensaje.show();
+                }
+            }
+        });
 
         puntos = new ArrayList<>();
         puntosAdapter = new PuntosAdapter(getActivity().getApplicationContext(), puntos);
@@ -178,13 +225,63 @@ public class FragmentDetalle extends Fragment {
 
     }
 
+    private class EditarTour extends AsyncTask<String, Void, String> {
+        private OkHttpClient client = new OkHttpClient();
+
+
+        @Override
+        protected void onPostExecute(String resultado) {
+            super.onPostExecute(resultado);
+            Toast registro;
+            if (!resultado.isEmpty()) {
+                if (resultado.equals("Se actualizo el like correctamente")){
+                    //asdas
+                } else {
+                    //sfs "no se pudo actualizar el like"
+                }
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String url = params[0];
+            RequestBody body = generarJSON();
+            Request request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .build();
+            try {
+                Response response = client.newCall(request).execute();
+                return parsearRespuesta(response.body().string());
+            } catch (IOException | JSONException  e) {
+                Log.d("Error", e.getMessage());
+                return "";
+            }
+        }
+
+        RequestBody generarJSON (){
+            org.json.simple.JSONObject json = new org.json.simple.JSONObject();
+            json.put("Id", tour.getId());
+            json.put("Likes", tour.getLikes());
+
+            RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
+
+            return body;
+        }
+
+        String parsearRespuesta(String JSONstr) throws JSONException {
+            org.json.JSONObject respuesta = new org.json.JSONObject(JSONstr);
+            String actualizacion = respuesta.getString("Actualizacion");
+            return actualizacion;
+        }
+    }
 
     public void addListenerOnButton() {
         fotoUsuario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
              //dt.setUsuario(tour.getUsuario());
-                ma.setUsuario(tour.getUsuario());
+                ma.setIdUsuario(tour.getUsuario().getId());
                 ma.mandarUsuario();
             }
         });
@@ -194,7 +291,7 @@ public class FragmentDetalle extends Fragment {
         nombreUsuario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ma.setUsuario(tour.getUsuario());
+                ma.setIdUsuario(tour.getUsuario().getId());
                 ma.mandarUsuario();
             }
         });

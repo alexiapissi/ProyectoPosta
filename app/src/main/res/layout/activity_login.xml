@@ -25,7 +25,8 @@
                 android:padding="10dp"
                 android:hint="Mail"
                 android:textColorHint="#cccccc"
-                android:drawableLeft="@drawable/email"/>
+                android:drawableLeft="@drawable/email"
+                android:singleLine="true"/>
 
             <EditText
                 android:id="@+id/contraseña"
@@ -37,7 +38,8 @@
                 android:hint="Contraseña"
                 android:textColorHint="#cccccc"
                 android:inputType="textPassword"
-                android:drawableLeft="@drawable/password"/>
+                android:drawableLeft="@drawable/password"
+                android:singleLine="true"/>
 
             <Button
                 android:layout_width="match_parent"
@@ -49,6 +51,7 @@
                 android:layout_margin="4dp"
                 android:text="Sign In"
                 android:onClick="btnIngresar"
+                android:id="@+id/ingresar"
                 />
 
             <TextView

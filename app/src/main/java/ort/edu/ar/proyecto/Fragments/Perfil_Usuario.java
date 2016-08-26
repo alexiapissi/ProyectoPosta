@@ -48,10 +48,11 @@ public class Perfil_Usuario extends Fragment {
     ArrayList<Tour> toursUsuarioAL;
     ArrayList<Tour> toursRecibidos;
     String resid;
+    String nom;
+    String foto;
     ProgressBar progressbar;
     Tour Tourmandar;
-
-
+    int id;
 
     @Override
     public View onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
@@ -62,16 +63,12 @@ public class Perfil_Usuario extends Fragment {
         fotoUsuario = (ImageView) v.findViewById(R.id.fotoUsu);
         toursUsuario = (ListView) v.findViewById(R.id.listToursUsu);
 
+        usu = new Usuario("", "", 0, "", null);
+
         MainActivity ma= (MainActivity) getActivity();
-        Usuario usuario = ma.getUsuario();
-        usu = usuario;
-        nombreUsuario.setText(usu.getNombre());
-        Picasso
-                .with(getContext())
-                .load(usu.getFoto())
-                //.resize(40,40)
-                .transform(new CircleTransform())
-                .into(fotoUsuario);
+        id = ma.getIdUsuario();
+        //Usuario usuario = ma.getUsuario();
+        //usu = usuario;
 
         //adapter = new ToursUsuarioAdapter(getApplicationContext(), usu.getToursCreados());
 
@@ -101,7 +98,7 @@ public class Perfil_Usuario extends Fragment {
     public void onStart() {
         super.onStart();
         String url = "http://viajarort.azurewebsites.net/usuario.php?id=";
-        url += usu.getId();
+        url += id;
         new UsuarioTask().execute(url);
         // Llamo a clase async con url
     }
@@ -119,10 +116,28 @@ public class Perfil_Usuario extends Fragment {
         protected void onPostExecute(Usuario resultado) {
             super.onPostExecute(resultado);
             toursUsuarioAL.clear();
-            toursUsuarioAL.addAll(resultado.getToursCreados());
+            if (!toursUsuarioAL.isEmpty()){
+                toursUsuarioAL.addAll(resultado.getToursCreados());
+            }
             resid = "";
             resid = resultado.getResidencia();
             residenciaUsuario.setText(resid);
+            nom = "";
+            nom = resultado.getNombre();
+            nombreUsuario.setText(nom);
+            foto = "";
+            foto= resultado.getFoto();
+
+            //que no venga una foto sin nada, que venga "" asi se muestra la default
+            if (!foto.isEmpty()) {
+                Picasso
+                        .with(getContext())
+                        .load(usu.getFoto())
+                        //.resize(40,40)
+                        .transform(new CircleTransform())
+                        .into(fotoUsuario);
+            }
+
             adapter.notifyDataSetChanged();
             progressbar.setVisibility(View.GONE);
         }
@@ -146,22 +161,31 @@ public class Perfil_Usuario extends Fragment {
         // Convierte un JSON
         Usuario parsearResultado(String JSONstr) throws JSONException {
             JSONObject usuario = new JSONObject(JSONstr);
+            String jsonNombreUsuario = usuario.getString("Nombre");
             String jsonResidenciaUsuario = usuario.getString("Residencia");
+            String jsonFotoUsuario = usuario.getString("FotoURL");
 
             ArrayList<Tour> toursLocal = new ArrayList<>();
-            JSONArray jsonTours = usuario.getJSONArray("Tours");
-            for (int i = 0; i < jsonTours.length(); i++) {
-                JSONObject jsonResultado = jsonTours.getJSONObject(i);
-                int jsonId = jsonResultado.getInt("Id");
-                String jsonNombre = jsonResultado.getString("Nombre");
-                String jsonFoto = jsonResultado.getString("FotoURL");
 
-                Tour t = new Tour(jsonNombre, "", jsonFoto, "", jsonId, "", null, null, null);
-                toursLocal.add(t);
+            if (usuario.getJSONArray("Tours") != null) {
+                JSONArray jsonTours = usuario.getJSONArray("Tours");
+                for (int i = 0; i < jsonTours.length(); i++) {
+                    JSONObject jsonResultado = jsonTours.getJSONObject(i);
+                    int jsonId = jsonResultado.getInt("Id");
+                    String jsonNombre = jsonResultado.getString("Nombre");
+                    String jsonFoto = jsonResultado.getString("FotoURL");
+
+                    Tour t = new Tour(jsonNombre, "", jsonFoto, "", jsonId, "", null, null, null);
+                    toursLocal.add(t);
+                }
+            } else {
+                toursLocal = null;
             }
 
             //no muestra residencia, va al catch
+            usu.setNombre(jsonNombreUsuario);
             usu.setResidencia(jsonResidenciaUsuario);
+            usu.setFoto(jsonFotoUsuario);
             usu.setToursCreados(toursLocal);
             return usu;
         }

@@ -2,15 +2,24 @@ package ort.edu.ar.proyecto.Fragments;
 
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -42,7 +51,6 @@ public class FBusqueda extends Fragment {
     TextView descripcion;
     TextView ubicacion;
     TextView nombreUsuario;
-    ImageView likes;
     TextView cantLikes;
     ListView listVW;
     ProgressBar cargando;
@@ -52,19 +60,15 @@ public class FBusqueda extends Fragment {
     SwipeRefreshLayout swipeLayout;
     boolean actualiza=false;
     View v;
-    public FBusqueda(){
 
+    public FBusqueda(){
 
     }
 
     @Override
     public void onCreate( Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-
     }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -81,9 +85,7 @@ public class FBusqueda extends Fragment {
             ubicacion = (TextView) v.findViewById(R.id.UbicacionTour);
             nombreUsuario = (TextView) v.findViewById(R.id.NombreUsuario);
             cantLikes = (TextView) v.findViewById(R.id.cantlikes);
-            likes = (ImageView) v.findViewById(R.id.Like);
             cargando = (ProgressBar) v.findViewById(R.id.progress);
-            //likes.setImageResource(R.drawable.likes);
 
             swipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
                     android.R.color.holo_green_light,
@@ -98,7 +100,6 @@ public class FBusqueda extends Fragment {
                 }
             });
 
-
             listVW.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> adapter, View V, int position, long l) {
                 /*Intent intent = new Intent(Busqueda.this, Detalle_Tour.class);
@@ -110,6 +111,7 @@ public class FBusqueda extends Fragment {
                     ma.IraDetalle(tours.get(position));
                 }
             });
+
             tours = new ArrayList<>();
             toursAdapter = new ToursAdapter(getActivity(), tours);
             listVW.setAdapter(toursAdapter);
@@ -118,6 +120,7 @@ public class FBusqueda extends Fragment {
 
             MainActivity ma = (MainActivity)getActivity();
             ma.setTours(tours);
+
         }
         return v;
     }
@@ -201,4 +204,5 @@ public class FBusqueda extends Fragment {
         }
 
     }
+
 }

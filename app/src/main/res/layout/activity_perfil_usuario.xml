@@ -17,7 +17,8 @@
             android:layout_height="80dp"
             android:id="@+id/fotoUsu"
             android:scaleType="centerCrop"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:src="@drawable/user"/>
 
         <TextView
             android:layout_width="fill_parent"
