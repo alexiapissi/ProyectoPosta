@@ -14,13 +14,15 @@ public class Usuario implements Serializable{
     public int Id;
     public String Residencia;
     ArrayList<Tour> ToursCreados;
+    ArrayList<Tour> ToursLikeados;
 
-    public Usuario(String nombre, String foto, int id, String residencia, ArrayList<Tour> toursCreados) {
+    public Usuario(String nombre, String foto, int id, String residencia, ArrayList<Tour> toursCreados, ArrayList<Tour> toursLikeados) {
         this.Nombre = nombre;
         this.Foto = foto;
         this.Id = id;
         this.Residencia = residencia;
         this.ToursCreados = toursCreados;
+        this.ToursLikeados = toursLikeados;
     }
 
     public String getNombre() {
@@ -61,6 +63,14 @@ public class Usuario implements Serializable{
 
     public void setToursCreados(ArrayList<Tour> toursCreados) {
         ToursCreados = toursCreados;
+    }
+
+    public ArrayList<Tour> getToursLikeados() {
+        return ToursLikeados;
+    }
+
+    public void setToursLikeados(ArrayList<Tour> toursLikeados) {
+        ToursLikeados = toursLikeados;
     }
 }
 

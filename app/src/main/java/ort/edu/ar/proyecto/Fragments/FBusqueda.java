@@ -185,10 +185,10 @@ public class FBusqueda extends Fragment {
                 String nomUsuario = jsonResultadoUsuario.getString("Nombre");
                 String fotoUsuario = jsonResultadoUsuario.getString("FotoURL");
 
-                Usuario usu = new Usuario(nomUsuario, fotoUsuario, idUsuario, "", null);
+                Usuario usu = new Usuario(nomUsuario, fotoUsuario, idUsuario, "", null, null);
 
                 gustos=new ArrayList<>();
-                JSONArray jsongustos = jsonResultado.getJSONArray("Gusto");
+                JSONArray jsongustos = jsonResultado.getJSONArray("Gustos");
                 for (int j = 0; j < jsongustos.length(); j++) {
                     JSONObject jsonresultadoGustos = jsongustos.getJSONObject(j);
                     int jsonIdGusto = jsonresultadoGustos.getInt("Id");

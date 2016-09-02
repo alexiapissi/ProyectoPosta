@@ -1,10 +1,7 @@
 package ort.edu.ar.proyecto.Fragments;
 
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.IntegerRes;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,11 +26,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.net.HttpCookie;
 import java.util.ArrayList;
-import java.util.List;
 
-import ort.edu.ar.proyecto.Login;
 import ort.edu.ar.proyecto.MainActivity;
 import ort.edu.ar.proyecto.R;
 import ort.edu.ar.proyecto.model.CircleTransform;
@@ -51,7 +45,6 @@ public class FragmentDetalle extends Fragment {
     ImageView fototour;
     ImageButton fotoUsuario;
     TextView nombre;
-    //TextView descripcion;
     TextView ubicacion;
     TextView nombreUsuario;
     ImageButton darlike;
@@ -66,6 +59,7 @@ public class FragmentDetalle extends Fragment {
     ProgressBar progressbar;
     int cantidadLikes;
     SessionManager session;
+    String accion;
 
     public FragmentDetalle() {
     }
@@ -93,37 +87,6 @@ public class FragmentDetalle extends Fragment {
 
         session = new SessionManager(getContext());
 
-        darlike.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //que quede el like maracado cuando se va a otro lado
-                if (session.checkLogin() == 1){
-                    if (darlike.getTag().equals("nolike")){
-                        darlike.setImageResource(R.drawable.likes);
-                        cantidadLikes = Integer.parseInt(cantLikes.getText().toString());
-                        cantidadLikes++;
-                        cantLikes.setText(Integer.toString(cantidadLikes));
-                        tour.setLikes(Integer.toString(cantidadLikes));
-                        darlike.setTag("like");
-                        String url = "http://viajarort.azurewebsites.net/actu.php";
-                        new EditarTour().execute(url);
-                    } else {
-                        darlike.setImageResource(R.drawable.nolike);
-                        darlike.setTag("nolike");
-                        cantidadLikes = Integer.parseInt(cantLikes.getText().toString());
-                        cantidadLikes--;
-                        cantLikes.setText(Integer.toString(cantidadLikes));
-                        tour.setLikes(Integer.toString(cantidadLikes));
-                        String url = "http://viajarort.azurewebsites.net/actu.php";
-                        new EditarTour().execute(url);
-                    }
-                } else {
-                    Toast mensaje = Toast.makeText(getContext(), "Inicie sesion para dar likes", Toast.LENGTH_SHORT);
-                    mensaje.show();
-                }
-            }
-        });
-
         puntos = new ArrayList<>();
         puntosAdapter = new PuntosAdapter(getActivity().getApplicationContext(), puntos);
         listPuntosVW.setAdapter(puntosAdapter);
@@ -142,12 +105,56 @@ public class FragmentDetalle extends Fragment {
                 //.resize(40,40)
                 .transform(new CircleTransform())
                 .into(fotoUsuario);
-        //descripcion.setText(tour.getDescripcion());
         ubicacion.setText(tour.getUbicacion());
         nombreUsuario.setText(tour.getUsuario().getNombre());
         cantLikes.setText(tour.getLikes());
 
+        String url = "http://viajarort.azurewebsites.net/traerlikes.php";
+        new ObtLike().execute(url);
+
+        darlike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (session.checkLogin() == 1){
+                    if (darlike.getTag().equals("nolike")){
+                        accion = "insertar";
+                        String url2 = "http://viajarort.azurewebsites.net/accionlikexusuario.php";
+                        new CrearEliminarLike().execute(url2);
+                    } else {
+                        accion = "eliminar";
+                        String url2 = "http://viajarort.azurewebsites.net/accionlikexusuario.php";
+                        new CrearEliminarLike().execute(url2);
+                    }
+                } else {
+                    Toast mensaje = Toast.makeText(getContext(), "Inicie sesion para dar likes", Toast.LENGTH_SHORT);
+                    mensaje.show();
+                }
+            }
+        });
+
         return view;
+    }
+
+    public void addListenerOnButton() {
+        fotoUsuario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //dt.setUsuario(tour.getUsuario());
+                ma.setIdUsuario(tour.getUsuario().getId());
+                ma.mandarUsuario();
+            }
+        });
+
+    }
+    public void addListenerOnText() {
+        nombreUsuario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ma.setIdUsuario(tour.getUsuario().getId());
+                ma.mandarUsuario();
+            }
+        });
+
     }
 
     @Override
@@ -223,19 +230,18 @@ public class FragmentDetalle extends Fragment {
 
     }
 
-    private class EditarTour extends AsyncTask<String, Void, String> {
+    private class ActualizarLikes extends AsyncTask<String, Void, String> {
         private OkHttpClient client = new OkHttpClient();
-
 
         @Override
         protected void onPostExecute(String resultado) {
             super.onPostExecute(resultado);
-            Toast registro;
             if (!resultado.isEmpty()) {
                 if (resultado.equals("Se actualizo el like correctamente")){
                     //asdas
                 } else {
-                    //sfs "no se pudo actualizar el like"
+                    Toast mensaje = Toast.makeText(getContext(), "No se pudo actualizar el like", Toast.LENGTH_SHORT);
+                    mensaje.show();
                 }
             }
         }
@@ -261,9 +267,7 @@ public class FragmentDetalle extends Fragment {
             org.json.simple.JSONObject json = new org.json.simple.JSONObject();
             json.put("Id", tour.getId());
             json.put("Likes", tour.getLikes());
-
             RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
-
             return body;
         }
 
@@ -274,28 +278,127 @@ public class FragmentDetalle extends Fragment {
         }
     }
 
-    public void addListenerOnButton() {
-        fotoUsuario.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-             //dt.setUsuario(tour.getUsuario());
-                ma.setIdUsuario(tour.getUsuario().getId());
-                ma.mandarUsuario();
+    private class ObtLike extends AsyncTask<String, Void, String> {
+        private OkHttpClient client = new OkHttpClient();
+
+        @Override
+        protected void onPostExecute(String resultado) {
+            super.onPostExecute(resultado);
+            if (!resultado.isEmpty()) {
+                switch (resultado){
+                    case "true":
+                        darlike.setImageResource(R.drawable.likes);
+                        darlike.setTag("like");
+                        break;
+                    case "false":
+                        darlike.setImageResource(R.drawable.nolike);
+                        darlike.setTag("nolike");
+                        break;
+                }
             }
-        });
+        }
 
-    }
-    public void addListenerOnText() {
-        nombreUsuario.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ma.setIdUsuario(tour.getUsuario().getId());
-                ma.mandarUsuario();
+        @Override
+        protected String doInBackground(String... params) {
+            String url = params[0];
+            RequestBody body = generarJSON();
+            Request request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .build();
+            try {
+                Response response = client.newCall(request).execute();
+                return parsearRespuesta(response.body().string());
+            } catch (IOException | JSONException  e) {
+                Log.d("Error", e.getMessage());
+                return "";
             }
-        });
+        }
 
+        RequestBody generarJSON (){
+            org.json.simple.JSONObject json = new org.json.simple.JSONObject();
+            int idusu = Integer.parseInt(session.getUserDetails().get(100)[2]);
+            json.put("idtour", tour.getId());
+            json.put("idusuario", idusu);
+            RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
+            return body;
+        }
+
+        String parsearRespuesta(String JSONstr) throws JSONException {
+            org.json.JSONObject respuesta = new org.json.JSONObject(JSONstr);
+            String mensaje = respuesta.getString("respuesta");
+            return mensaje;
+        }
     }
 
+    private class CrearEliminarLike extends AsyncTask<String, Void, String> {
+        private OkHttpClient client = new OkHttpClient();
+
+        @Override
+        protected void onPostExecute(String resultado) {
+            super.onPostExecute(resultado);
+            if (!resultado.isEmpty()) {
+                switch (resultado){
+                    case "eliminado":
+                        darlike.setImageResource(R.drawable.nolike);
+                        darlike.setTag("nolike");
+                        cantidadLikes = Integer.parseInt(cantLikes.getText().toString());
+                        cantidadLikes--;
+                        cantLikes.setText(Integer.toString(cantidadLikes));
+                        tour.setLikes(Integer.toString(cantidadLikes));
+                        String url = "http://viajarort.azurewebsites.net/actu.php";
+                        new ActualizarLikes().execute(url);
+                        break;
+                    case "insertado":
+                        darlike.setImageResource(R.drawable.likes);
+                        darlike.setTag("like");
+                        cantidadLikes = Integer.parseInt(cantLikes.getText().toString());
+                        cantidadLikes++;
+                        cantLikes.setText(Integer.toString(cantidadLikes));
+                        tour.setLikes(Integer.toString(cantidadLikes));
+                        String url2 = "http://viajarort.azurewebsites.net/actu.php";
+                        new ActualizarLikes().execute(url2);
+                        break;
+                    case "hubo un error":
+                        Toast mensaje = Toast.makeText(getContext(), "Hubo un problema, intente de nuevo", Toast.LENGTH_SHORT);
+                        mensaje.show();
+                }
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String url = params[0];
+            RequestBody body = generarJSON();
+            Request request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .build();
+            try {
+                Response response = client.newCall(request).execute();
+                return parsearRespuesta(response.body().string());
+            } catch (IOException | JSONException  e) {
+                Log.d("Error", e.getMessage());
+                return "";
+            }
+        }
+
+        RequestBody generarJSON (){
+            org.json.simple.JSONObject json = new org.json.simple.JSONObject();
+            int idusu = Integer.parseInt(session.getUserDetails().get(100)[2]);
+            json.put("accion", accion);
+            json.put("idtour", tour.getId());
+            json.put("idusuario", idusu);
+            RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
+            return body;
+        }
+
+        String parsearRespuesta(String JSONstr) throws JSONException {
+            org.json.JSONObject respuesta = new org.json.JSONObject(JSONstr);
+            String mensaje = respuesta.getString("accion");
+            return mensaje;
+        }
+    }
 
 }
 

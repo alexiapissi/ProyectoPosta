@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     TextView navUsuario;
     Tour tour;
     ArrayList<Tour> tours;
+    ArrayList<Tour> toursUsuarioAL;
     //int posicion;
     ArrayList<Punto> puntos;
     Usuario usuario;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     Fragment Busquedafragment;
     String miId;
     int idUsuario;
+    ArrayList<Tour> ToursLikeadosUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +114,22 @@ public class MainActivity extends AppCompatActivity {
     /*public void setPos (int pos){
         posicion=pos;
     }*/
+
+    public void setToursUsuarioAL (ArrayList<Tour> toursUsuario){
+        toursUsuarioAL = toursUsuario;
+    }
+
+    public ArrayList<Tour> getToursUsuarioAL(){
+        return toursUsuarioAL;
+    }
+
+    public void setToursLikeadosUsuario (ArrayList<Tour> toursLikeados){
+        ToursLikeadosUsuario = toursLikeados;
+    }
+
+    public ArrayList<Tour> getToursLikeadosUsuario(){
+        return ToursLikeadosUsuario;
+    }
 
     public void IraBusqueda() {
 
