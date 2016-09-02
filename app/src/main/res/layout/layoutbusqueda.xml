@@ -29,7 +29,7 @@
         android:id="@+id/msj"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Buscá tours por nombre, ubicación o gustos."/>
+        android:text="Buscá tours por nombre o ubicación"/>
 
     <TextView
         android:layout_width="wrap_content"
