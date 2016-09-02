@@ -193,7 +193,7 @@ public class FHome extends Fragment {
                 Usuario usu = new Usuario(nomUsuario, fotoUsuario, idUsuario, "", null);
 
                 gustos=new ArrayList<>();
-                JSONArray jsongustos = jsonResultado.getJSONArray("Gusto");
+                JSONArray jsongustos = jsonResultado.getJSONArray("Gustos");
                 for (int j = 0; j < jsongustos.length(); j++) {
                     JSONObject jsonresultadoGustos = jsongustos.getJSONObject(j);
                     int jsonIdGusto = jsonresultadoGustos.getInt("Id");

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ public class GustosDialog extends DialogFragment implements View.OnClickListener
         getDialog().setTitle("Seleccione sus gustos");
         aceptar= (Button) view.findViewById(R.id.aceptar);
         lv= (ListView) view.findViewById(R.id.lv);
+
         aceptar.setOnClickListener(this);
         if (gustos !=null){
             gadapter = new GustosAdapter(getActivity(), gustos);
@@ -50,9 +52,28 @@ public class GustosDialog extends DialogFragment implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.aceptar:
-                //???
+                ButtonClick();
                 break;
         }
+    }
+
+    private void ButtonClick() {
+        /** get all values of the EditText-Fields */
+        View v;
+        ArrayList<Gusto> gustoselegidos = new ArrayList<Gusto>();
+        CheckBox cb;
+        for (int i = 0; i < lv.getCount(); i++) {
+            v = lv.getChildAt(i);
+            cb = (CheckBox) v.findViewById(R.id.gustocb);
+            if(cb.isChecked()){
+                Gusto g= (Gusto)gadapter.getItem(i);
+                gustoselegidos.add(g);
+            }
+        }
+        FragmentBuscar fb = (FragmentBuscar)getTargetFragment();
+        fb.setGustosElegidos(gustoselegidos);
+        dismiss();
+
     }
 
 

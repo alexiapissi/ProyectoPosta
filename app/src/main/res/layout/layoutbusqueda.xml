@@ -11,8 +11,10 @@
     <EditText android:id="@+id/inputSearch"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="Buscar Tours.."
-        android:inputType="textVisiblePassword"/>
+        android:hint="Buscar Tours..."
+        android:inputType="textVisiblePassword"
+        android:digits="abcdefghijklmnopqrstuvwxyz1234567890 "
+        android:drawableLeft="@drawable/blacklupa"/>
 
 
     <ProgressBar
@@ -28,6 +30,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Buscá tours por nombre, ubicación o gustos."/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No se encontraron resultados"
+        android:visibility="gone"
+        android:id="@+id/noresult"/>
 
     
 
