@@ -3,6 +3,7 @@ package ort.edu.ar.proyecto.Fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ public class GustosDialog extends DialogFragment implements View.OnClickListener
     Button aceptar;
     GustosAdapter gadapter;
     ListView lv;
+    String elegidos;
 
     public void Setgustos (ArrayList<Gusto> gustos){
         this.gustos=gustos;
@@ -58,7 +60,7 @@ public class GustosDialog extends DialogFragment implements View.OnClickListener
     private void ButtonClick() {
         /** get all values of the EditText-Fields */
         View v;
-        ArrayList<Gusto> gustoselegidos = new ArrayList<>();
+        ArrayList<Gusto> gustoselegidos = new ArrayList<Gusto>();
         CheckBox cb;
         for (int i = 0; i < lv.getCount(); i++) {
             v = lv.getChildAt(i);
@@ -76,3 +78,4 @@ public class GustosDialog extends DialogFragment implements View.OnClickListener
 
 
 }
+

@@ -44,15 +44,16 @@ public class FragmentBuscar extends Fragment {
     ArrayList<Gusto> gustosparc;
     ArrayList<Gusto> gustos;
     ProgressBar cargando;
+    TextView noresult;
     ToursAdapter toursAdapter;
     ArrayList<Tour> tours;
     EditText inputSearch;
     ListView listviewt;
     TextView mensaje;
-    String busqueda;
     boolean iswaiting =false;
-    String gustosElegidos;
-    //xd
+    String gustosElegidos="";
+    CharSequence busqueda;
+
 
     @Override
     public void onCreate(Bundle savedInstantState) {
@@ -67,6 +68,7 @@ public class FragmentBuscar extends Fragment {
         cargando.setVisibility(View.GONE);
         inputSearch = (EditText) view.findViewById(R.id.inputSearch);
         listviewt = (ListView) view.findViewById(R.id.lv);
+        noresult=(TextView)view.findViewById(R.id.noresult);
         tours = new ArrayList<>();
         mensaje=(TextView) view.findViewById(R.id.msj);
         toursAdapter = new ToursAdapter(getActivity(), tours);
@@ -74,22 +76,24 @@ public class FragmentBuscar extends Fragment {
         setHasOptionsMenu(true);
         inputSearch.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void beforeTextChanged(CharSequence cs, int i, int i1, int i2) {
 
             }
 
             @Override
             public void onTextChanged(CharSequence cs, int i, int i1, int i2) {
+                noresult.setVisibility(View.GONE);
                 if(cs.length()>=3){
-                    new ToursTask().execute("http://viajarort.azurewebsites.net/tours.php");
+                    new ToursTask().execute("http://viajarort.azurewebsites.net/busqueda.php?q="+cs);
                     cargando.setVisibility(View.VISIBLE);
                     iswaiting=true;
                     mensaje.setVisibility(View.GONE);
-                    cs=busqueda;
+                    busqueda=cs;
                 }
                 if(cs.length()==0){
 
                     mensaje.setVisibility(View.VISIBLE);
+                    noresult.setVisibility(View.GONE);
                 }
                 if(cs.length()<3){
                     cargando.setVisibility(View.GONE);
@@ -97,8 +101,14 @@ public class FragmentBuscar extends Fragment {
                     tours.clear();
                     toursAdapter.notifyDataSetChanged();
                     iswaiting =false;
+                    noresult.setVisibility(View.GONE);
                 }
+
+
+
+
             }
+
             @Override
             public void afterTextChanged(Editable editable) {
 
@@ -127,16 +137,12 @@ public class FragmentBuscar extends Fragment {
         switch (item.getItemId()) {
             case R.id.nav_opciones:
                 Log.d("opciones", "ison");
-                if (!busqueda.equals("")) {
-                    FragmentManager fm = getActivity().getSupportFragmentManager();
-                    GustosDialog gustosDialog = new GustosDialog();
-                    gustosDialog.Setgustos(gustos);
-                    gustosDialog.show(fm, "fragment_gustos");
-                    break;
-                }else{
-                    Toast toast = Toast.makeText(getContext(),"Primero debe hacer su busqueda", Toast.LENGTH_SHORT);
-                    toast.show();
-                }
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                GustosDialog gustosDialog = new GustosDialog();
+                gustosDialog.Setgustos(gustos);
+                gustosDialog.show(fm,"fragment_gustos");
+                gustosDialog.setTargetFragment(this,1);
+                break;
     }
         return true;
     }
@@ -146,10 +152,15 @@ public class FragmentBuscar extends Fragment {
             gustosElegidos += g.getId() + ",";
         }
         gustosElegidos=gustosElegidos.substring(0,gustosElegidos.length()-2);
-        new ToursTask().execute("http://viajarort.azurewebsites.net/busqueda.php?q="+busqueda+"&gustos=["+gustosElegidos+"]");
-
+        if (busqueda!=""){
+            new ToursTask().execute("http://viajarort.azurewebsites.net/busqueda.php?q="+busqueda+"&gustos=["+gustosElegidos+"]");
+        }else{
+            Toast toast = Toast.makeText(getContext(), "Escriba el tour que quiera buscar.", Toast.LENGTH_SHORT);
+            toast.show();
+        }
 
     }
+
 
     private class ToursTask extends AsyncTask<String, Void, ArrayList<Tour>> {
         private OkHttpClient client = new OkHttpClient();
@@ -174,6 +185,9 @@ public class FragmentBuscar extends Fragment {
                 tours.clear();
                 tours.addAll(resultado);
                 toursAdapter.notifyDataSetChanged();
+                noresult.setVisibility(View.GONE);
+            }else{
+                noresult.setVisibility(View.VISIBLE);
             }
             cargando.setVisibility(View.GONE);
         }
@@ -198,34 +212,36 @@ public class FragmentBuscar extends Fragment {
         ArrayList<Tour> parsearResultado(String JSONstr) throws JSONException {
             ArrayList<Tour> tours = new ArrayList<>();
             JSONArray jsonTours = new JSONArray(JSONstr);
-            for (int i = 0; i < jsonTours.length(); i++) {
-                JSONObject jsonResultado = jsonTours.getJSONObject(i);
-                int jsonId = jsonResultado.getInt("Id");
-                String jsonNombre = jsonResultado.getString("Nombre");
-                String jsonUbicacion = jsonResultado.getString("Ubicacion");
-                String jsonFoto = jsonResultado.getString("FotoURL");
-                String jsonLikes = jsonResultado.getString("Likes");
-                String jsonDescripcion = jsonResultado.getString("Descripcion");
+            if (jsonTours.length()!=0) {
+                for (int i = 0; i < jsonTours.length(); i++) {
+                    JSONObject jsonResultado = jsonTours.getJSONObject(i);
+                    int jsonId = jsonResultado.getInt("Id");
+                    String jsonNombre = jsonResultado.getString("Nombre");
+                    String jsonUbicacion = jsonResultado.getString("Ubicacion");
+                    String jsonFoto = jsonResultado.getString("FotoURL");
+                    String jsonLikes = jsonResultado.getString("Likes");
+                    String jsonDescripcion = jsonResultado.getString("Descripcion");
 
-                JSONObject jsonResultadoUsuario = jsonResultado.getJSONObject("Usuario");
-                int idUsuario = jsonResultadoUsuario.getInt("Id");
-                String nomUsuario = jsonResultadoUsuario.getString("Nombre");
-                String fotoUsuario = jsonResultadoUsuario.getString("FotoURL");
+                    JSONObject jsonResultadoUsuario = jsonResultado.getJSONObject("Usuario");
+                    int idUsuario = jsonResultadoUsuario.getInt("Id");
+                    String nomUsuario = jsonResultadoUsuario.getString("Nombre");
+                    String fotoUsuario = jsonResultadoUsuario.getString("FotoURL");
 
-                Usuario usu = new Usuario(nomUsuario, fotoUsuario, idUsuario, "", null);
+                    Usuario usu = new Usuario(nomUsuario, fotoUsuario, idUsuario, "", null);
 
-                gustosparc = new ArrayList<>();
-                JSONArray jsongustos = jsonResultado.getJSONArray("Gusto");
-                for (int j = 0; j < jsongustos.length(); j++) {
-                    JSONObject jsonresultadoGustos = jsongustos.getJSONObject(j);
-                    int jsonIdGusto = jsonresultadoGustos.getInt("Id");
-                    String jsonnombregustos = jsonresultadoGustos.getString("Nombre");
-                    Gusto gus = new Gusto(jsonIdGusto, jsonnombregustos);
-                    gustosparc.add(gus);
+                    gustosparc = new ArrayList<>();
+                    JSONArray jsongustos = jsonResultado.getJSONArray("Gustos");
+                    for (int j = 0; j < jsongustos.length(); j++) {
+                        JSONObject jsonresultadoGustos = jsongustos.getJSONObject(j);
+                        int jsonIdGusto = jsonresultadoGustos.getInt("Id");
+                        String jsonnombregustos = jsonresultadoGustos.getString("Nombre");
+                        Gusto gus = new Gusto(jsonIdGusto, jsonnombregustos);
+                        gustosparc.add(gus);
+                    }
+
+                    Tour t = new Tour(jsonNombre, jsonDescripcion, jsonFoto, jsonUbicacion, jsonId, jsonLikes, usu, null, gustosparc);
+                    tours.add(t);
                 }
-
-                Tour t = new Tour(jsonNombre, jsonDescripcion, jsonFoto, jsonUbicacion, jsonId, jsonLikes, usu, null, gustosparc);
-                tours.add(t);
             }
             return tours;
         }
