@@ -44,7 +44,7 @@ import ort.edu.ar.proyecto.model.ToursAdapter;
 import ort.edu.ar.proyecto.model.Usuario;
 
 
-public class FBusqueda extends Fragment {
+public class FHome extends Fragment {
     ImageView foto;
     ImageView fotoUsuario;
     TextView nombre;
@@ -61,7 +61,7 @@ public class FBusqueda extends Fragment {
     boolean actualiza=false;
     View v;
 
-    public FBusqueda(){
+    public FHome(){
 
     }
 
@@ -70,10 +70,12 @@ public class FBusqueda extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (v == null) {
-            v = inflater.inflate(R.layout.activity_busqueda, container, false);
+            setHasOptionsMenu(true);
+            v = inflater.inflate(R.layout.layouthome, container, false);
 
             listVW = (ListView) v.findViewById(R.id.listv);
 
@@ -126,6 +128,9 @@ public class FBusqueda extends Fragment {
     }
 
 
+
+
+
     private class ToursTask extends AsyncTask<String, Void, ArrayList<Tour>> {
         private OkHttpClient client = new OkHttpClient();
         @Override
@@ -152,6 +157,8 @@ public class FBusqueda extends Fragment {
         }
 
 
+
+
         @Override
         protected ArrayList<Tour> doInBackground(String... params) {
             String url = params[0];
@@ -166,6 +173,7 @@ public class FBusqueda extends Fragment {
                 return new ArrayList<>();
             }
         }
+
 
         // Convierte un JSON en un ArrayList de Direccion
         ArrayList<Tour> parsearResultado(String JSONstr) throws JSONException {

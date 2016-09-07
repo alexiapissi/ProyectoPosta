@@ -7,10 +7,15 @@
         android:text="Viaj.ar"
         android:textColor="@android:color/black"
         android:textStyle="bold" />
-    <group android:checkableBehavior="single"><item
+    <group android:checkableBehavior="single">
+        <item
         android:id="@+id/nav_home"
         android:icon="@drawable/ic_house_black_24dp"
         android:title="Home"/>
+        <item
+            android:id="@+id/nav_busqueda"
+            android:icon="@drawable/lupa"
+            android:title="Busqueda"/>
     </group>
     <group android:checkableBehavior="single">
         <item

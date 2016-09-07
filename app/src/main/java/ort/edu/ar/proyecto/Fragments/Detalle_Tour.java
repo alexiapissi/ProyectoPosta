@@ -1,41 +1,19 @@
 package ort.edu.ar.proyecto.Fragments;
 
-import android.content.Intent;
-import android.sax.StartElementListener;
+
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+
 import android.support.v4.app.FragmentTabHost;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import java.util.ArrayList;
-
-import ort.edu.ar.proyecto.Fragments.FragmentDetalle;
-import ort.edu.ar.proyecto.Fragments.FragmentMapa;
 import ort.edu.ar.proyecto.R;
-import ort.edu.ar.proyecto.model.Punto;
-import ort.edu.ar.proyecto.model.Tour;
-import ort.edu.ar.proyecto.model.Usuario;
 
 public class Detalle_Tour extends Fragment {
 
-    static public int REQUEST_LIST = 2;
-    ArrayList<Tour> tours;
-    int posicion;
-    ArrayList<Punto> puntos;
-    Tour tour;
-    Usuario usuario;
+
     private FragmentTabHost tabHost;
 
 

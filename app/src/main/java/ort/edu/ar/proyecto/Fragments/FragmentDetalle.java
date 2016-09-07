@@ -36,9 +36,7 @@ import ort.edu.ar.proyecto.model.PuntosAdapter;
 import ort.edu.ar.proyecto.model.SessionManager;
 import ort.edu.ar.proyecto.model.Tour;
 
-/**
- * Created by 41400475 on 10/6/2016.
- */
+
 public class FragmentDetalle extends Fragment {
 
 
@@ -52,8 +50,6 @@ public class FragmentDetalle extends Fragment {
     ListView listPuntosVW;
     PuntosAdapter puntosAdapter;
     ArrayList<Punto> puntos;
-    ArrayList<Tour> tours;
-    int pos;
     Tour tour;
     MainActivity ma;
     ProgressBar progressbar;

@@ -1,7 +1,7 @@
 package ort.edu.ar.proyecto;
 
-import android.content.ClipData;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,16 +12,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import ort.edu.ar.proyecto.Fragments.Detalle_Tour;
-import ort.edu.ar.proyecto.Fragments.FBusqueda;
+import ort.edu.ar.proyecto.Fragments.FHome;
+import ort.edu.ar.proyecto.Fragments.FragmentBuscar;
 import ort.edu.ar.proyecto.Fragments.Perfil_Usuario;
+import ort.edu.ar.proyecto.model.Gusto;
 import ort.edu.ar.proyecto.model.Punto;
 import ort.edu.ar.proyecto.model.SessionManager;
 import ort.edu.ar.proyecto.model.Tour;
@@ -43,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
     String miId;
     int idUsuario;
     ArrayList<Tour> ToursLikeadosUsuario;
+    Fragment HomeFragment;
+    FragmentBuscar fbusqueda;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +64,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         inicializarToolbar();
-        Busquedafragment = new FBusqueda();
+        fbusqueda=new FragmentBuscar();
+        HomeFragment = new FHome();
+
+        String url = "http://viajarort.azurewebsites.net/gustos.php";
+        new GustosTask().execute(url);
         FragmentManager fm= getSupportFragmentManager();
         fm.beginTransaction()
-                .replace(R.id.contenido,Busquedafragment)
+                .replace(R.id.contenido,HomeFragment)
                 .addToBackStack(null)
                 .commit();
 
@@ -134,13 +152,23 @@ public class MainActivity extends AppCompatActivity {
         return ToursLikeadosUsuario;
     }
 
-    public void IraBusqueda() {
+
+    public void IraHome() {
 
         //fragment.setTour(tour);
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
                 .addToBackStack(null)
-                .replace(R.id.contenido, Busquedafragment)
+                .replace(R.id.contenido, HomeFragment)
+                .commit();
+    }
+
+    public void IraBusqueda(){
+
+        FragmentManager fm=getSupportFragmentManager();
+        fm.beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.contenido, fbusqueda)
                 .commit();
     }
 
@@ -204,6 +232,15 @@ public class MainActivity extends AppCompatActivity {
         setearListener(navigationView);
     }
 
+    public void btnBusqueda (View v){
+        IraBusqueda();
+    }
+    public void btnHome (View v){
+        IraHome();
+    }
+    public void btnMiPerfil (View v){
+        Log.d("ir a", "mi perfil");
+    }
 
     private void setearListener(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -213,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
                 switch(item.getItemId()) {
                     case R.id.nav_home:
                         Log.d("Choose:","Home");
-                        IraBusqueda();
+                        IraHome();
                         break;
                     case R.id.nav_user:
                         //mostrar cuando inicio sesion
@@ -229,6 +266,11 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("Choose:","Logout");
                         IraCerrarSesion();
                         break;
+                    case R.id.nav_busqueda:
+                        IraBusqueda();
+                        break;
+
+
                 }
 
                 drawerLayout.closeDrawers();
@@ -252,7 +294,54 @@ public class MainActivity extends AppCompatActivity {
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private class GustosTask extends AsyncTask<String, Void, ArrayList<Gusto>> {
+        private OkHttpClient client = new OkHttpClient();
+        @Override
+        protected void onPostExecute(ArrayList<Gusto> resultado) {
+            super.onPostExecute(resultado);
+
+            if (!resultado.isEmpty()) {
+                fbusqueda.Setbusqueda(resultado);
+
+            }
+        }
+
+        @Override
+        protected ArrayList<Gusto> doInBackground(String... params) {
+            String url = params[0];
+            Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+            try {
+                Response response = client.newCall(request).execute();
+                return parsearResultado(response.body().string());      // Convierto el resultado en ArrayList<Direccion>
+            } catch (IOException | JSONException e) {
+                Log.d("Error", e.getMessage());                          // Error de Network o al parsear JSON
+                return new ArrayList<>();
+            }
+        }
+
+
+        // Convierte un JSON en un ArrayList de Direccion
+        ArrayList<Gusto> parsearResultado(String JSONstr) throws JSONException {
+            ArrayList<Gusto> gustos  = new ArrayList<>();
+            JSONArray jsonGustos = new JSONArray(JSONstr);
+            for (int i = 0; i < jsonGustos.length(); i++) {
+                JSONObject jsonResultado = jsonGustos.getJSONObject(i);
+                int jsonId = jsonResultado.getInt("Id");
+                String jsonNombre = jsonResultado.getString("Nombre");
+
+                Gusto g = new Gusto(jsonId, jsonNombre);
+                gustos.add(g);
+            }
+            return gustos;
+        }
+
+    }
+
 }

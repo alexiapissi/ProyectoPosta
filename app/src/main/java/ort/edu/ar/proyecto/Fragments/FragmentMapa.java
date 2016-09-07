@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ public class FragmentMapa extends Fragment implements OnMapReadyCallback {
     GoogleMap map;
     ArrayList<Punto> listapuntos;
     FragmentManager fm;
+    MapFragment mapFragment;
 
     public FragmentMapa() {
     }
@@ -49,20 +51,34 @@ public class FragmentMapa extends Fragment implements OnMapReadyCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle saveInstantState) {
         //View view = inflater.inflate(R.layout.fragment_mapa, container, false);
-        if(mapview==null)
-             mapview = inflater.inflate(R.layout.fragment_mapa, container, false);
+        if (mapview != null) {
+            ViewGroup parent = (ViewGroup) mapview.getParent();
+            if (parent != null)
+                parent.removeView(mapview);
+        }
 
-        MainActivity ma = (MainActivity) getActivity();
-        listapuntos = new ArrayList<Punto>();
-        listapuntos = ma.getPuntos();
+        mapview = inflater.inflate(R.layout.fragment_mapa, container, false);
 
-        return mapview;
+            MainActivity ma = (MainActivity) getActivity();
+            listapuntos = new ArrayList<Punto>();
+            listapuntos = ma.getPuntos();
+            return  mapview;
+        }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mapFragment = (MapFragment) getActivity().getFragmentManager()
+                .findFragmentById(R.id.map);
+        if (mapFragment != null)
+            getActivity().getFragmentManager().beginTransaction().remove(mapFragment).commit();
     }
+
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        MapFragment mapFragment = (MapFragment) getActivity().getFragmentManager()
+        mapFragment = (MapFragment) getActivity().getFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
@@ -81,12 +97,11 @@ public class FragmentMapa extends Fragment implements OnMapReadyCallback {
             map.getUiSettings().setZoomControlsEnabled(true);
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
-            int color = 1;
+
             for (Punto p : listapuntos) {
                 double lat = p.getLatitud();
                 double lng = p.getLongitud();
                 LatLng position = new LatLng(lat, lng);
-                String coordStr = lat + "," + lng;
                 if (map != null) {
 
                     map.addMarker(new MarkerOptions()
