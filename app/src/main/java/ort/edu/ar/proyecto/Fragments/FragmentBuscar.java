@@ -52,7 +52,7 @@ public class FragmentBuscar extends Fragment {
     TextView mensaje;
     boolean iswaiting =false;
     String gustosElegidos="";
-    CharSequence busqueda;
+    String busqueda="";
 
 
     @Override
@@ -83,12 +83,13 @@ public class FragmentBuscar extends Fragment {
             @Override
             public void onTextChanged(CharSequence cs, int i, int i1, int i2) {
                 noresult.setVisibility(View.GONE);
+                busqueda=cs.toString();
                 if(cs.length()>=3){
                     new ToursTask().execute("http://viajarort.azurewebsites.net/busqueda.php?q="+cs);
                     cargando.setVisibility(View.VISIBLE);
                     iswaiting=true;
                     mensaje.setVisibility(View.GONE);
-                    busqueda=cs;
+                    busqueda=cs.toString();
                 }
                 if(cs.length()==0){
 
@@ -98,10 +99,12 @@ public class FragmentBuscar extends Fragment {
                 if(cs.length()<3){
                     cargando.setVisibility(View.GONE);
                     mensaje.setVisibility(View.VISIBLE);
+
                     tours.clear();
                     toursAdapter.notifyDataSetChanged();
                     iswaiting =false;
                     noresult.setVisibility(View.GONE);
+
                 }
 
 
@@ -134,30 +137,32 @@ public class FragmentBuscar extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.nav_opciones:
-                Log.d("opciones", "ison");
-                FragmentManager fm = getActivity().getSupportFragmentManager();
-                GustosDialog gustosDialog = new GustosDialog();
-                gustosDialog.Setgustos(gustos);
-                gustosDialog.show(fm,"fragment_gustos");
-                gustosDialog.setTargetFragment(this,1);
-                break;
-    }
+        if (!busqueda.equals("") && busqueda.length()>=3) {
+            switch (item.getItemId()) {
+                case R.id.nav_opciones:
+                    Log.d("opciones", "ison");
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    GustosDialog gustosDialog = new GustosDialog();
+                    gustosDialog.Setgustos(gustos);
+                    gustosDialog.show(fm, "fragment_gustos");
+                    gustosDialog.setTargetFragment(this, 1);
+                    break;
+            }
+        }else{
+            Toast toast = Toast.makeText(getContext(),"Primero busque su tour.", Toast.LENGTH_SHORT);
+            toast.show();
+        }
         return true;
     }
 
     public void setGustosElegidos(ArrayList<Gusto> gustose) {
+        gustosElegidos="";
         for(Gusto g:gustose){
             gustosElegidos += g.getId() + ",";
         }
-        gustosElegidos=gustosElegidos.substring(0,gustosElegidos.length()-2);
-        if (busqueda!=""){
-            new ToursTask().execute("http://viajarort.azurewebsites.net/busqueda.php?q="+busqueda+"&gustos=["+gustosElegidos+"]");
-        }else{
-            Toast toast = Toast.makeText(getContext(), "Escriba el tour que quiera buscar.", Toast.LENGTH_SHORT);
-            toast.show();
-        }
+        gustosElegidos=gustosElegidos.substring(0,gustosElegidos.length()-1);
+            //new ToursTask().execute("http://viajarort.azurewebsites.net/busqueda.php?q="+busqueda+"&gustos=["+gustosElegidos+"]");
+        new ToursTask().execute("http://viajarort.azurewebsites.net/toursxgusto.php?Idgusto="+gustosElegidos+"");
 
     }
 
@@ -187,6 +192,8 @@ public class FragmentBuscar extends Fragment {
                 toursAdapter.notifyDataSetChanged();
                 noresult.setVisibility(View.GONE);
             }else{
+                tours.clear();
+                toursAdapter.notifyDataSetChanged();
                 noresult.setVisibility(View.VISIBLE);
             }
             cargando.setVisibility(View.GONE);
