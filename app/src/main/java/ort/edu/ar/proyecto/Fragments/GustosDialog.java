@@ -22,7 +22,6 @@ public class GustosDialog extends DialogFragment implements View.OnClickListener
     ArrayList<Gusto> gustos;
     Button aceptar;
     GustosAdapter gadapter;
-    //icodi
     ListView lv;
 
     public void Setgustos (ArrayList<Gusto> gustos){
