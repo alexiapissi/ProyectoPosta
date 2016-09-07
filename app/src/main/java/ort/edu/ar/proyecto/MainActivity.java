@@ -80,6 +80,9 @@ public class MainActivity extends AppCompatActivity {
             miId = extras.getString("miId");
         }
 
+        toursUsuarioAL = new ArrayList<>();
+        ToursLikeadosUsuario = new ArrayList<>();
+
     }
 
     public void IraDetalle(Tour tour){

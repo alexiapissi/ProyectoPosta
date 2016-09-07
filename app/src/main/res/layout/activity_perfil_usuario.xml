@@ -23,7 +23,6 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Nombre Usuario"
             android:id="@+id/nomUsu"
             android:textStyle="bold"
             android:gravity="center"
@@ -36,6 +35,16 @@
             android:id="@+id/residenciaUsu"
             android:gravity="center"
             android:textStyle="italic"/>
+
+        <!--
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            >
+        </ProgressBar>
+        -->
 
         <android.support.v4.app.FragmentTabHost
             android:id="@android:id/tabhost"

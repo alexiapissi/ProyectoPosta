@@ -109,8 +109,10 @@ public class FragmentDetalle extends Fragment {
         nombreUsuario.setText(tour.getUsuario().getNombre());
         cantLikes.setText(tour.getLikes());
 
-        String url = "http://viajarort.azurewebsites.net/traerlikes.php";
-        new ObtLike().execute(url);
+        if (session.checkLogin() == 1) {
+            String url = "http://viajarort.azurewebsites.net/traerlikes.php";
+            new ObtLike().execute(url);
+        }
 
         darlike.setOnClickListener(new View.OnClickListener() {
             @Override

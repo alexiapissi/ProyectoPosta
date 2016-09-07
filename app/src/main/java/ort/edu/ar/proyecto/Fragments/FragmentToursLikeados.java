@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -26,6 +27,7 @@ public class FragmentToursLikeados extends Fragment {
     ArrayList<Tour> toursRecibidos;
     MainActivity ma;
     Tour Tourmandar;
+    TextView likeados;
 
     public FragmentToursLikeados() {
     }
@@ -41,9 +43,12 @@ public class FragmentToursLikeados extends Fragment {
 
         ma = (MainActivity) getActivity();
         toursUsuario = (ListView)v.findViewById(R.id.listToursUsuLikeados);
+        likeados = (TextView) v.findViewById(R.id.tourslikeados);
 
+        toursUsuarioLikeadosAL = new ArrayList<>();
         toursUsuarioLikeadosAL = ma.getToursLikeadosUsuario();
-        if (toursUsuarioLikeadosAL != null) {
+        if (toursUsuarioLikeadosAL != null && toursUsuarioLikeadosAL.size() != 0) {
+            likeados.setText("Tours likeados:");
             adapter = new ToursUsuarioAdapter(getActivity(), toursUsuarioLikeadosAL);
             //if (usu.getToursCreados() != null) {
             toursUsuario.setAdapter(adapter);
@@ -63,6 +68,8 @@ public class FragmentToursLikeados extends Fragment {
                     ma.IraDetalle(Tourmandar);
                 }
             });
+        } else {
+            likeados.setText("Este usuario no ha likeado tours.");
         }
 
         return v;

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -27,6 +28,7 @@ public class FragmentToursCreados extends Fragment {
     ArrayList<Tour> toursRecibidos;
     Tour Tourmandar;
     MainActivity ma;
+    TextView creados;
 
     public FragmentToursCreados() {
     }
@@ -43,11 +45,19 @@ public class FragmentToursCreados extends Fragment {
         ma = (MainActivity) getActivity();
 
         toursUsuario = (ListView) v.findViewById(R.id.listToursUsu);
+        creados = (TextView) v.findViewById(R.id.tourscreados);
 
-        toursUsuarioAL = ma.getToursUsuarioAL();
-        if (toursUsuarioAL != null) {
+        toursUsuarioAL = new ArrayList<>();
+        toursUsuarioAL.clear();
+        toursUsuarioAL.addAll(ma.getToursUsuarioAL());
+        toursUsuario.invalidateViews();
+        toursUsuario.refreshDrawableState();
+
+        if (toursUsuarioAL != null && toursUsuarioAL.size() != 0) {
+            creados.setText("Tours creados:");
             adapter = new ToursUsuarioAdapter(getActivity(), toursUsuarioAL);
             //if (usu.getToursCreados() != null) {
+            toursUsuario.invalidateViews();
             toursUsuario.setAdapter(adapter);
             toursRecibidos = ma.getTours();
             //}
@@ -65,6 +75,9 @@ public class FragmentToursCreados extends Fragment {
                     ma.IraDetalle(Tourmandar);
                 }
             });
+
+        }else {
+            creados.setText("Este usuario no ha creado tours.");
         }
 
         return v;

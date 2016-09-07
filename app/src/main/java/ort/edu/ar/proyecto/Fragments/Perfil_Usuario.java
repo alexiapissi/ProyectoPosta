@@ -2,6 +2,7 @@ package ort.edu.ar.proyecto.Fragments;
 
 
 
+import android.media.Image;
 import android.os.AsyncTask;
 
 import android.support.v4.app.Fragment;
@@ -26,6 +27,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 
 import ort.edu.ar.proyecto.MainActivity;
@@ -61,15 +64,7 @@ public class Perfil_Usuario extends Fragment {
         url += id;
         new UsuarioTask().execute(url);
 
-        tabHost = (FragmentTabHost) v.findViewById(android.R.id.tabhost);
-        tabHost.setup(getContext(), getChildFragmentManager(), android.R.id.tabcontent);
-        tabHost.addTab(
-                tabHost.newTabSpec("tab1").setIndicator("Tours Creados", null),
-                FragmentToursCreados.class, null);
-        tabHost.addTab(
-                tabHost.newTabSpec("tab2").setIndicator("Tours Likeados", null),
-                FragmentToursLikeados.class, null);
-
+        resid ="";
         toursUsuarioAL = new ArrayList<>();
         toursLikeados = new ArrayList<>();
         //progressbar=(ProgressBar)v.findViewById(R.id.progress);
@@ -81,6 +76,15 @@ public class Perfil_Usuario extends Fragment {
 
         //Usuario usuario = ma.getUsuario();
         //usu = usuario;
+
+        tabHost = (FragmentTabHost) v.findViewById(android.R.id.tabhost);
+        tabHost.setup(getContext(), getChildFragmentManager(), android.R.id.tabcontent);
+        tabHost.addTab(
+                tabHost.newTabSpec("tab1").setIndicator("Tours Creados", null),
+                FragmentToursCreados.class, null);
+        tabHost.addTab(
+                tabHost.newTabSpec("tab2").setIndicator("Tours Likeados", null),
+                FragmentToursLikeados.class, null);
 
         return v;
     }
@@ -97,26 +101,15 @@ public class Perfil_Usuario extends Fragment {
         @Override
         protected void onPostExecute(Usuario resultado) {
             super.onPostExecute(resultado);
-            toursUsuarioAL.clear();
-            toursLikeados.clear();
 
-                toursUsuarioAL.addAll(resultado.getToursCreados());
-                ma.setToursUsuarioAL(toursUsuarioAL);
-
-                toursLikeados.addAll(resultado.getToursLikeados());
-                ma.setToursLikeadosUsuario(toursLikeados);
-
-            resid = "";
             resid = resultado.getResidencia();
             residenciaUsuario.setText(resid);
-            nom = "";
             nom = resultado.getNombre();
             nombreUsuario.setText(nom);
-            foto = "";
             foto= resultado.getFoto();
 
             //que no venga una foto sin nada, que venga "" asi se muestra la foto default
-            if (!foto.isEmpty()) {
+            if (!foto.equals("")) {
                 Picasso
                         .with(getContext())
                         .load(usu.getFoto())
@@ -124,6 +117,18 @@ public class Perfil_Usuario extends Fragment {
                         .transform(new CircleTransform())
                         .into(fotoUsuario);
             }
+
+            toursUsuarioAL.clear();
+            toursLikeados.clear();
+
+            toursUsuarioAL.addAll(resultado.getToursCreados());
+            ma.setToursUsuarioAL(toursUsuarioAL);
+
+            toursLikeados.addAll(resultado.getToursLikeados());
+            ma.setToursLikeadosUsuario(toursLikeados);
+
+            tabHost.setCurrentTab(1);
+            tabHost.setCurrentTab(0);
 
             //progressbar.setVisibility(View.GONE);
         }
@@ -150,6 +155,8 @@ public class Perfil_Usuario extends Fragment {
             String jsonNombreUsuario = usuario.getString("Nombre");
             String jsonResidenciaUsuario = usuario.getString("Residencia");
             String jsonFotoUsuario = usuario.getString("FotoURL");
+
+            usu.setResidencia(jsonResidenciaUsuario);
 
             ArrayList<Tour> toursLocal = new ArrayList<>();
             if (usuario.getJSONArray("ToursCreados") != null) {
@@ -185,7 +192,6 @@ public class Perfil_Usuario extends Fragment {
 
             //no muestra residencia, va al catch
             usu.setNombre(jsonNombreUsuario);
-            usu.setResidencia(jsonResidenciaUsuario);
             usu.setFoto(jsonFotoUsuario);
             usu.setToursCreados(toursLocal);
             usu.setToursLikeados(toursLikeadosLocal);
