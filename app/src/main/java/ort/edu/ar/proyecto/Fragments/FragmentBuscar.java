@@ -52,6 +52,7 @@ public class FragmentBuscar extends Fragment {
     String busqueda;
     boolean iswaiting =false;
     String gustosElegidos;
+    //xd
 
     @Override
     public void onCreate(Bundle savedInstantState) {
