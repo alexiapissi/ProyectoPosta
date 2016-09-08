@@ -234,7 +234,7 @@ public class FragmentBuscar extends Fragment {
                     String nomUsuario = jsonResultadoUsuario.getString("Nombre");
                     String fotoUsuario = jsonResultadoUsuario.getString("FotoURL");
 
-                    Usuario usu = new Usuario(nomUsuario, fotoUsuario, idUsuario, "", null);
+                    Usuario usu = new Usuario(nomUsuario, fotoUsuario, idUsuario, "", null, null);
 
                     gustosparc = new ArrayList<>();
                     JSONArray jsongustos = jsonResultado.getJSONArray("Gustos");

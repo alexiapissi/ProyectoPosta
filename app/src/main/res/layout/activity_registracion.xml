@@ -44,7 +44,8 @@
        android:background="@drawable/edittext_top_bg"
        android:padding="10dp"
        android:textColorHint="#bbbbbb"
-       android:drawableLeft="@drawable/user" />
+       android:drawableLeft="@drawable/user"
+       android:singleLine="true"/>
 
    <EditText
        android:hint="Mail"
@@ -54,7 +55,8 @@
        android:background="@drawable/edittext_default_bg"
        android:padding="10dp"
        android:textColorHint="#bbbbbb"
-       android:drawableLeft="@drawable/email"/>
+       android:drawableLeft="@drawable/email"
+       android:singleLine="true"/>
 
    <EditText
        android:hint="Lugar de Residencia"
@@ -64,7 +66,8 @@
        android:background="@drawable/edittext_default_bg"
        android:padding="10dp"
        android:textColorHint="#bbbbbb"
-       android:drawableLeft="@drawable/residencia"/>
+       android:drawableLeft="@drawable/residencia"
+       android:singleLine="true"/>
 
    <EditText
        android:hint="Contraseña"
@@ -76,7 +79,8 @@
        android:layout_marginTop="-2dp"
        android:padding="10dp"
        android:textColorHint="#bbbbbb"
-       android:drawableLeft="@drawable/password"/>
+       android:drawableLeft="@drawable/password"
+       android:singleLine="true"/>
 
    <EditText
        android:hint="Repetir Contraseña"
@@ -88,7 +92,8 @@
        android:layout_marginTop="-2dp"
        android:padding="10dp"
        android:textColorHint="#bbbbbb"
-       android:drawableLeft="@drawable/password"/>
+       android:drawableLeft="@drawable/password"
+       android:singleLine="true"/>
 
    <Button
        android:layout_width="match_parent"

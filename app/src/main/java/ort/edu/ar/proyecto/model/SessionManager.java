@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import ort.edu.ar.proyecto.Login;
 import ort.edu.ar.proyecto.MainActivity;
@@ -24,6 +26,7 @@ public class SessionManager implements Serializable{
     private static final String IS_LOGIN = "IsLoggedIn";
     public static final String KEY_PASSWORD = "contraseña";
     public static final String KEY_EMAIL = "email";
+    public static final String KEY_ID = "id";
 
     public SessionManager(Context context){
         this._context = context;
@@ -31,13 +34,15 @@ public class SessionManager implements Serializable{
         editor = pref.edit();
     }
 
-    public void createLoginSession(String contraseña, String email){
+    public void createLoginSession(String contraseña, String email, String id){
         // Storing login value as TRUE
         editor.putBoolean(IS_LOGIN, true);
         // Storing name in pref
         editor.putString(KEY_PASSWORD, contraseña);
         // Storing email in pref
         editor.putString(KEY_EMAIL, email);
+
+        editor.putString(KEY_ID, id);
         editor.commit();
     }
 
@@ -55,11 +60,12 @@ public class SessionManager implements Serializable{
         return pref.getBoolean(IS_LOGIN, false);
     }
 
-    public HashMap<String, String> getUserDetails(){
-        HashMap<String, String> user = new HashMap<String, String>();
-        user.put(KEY_PASSWORD, pref.getString(KEY_PASSWORD, null));
-        user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
-        return user;
+    public Map<Integer, String[]> getUserDetails(){
+        Map<Integer, String[]> userMap = new HashMap<Integer, String[]>();
+        String[] userArray = new String[]{pref.getString(KEY_EMAIL, null), pref.getString(KEY_PASSWORD, null), pref.getString(KEY_ID, null)};
+        userMap.put(100, userArray);
+
+        return userMap;
     }
 
     public void logoutUser(){

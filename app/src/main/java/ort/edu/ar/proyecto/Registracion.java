@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ort.edu.ar.proyecto.model.SessionManager;
 import ort.edu.ar.proyecto.model.Usuario;
 
 public class Registracion extends AppCompatActivity {
@@ -44,6 +45,7 @@ public class Registracion extends AppCompatActivity {
     String foto;
     String mail;
     String residencia;
+    SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,8 @@ public class Registracion extends AppCompatActivity {
         repContraUsuario = (EditText) findViewById(R.id.repContraseñaUsuario);
         mailUsuario = (EditText) findViewById(R.id.mailUsuario);
         //uriTV = (TextView) findViewById(R.id.uriFotoUsuario);
+
+        session = new SessionManager(getApplicationContext());
 
     }
 
@@ -145,13 +149,10 @@ public class Registracion extends AppCompatActivity {
                     } else {
                         registro = Toast.makeText(getApplicationContext(), "Registración completada", Toast.LENGTH_SHORT);
                         registro.show();
-                        nomUsuario.setText("");
-                        mailUsuario.setText("");
-                        residenciaUsuario.setText("");
-                        contraUsuario.setText("");
-                        repContraUsuario.setText("");
+                        session.createLoginSession(contraUsuario.getText().toString(), mailUsuario.getText().toString(), resultado);
                         //ir al inicio
-                        finish();
+                        Intent intent= new Intent(getApplicationContext(),MainActivity.class);
+                        startActivity(intent);
                     }
                 }
             }

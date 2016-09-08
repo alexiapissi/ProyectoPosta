@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import ort.edu.ar.proyecto.Fragments.Detalle_Tour;
 import ort.edu.ar.proyecto.Fragments.FHome;
@@ -43,11 +44,17 @@ public class MainActivity extends AppCompatActivity {
     TextView navUsuario;
     Tour tour;
     ArrayList<Tour> tours;
+    ArrayList<Tour> toursUsuarioAL;
     //int posicion;
     ArrayList<Punto> puntos;
     Usuario usuario;
     SessionManager session;
     NavigationView navigationView;
+    MenuItem usu, login, logout;
+    Fragment Busquedafragment;
+    String miId;
+    int idUsuario;
+    ArrayList<Tour> ToursLikeadosUsuario;
     Fragment HomeFragment;
     FragmentBuscar fbusqueda;
 
@@ -82,8 +89,17 @@ public class MainActivity extends AppCompatActivity {
         } else {
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.drawer_items_logout);
-            navUsuario.setText(session.getUserDetails().get("email"));
+            String email = session.getUserDetails().get(100)[0];
+            navUsuario.setText(email);
         }
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            miId = extras.getString("miId");
+        }
+
+        toursUsuarioAL = new ArrayList<>();
+        ToursLikeadosUsuario = new ArrayList<>();
 
     }
 
@@ -119,6 +135,23 @@ public class MainActivity extends AppCompatActivity {
     /*public void setPos (int pos){
         posicion=pos;
     }*/
+
+    public void setToursUsuarioAL (ArrayList<Tour> toursUsuario){
+        toursUsuarioAL = toursUsuario;
+    }
+
+    public ArrayList<Tour> getToursUsuarioAL(){
+        return toursUsuarioAL;
+    }
+
+    public void setToursLikeadosUsuario (ArrayList<Tour> toursLikeados){
+        ToursLikeadosUsuario = toursLikeados;
+    }
+
+    public ArrayList<Tour> getToursLikeadosUsuario(){
+        return ToursLikeadosUsuario;
+    }
+
 
     public void IraHome() {
 
@@ -156,6 +189,10 @@ public class MainActivity extends AppCompatActivity {
 
     public Usuario getUsuario(){ return usuario; }
 
+    public int getIdUsuario() { return idUsuario; }
+
+    public void setIdUsuario(int id) { idUsuario = id; }
+
     public void setTours (ArrayList<Tour> tourss){
         tours = tourss;
     }
@@ -169,6 +206,19 @@ public class MainActivity extends AppCompatActivity {
         Intent intent= new Intent(this,CerrarSesion.class);
         startActivity(intent);
     }
+
+
+    public void IraMiPerfil(){
+        idUsuario = Integer.parseInt(session.getUserDetails().get(100)[2]);
+        this.setIdUsuario(idUsuario);
+        Perfil_Usuario fragment = new Perfil_Usuario();
+        FragmentManager fm= getSupportFragmentManager();
+        fm.beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.contenido,fragment)
+                .commit();
+    }
+
 
     private void inicializarToolbar() {
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -203,9 +253,9 @@ public class MainActivity extends AppCompatActivity {
                         IraHome();
                         break;
                     case R.id.nav_user:
-                        //mostrar cuando ya inicio sesion
-
+                        //mostrar cuando inicio sesion
                         Log.d("Choose:","user");
+                        IraMiPerfil();
                         break;
                     case R.id.login:
                         Log.d("Choose:","Login");

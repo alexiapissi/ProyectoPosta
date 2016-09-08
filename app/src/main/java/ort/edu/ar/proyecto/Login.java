@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,8 @@ import org.json.simple.JSONObject;
 import java.io.IOException;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.net.HttpCookie;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,6 +39,8 @@ public class Login extends AppCompatActivity  {
     String mail, contraseña;
     private static final int REQUEST_SIGNUP = 0;
     SessionManager session;
+    Button ing;
+    String idUsuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +50,7 @@ public class Login extends AppCompatActivity  {
         mailUsuario = (EditText) findViewById(R.id.mail);
         contraseñaUsuario = (EditText) findViewById(R.id.contraseña);
         registrarse = (TextView) findViewById(R.id.registrate);
+        ing = (Button) findViewById(R.id.ingresar);
 
         registrarse.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,9 +98,11 @@ public class Login extends AppCompatActivity  {
                     Toast registro = Toast.makeText(getApplicationContext(), "El usuario y la contraseña no coinciden", Toast.LENGTH_SHORT);
                     registro.show();
                 } else {
-                    session.createLoginSession(contraseñaUsuario.getText().toString(), mailUsuario.getText().toString());
+                    idUsuario = resultado;
+                    session.createLoginSession(contraseñaUsuario.getText().toString(), mailUsuario.getText().toString(), idUsuario);
                     //ir al inicio
                     Intent intent= new Intent(getApplicationContext(),MainActivity.class);
+                    intent.putExtra("miId", idUsuario);
                     startActivity(intent);
                 }
             }
@@ -151,6 +159,15 @@ public class Login extends AppCompatActivity  {
             return "Invalid Email Address";
         }
     }
+
+    /*
+    private List<HttpCookie> getCookies() {
+        if(cookieManager == null)
+            return null;
+        else
+            return cookieManager.getCookieStore().getCookies();
+    }
+    */
 
 }
 
