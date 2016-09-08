@@ -4,6 +4,8 @@ package ort.edu.ar.proyecto;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +32,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ort.edu.ar.proyecto.Fragments.FHome;
 import ort.edu.ar.proyecto.model.SessionManager;
 
 public class Login extends AppCompatActivity  {
@@ -65,22 +68,27 @@ public class Login extends AppCompatActivity  {
     }
 
     public void btnIngresar (View view){
+        ing.setEnabled(false);
         mail = mailUsuario.getText().toString();
         contraseña = contraseñaUsuario.getText().toString();
 
         if (contraseña.length() == 0 || mail.length() == 0 ) {
             Toast error = Toast.makeText(this, "Debe completar todos los campos", Toast.LENGTH_SHORT);
             error.show();
+            ing.setEnabled(true);
         } else {
             if (validateEmailAddress(mail).equals("Invalid Email Address")) {
                 mailUsuario.setError("Mail no valido");
+                ing.setEnabled(true);
             }
 
             if (contraseña.length() < 4 || contraseña.length() > 10){
                 contraseñaUsuario.setError("La contraseña debe tener entre 4 y 10 caracteres");
+                ing.setEnabled(true);
             }
 
             if (mailUsuario.getError() == null && contraseñaUsuario.getError() == null){
+                ing.setEnabled(false);
                 String url = "http://viajarort.azurewebsites.net/LogueoUsuario.php";
                 new LoginTask().execute(url);
             }
@@ -97,6 +105,7 @@ public class Login extends AppCompatActivity  {
                 if (resultado.equals("No existe el usuario")){
                     Toast registro = Toast.makeText(getApplicationContext(), "El usuario y la contraseña no coinciden", Toast.LENGTH_SHORT);
                     registro.show();
+                    ing.setEnabled(true);
                 } else {
                     idUsuario = resultado;
                     session.createLoginSession(contraseñaUsuario.getText().toString(), mailUsuario.getText().toString(), idUsuario);

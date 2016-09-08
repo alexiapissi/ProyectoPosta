@@ -37,28 +37,26 @@
             android:background="@color/colorproyecto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp">
+            android:weightSum="3"
+            android:padding="15dp">
             <ImageButton
                 android:background="@color/colorproyecto"
                 android:src="@drawable/lupa"
                 android:onClick="btnBusqueda"
                 android:layout_width="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="50dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content" />
             <ImageButton
                 android:background="@color/colorproyecto"
                 android:onClick="btnHome"
-                android:layout_marginLeft="50dp"
-                android:layout_marginRight="20dp"
+                android:layout_weight="1"
                 android:src="@drawable/ic_house_black_24dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
             <ImageButton
                 android:background="@color/colorproyecto"
                 android:onClick="btnMiPerfil"
-                android:layout_marginLeft="50dp"
-                android:layout_marginRight="20dp"
+                android:layout_weight="1"
                 android:src="@drawable/ic_person_black_24dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />

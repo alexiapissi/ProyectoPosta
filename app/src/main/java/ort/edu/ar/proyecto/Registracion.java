@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
@@ -30,6 +32,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ort.edu.ar.proyecto.Fragments.FHome;
 import ort.edu.ar.proyecto.model.SessionManager;
 import ort.edu.ar.proyecto.model.Usuario;
 
