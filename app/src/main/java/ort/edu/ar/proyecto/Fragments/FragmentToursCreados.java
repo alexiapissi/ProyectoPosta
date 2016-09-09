@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ort.edu.ar.proyecto.MainActivity;
 import ort.edu.ar.proyecto.R;
@@ -29,6 +30,8 @@ public class FragmentToursCreados extends Fragment {
     Tour Tourmandar;
     MainActivity ma;
     TextView creados;
+    boolean estado;
+    ProgressBar progess;
 
     public FragmentToursCreados() {
     }
@@ -42,22 +45,24 @@ public class FragmentToursCreados extends Fragment {
                              Bundle saveInstantState) {
         View v = inflater.inflate(R.layout.fragment_tourscreados, container, false);
 
-        ma = (MainActivity) getActivity();
-
         toursUsuario = (ListView) v.findViewById(R.id.listToursUsu);
+        toursUsuario.invalidateViews();
+        toursUsuario.refreshDrawableState();
         creados = (TextView) v.findViewById(R.id.tourscreados);
+        progess = (ProgressBar)v.findViewById(R.id.progress);
+        progess.setVisibility(View.GONE);
+
+        ma = (MainActivity) getActivity();
+        estado = ma.getEstado();
 
         toursUsuarioAL = new ArrayList<>();
         toursUsuarioAL.clear();
         toursUsuarioAL.addAll(ma.getToursUsuarioAL());
-        toursUsuario.invalidateViews();
-        toursUsuario.refreshDrawableState();
 
         if (toursUsuarioAL != null && toursUsuarioAL.size() != 0) {
             creados.setText("Tours creados:");
-            adapter = new ToursUsuarioAdapter(getActivity(), toursUsuarioAL);
             //if (usu.getToursCreados() != null) {
-            toursUsuario.invalidateViews();
+            adapter = new ToursUsuarioAdapter(getActivity(), toursUsuarioAL);
             toursUsuario.setAdapter(adapter);
             toursRecibidos = ma.getTours();
             //}
@@ -77,7 +82,12 @@ public class FragmentToursCreados extends Fragment {
             });
 
         }else {
-            creados.setText("Este usuario no ha creado tours.");
+            if (estado) {
+                creados.setText("Este usuario no ha creado tours.");
+            } else {
+                progess.setVisibility(View.VISIBLE);
+                //creados.setText("Cargando...");
+            }
         }
 
         return v;

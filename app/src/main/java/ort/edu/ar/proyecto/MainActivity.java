@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Tour> ToursLikeadosUsuario;
     Fragment HomeFragment;
     FragmentBuscar fbusqueda;
+    boolean estado;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -133,6 +134,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void setTour(Tour t) {
         tour = t;
+    }
+
+    public boolean getEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estad) {
+        estado = estad;
     }
 
     public ArrayList<Tour> getTours() {
@@ -292,10 +301,6 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("Choose:", "Logout");
                         IraCerrarSesion();
                         break;
-                    case R.id.nav_busqueda:
-                        IraBusqueda();
-                        break;
-
                 }
 
                 drawerLayout.closeDrawers();
