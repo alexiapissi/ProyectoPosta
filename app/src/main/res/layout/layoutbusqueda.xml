@@ -4,14 +4,13 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp"
     tools:context=".Fragments.FHome"
     >
     <EditText android:id="@+id/inputSearch"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="Buscar Tours..."
+        android:hint=" Buscar Tours..."
+        android:layout_margin="5dp"
         android:inputType="textVisiblePassword"
         android:digits="abcdefghijklmnopqrstuvwxyz1234567890 "
         android:drawableLeft="@drawable/blacklupa"/>
@@ -29,13 +28,15 @@
         android:id="@+id/msj"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Buscá tours por nombre o ubicación"/>
+        android:layout_margin="5dp"
+        android:text="Buscá tours por nombre, descripción o ubicación"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="No se encontraron resultados"
         android:visibility="gone"
+        android:layout_margin="5dp"
         android:id="@+id/noresult"/>
 
     

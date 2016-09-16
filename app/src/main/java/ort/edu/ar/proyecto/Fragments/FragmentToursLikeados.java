@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ public class FragmentToursLikeados extends Fragment {
     MainActivity ma;
     Tour Tourmandar;
     TextView likeados;
+    boolean estado;
+    ProgressBar progess;
 
     public FragmentToursLikeados() {
     }
@@ -41,16 +44,24 @@ public class FragmentToursLikeados extends Fragment {
                              Bundle saveInstantState) {
         View v = inflater.inflate(R.layout.fragment_tourslikeados, container, false);
 
-        ma = (MainActivity) getActivity();
         toursUsuario = (ListView)v.findViewById(R.id.listToursUsuLikeados);
         likeados = (TextView) v.findViewById(R.id.tourslikeados);
+        progess = (ProgressBar)v.findViewById(R.id.progress);
+        progess.setVisibility(View.GONE);
+
+        ma = (MainActivity) getActivity();
+        estado = ma.getEstado();
 
         toursUsuarioLikeadosAL = new ArrayList<>();
-        toursUsuarioLikeadosAL = ma.getToursLikeadosUsuario();
+        toursUsuarioLikeadosAL.clear();
+        toursUsuarioLikeadosAL.addAll(ma.getToursLikeadosUsuario());
+        toursUsuario.invalidateViews();
+        toursUsuario.refreshDrawableState();
+
         if (toursUsuarioLikeadosAL != null && toursUsuarioLikeadosAL.size() != 0) {
             likeados.setText("Tours likeados:");
-            adapter = new ToursUsuarioAdapter(getActivity(), toursUsuarioLikeadosAL);
             //if (usu.getToursCreados() != null) {
+            adapter = new ToursUsuarioAdapter(getActivity(), toursUsuarioLikeadosAL);
             toursUsuario.setAdapter(adapter);
             toursRecibidos = ma.getTours();
             //}
@@ -69,9 +80,15 @@ public class FragmentToursLikeados extends Fragment {
                 }
             });
         } else {
-            likeados.setText("Este usuario no ha likeado tours.");
+            if (estado) {
+                likeados.setText("Este usuario no ha likeado tours.");
+            } else {
+                progess.setVisibility(View.VISIBLE);
+                //likeados.setText("Cargando...");
+            }
         }
 
         return v;
     }
+
 }

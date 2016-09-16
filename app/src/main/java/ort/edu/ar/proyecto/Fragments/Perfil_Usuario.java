@@ -52,31 +52,27 @@ public class Perfil_Usuario extends Fragment {
     String foto;
     int id;
     MainActivity ma;
+    boolean estado;
 
     @Override
     public View onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         View v=inflater.inflate(R.layout.activity_perfil_usuario,container,false);
 
+        resid ="";
         ma= (MainActivity) getActivity();
         id = ma.getIdUsuario();
+        estado = false;
 
         String url = "http://viajarort.azurewebsites.net/usuario.php?id=";
         url += id;
         new UsuarioTask().execute(url);
 
-        resid ="";
         toursUsuarioAL = new ArrayList<>();
         toursLikeados = new ArrayList<>();
         //progressbar=(ProgressBar)v.findViewById(R.id.progress);
         nombreUsuario = (TextView) v.findViewById(R.id.nomUsu);
         residenciaUsuario = (TextView) v.findViewById(R.id.residenciaUsu);
         fotoUsuario = (ImageView) v.findViewById(R.id.fotoUsu);
-
-        usu = new Usuario("", "", 0, "", null, null);
-
-        //Usuario usuario = ma.getUsuario();
-        //usu = usuario;
-
         tabHost = (FragmentTabHost) v.findViewById(android.R.id.tabhost);
         tabHost.setup(getContext(), getChildFragmentManager(), android.R.id.tabcontent);
         tabHost.addTab(
@@ -85,6 +81,11 @@ public class Perfil_Usuario extends Fragment {
         tabHost.addTab(
                 tabHost.newTabSpec("tab2").setIndicator("Tours Likeados", null),
                 FragmentToursLikeados.class, null);
+
+        usu = new Usuario("", "", 0, "", null, null);
+
+        //Usuario usuario = ma.getUsuario();
+        //usu = usuario;
 
         return v;
     }
@@ -102,8 +103,13 @@ public class Perfil_Usuario extends Fragment {
         protected void onPostExecute(Usuario resultado) {
             super.onPostExecute(resultado);
 
-            resid = resultado.getResidencia();
-            residenciaUsuario.setText(resid);
+            estado = true;
+            ma.setEstado(estado);
+
+            if (resultado.getResidencia() != null) {
+                resid = resultado.getResidencia();
+                residenciaUsuario.setText(resid);
+            }
             nom = resultado.getNombre();
             nombreUsuario.setText(nom);
             foto= resultado.getFoto();
@@ -156,8 +162,6 @@ public class Perfil_Usuario extends Fragment {
             String jsonResidenciaUsuario = usuario.getString("Residencia");
             String jsonFotoUsuario = usuario.getString("FotoURL");
 
-            usu.setResidencia(jsonResidenciaUsuario);
-
             ArrayList<Tour> toursLocal = new ArrayList<>();
             if (usuario.getJSONArray("ToursCreados") != null) {
                 JSONArray jsonTours = usuario.getJSONArray("ToursCreados");
@@ -188,6 +192,10 @@ public class Perfil_Usuario extends Fragment {
                 }
             } else {
                 toursLikeadosLocal = null;
+            }
+
+            if (jsonResidenciaUsuario != null){
+                usu.setResidencia(jsonResidenciaUsuario);
             }
 
             //no muestra residencia, va al catch

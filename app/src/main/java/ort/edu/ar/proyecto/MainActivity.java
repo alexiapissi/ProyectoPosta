@@ -1,6 +1,7 @@
 package ort.edu.ar.proyecto;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -16,7 +17,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -57,6 +62,12 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Tour> ToursLikeadosUsuario;
     Fragment HomeFragment;
     FragmentBuscar fbusqueda;
+    boolean estado;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,26 +75,26 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         inicializarToolbar();
-        fbusqueda=new FragmentBuscar();
+        fbusqueda = new FragmentBuscar();
         HomeFragment = new FHome();
 
         String url = "http://viajarort.azurewebsites.net/gustos.php";
         new GustosTask().execute(url);
-        FragmentManager fm= getSupportFragmentManager();
+        FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
-                .replace(R.id.contenido,HomeFragment)
+                .replace(R.id.contenido, HomeFragment)
                 .addToBackStack(null)
                 .commit();
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navUsuario = (TextView)navigationView.getHeaderView(0).findViewById(R.id.nav_username);
+        navUsuario = (TextView) navigationView.getHeaderView(0).findViewById(R.id.nav_username);
 
         session = new SessionManager(this);
 
         //usu = navigationView.getMenu().findItem(R.id.nav_user);
         //login = navigationView.getMenu().findItem(R.id.login);
         //logout = navigationView.getMenu().findItem(R.id.logout);
-        if (session.checkLogin() == 0){
+        if (session.checkLogin() == 0) {
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.drawer_items_login);
         } else {
@@ -101,34 +112,52 @@ public class MainActivity extends AppCompatActivity {
         toursUsuarioAL = new ArrayList<>();
         ToursLikeadosUsuario = new ArrayList<>();
 
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    public void IraDetalle(Tour tour){
+    public void IraDetalle(Tour tour) {
         Detalle_Tour fragment = new Detalle_Tour();
         //fragment.setTour(tour);
-        this.tour=tour;
-        FragmentManager fm= getSupportFragmentManager();
+        this.tour = tour;
+        FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
                 .addToBackStack(null)
-                .replace(R.id.contenido,fragment)
+                .replace(R.id.contenido, fragment)
                 .commit();
     }
-    public Tour getTour(){ return tour; }
-    public void setTour (Tour t){
-        tour=t;
+
+    public Tour getTour() {
+        return tour;
     }
-    public ArrayList<Tour> getTours(){
+
+    public void setTour(Tour t) {
+        tour = t;
+    }
+
+    public boolean getEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estad) {
+        estado = estad;
+    }
+
+    public ArrayList<Tour> getTours() {
         return tours;
     }
+
     /*public int getPos(){
         return posicion;
     }*/
     public void setPuntos(ArrayList<Punto> puntos) {
         tour.setPuntos(puntos);
     }
-    public ArrayList<Punto> getPuntos(){
 
-        puntos=tour.getPuntos();
+    public ArrayList<Punto> getPuntos() {
+
+        puntos = tour.getPuntos();
         return puntos;
     }
 
@@ -136,19 +165,19 @@ public class MainActivity extends AppCompatActivity {
         posicion=pos;
     }*/
 
-    public void setToursUsuarioAL (ArrayList<Tour> toursUsuario){
+    public void setToursUsuarioAL(ArrayList<Tour> toursUsuario) {
         toursUsuarioAL = toursUsuario;
     }
 
-    public ArrayList<Tour> getToursUsuarioAL(){
+    public ArrayList<Tour> getToursUsuarioAL() {
         return toursUsuarioAL;
     }
 
-    public void setToursLikeadosUsuario (ArrayList<Tour> toursLikeados){
+    public void setToursLikeadosUsuario(ArrayList<Tour> toursLikeados) {
         ToursLikeadosUsuario = toursLikeados;
     }
 
-    public ArrayList<Tour> getToursLikeadosUsuario(){
+    public ArrayList<Tour> getToursLikeadosUsuario() {
         return ToursLikeadosUsuario;
     }
 
@@ -163,9 +192,9 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void IraBusqueda(){
+    public void IraBusqueda() {
 
-        FragmentManager fm=getSupportFragmentManager();
+        FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
                 .addToBackStack(null)
                 .replace(R.id.contenido, fbusqueda)
@@ -173,49 +202,55 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void mandarUsuario(){
+    public void mandarUsuario() {
         Perfil_Usuario fragment = new Perfil_Usuario();
-        this.tour=tour;
-        FragmentManager fm= getSupportFragmentManager();
+        this.tour = tour;
+        FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
                 .addToBackStack(null)
-                .replace(R.id.contenido,fragment)
+                .replace(R.id.contenido, fragment)
                 .commit();
     }
 
-    public void setUsuario(Usuario usu){
+    public void setUsuario(Usuario usu) {
         usuario = usu;
     }
 
-    public Usuario getUsuario(){ return usuario; }
+    public Usuario getUsuario() {
+        return usuario;
+    }
 
-    public int getIdUsuario() { return idUsuario; }
+    public int getIdUsuario() {
+        return idUsuario;
+    }
 
-    public void setIdUsuario(int id) { idUsuario = id; }
+    public void setIdUsuario(int id) {
+        idUsuario = id;
+    }
 
-    public void setTours (ArrayList<Tour> tourss){
+    public void setTours(ArrayList<Tour> tourss) {
         tours = tourss;
     }
 
     public void IraLogin() {
-        Intent intent= new Intent(this,Login.class);
+        Intent intent = new Intent(this, Login.class);
         startActivity(intent);
     }
 
     public void IraCerrarSesion() {
-        Intent intent= new Intent(this,CerrarSesion.class);
+        Intent intent = new Intent(this, CerrarSesion.class);
         startActivity(intent);
     }
 
 
-    public void IraMiPerfil(){
+    public void IraMiPerfil() {
         idUsuario = Integer.parseInt(session.getUserDetails().get(100)[2]);
         this.setIdUsuario(idUsuario);
         Perfil_Usuario fragment = new Perfil_Usuario();
-        FragmentManager fm= getSupportFragmentManager();
+        FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
                 .addToBackStack(null)
-                .replace(R.id.contenido,fragment)
+                .replace(R.id.contenido, fragment)
                 .commit();
     }
 
@@ -232,14 +267,23 @@ public class MainActivity extends AppCompatActivity {
         setearListener(navigationView);
     }
 
-    public void btnBusqueda (View v){
+    public void btnBusqueda(View v) {
         IraBusqueda();
     }
-    public void btnHome (View v){
+
+    public void btnHome(View v) {
         IraHome();
     }
-    public void btnMiPerfil (View v){
+
+    public void btnMiPerfil(View v) {
         Log.d("ir a", "mi perfil");
+        if (session.checkLogin() == 1) {
+            IraMiPerfil();
+        } else {
+            Toast mensaje = Toast.makeText(getApplicationContext(), "Inicie sesion", Toast.LENGTH_SHORT);
+            mensaje.show();
+            IraLogin();
+        }
     }
 
     private void setearListener(NavigationView navigationView) {
@@ -247,30 +291,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 item.setChecked(true);
-                switch(item.getItemId()) {
-                    case R.id.nav_home:
-                        Log.d("Choose:","Home");
-                        IraHome();
-                        break;
-                    case R.id.nav_user:
-                        //mostrar cuando inicio sesion
-                        Log.d("Choose:","user");
-                        IraMiPerfil();
-                        break;
+                switch (item.getItemId()) {
                     case R.id.login:
-                        Log.d("Choose:","Login");
+                        Log.d("Choose:", "Login");
                         IraLogin();
                         break;
                     case R.id.logout:
                         //mostrar cuando ya inicio sesion
-                        Log.d("Choose:","Logout");
+                        Log.d("Choose:", "Logout");
                         IraCerrarSesion();
                         break;
-                    case R.id.nav_busqueda:
-                        IraBusqueda();
-                        break;
-
-
                 }
 
                 drawerLayout.closeDrawers();
@@ -279,6 +309,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
     @Override
     public void onBackPressed() {
         if (getFragmentManager().getBackStackEntryCount() > 0) {
@@ -299,8 +330,49 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://ort.edu.ar.proyecto/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://ort.edu.ar.proyecto/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
+    }
+
     private class GustosTask extends AsyncTask<String, Void, ArrayList<Gusto>> {
         private OkHttpClient client = new OkHttpClient();
+
         @Override
         protected void onPostExecute(ArrayList<Gusto> resultado) {
             super.onPostExecute(resultado);
@@ -329,7 +401,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Convierte un JSON en un ArrayList de Direccion
         ArrayList<Gusto> parsearResultado(String JSONstr) throws JSONException {
-            ArrayList<Gusto> gustos  = new ArrayList<>();
+            ArrayList<Gusto> gustos = new ArrayList<>();
             JSONArray jsonGustos = new JSONArray(JSONstr);
             for (int i = 0; i < jsonGustos.length(); i++) {
                 JSONObject jsonResultado = jsonGustos.getJSONObject(i);

@@ -100,13 +100,13 @@
             android:shadowDy="1"
             android:shadowRadius="2"
             android:textStyle="bold"/>
+
         <ProgressBar
             android:id="@+id/progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_margin="100dp"
-            >
+            android:layout_gravity="center"
+            android:layout_marginTop="-25dp">
         </ProgressBar>
 
         <ListView
@@ -116,6 +116,8 @@
             android:id="@+id/listPuntos">
 
         </ListView>
+
+
 
     </FrameLayout>
 

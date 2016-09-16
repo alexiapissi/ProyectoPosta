@@ -9,6 +9,15 @@
         android:id="@+id/tourslikeados"
         android:layout_marginTop="15dp"/>
 
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        >
+    </ProgressBar>
+
     <ListView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
