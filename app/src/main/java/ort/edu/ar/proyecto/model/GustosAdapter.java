@@ -49,6 +49,7 @@ public class GustosAdapter extends BaseAdapter {
 
         Gusto g= gustos.get(position);
         cbgusto.setText(g.getNombre());
+        cbgusto.setChecked(g.isCheckeado());
 
         return view;
     }

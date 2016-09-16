@@ -1,7 +1,9 @@
 package ort.edu.ar.proyecto.Fragments;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import ort.edu.ar.proyecto.R;
 import ort.edu.ar.proyecto.model.Gusto;
@@ -22,6 +25,8 @@ public class GustosDialog extends DialogFragment implements View.OnClickListener
     Button aceptar;
     GustosAdapter gadapter;
     ListView lv;
+    CheckBox cb;
+
 
     public void Setgustos (ArrayList<Gusto> gustos){
         this.gustos=gustos;
@@ -46,6 +51,12 @@ public class GustosDialog extends DialogFragment implements View.OnClickListener
         return view;
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.d("para","aca");
+    }
+
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.aceptar:
@@ -59,21 +70,27 @@ public class GustosDialog extends DialogFragment implements View.OnClickListener
         /** get all values of the EditText-Fields */
         View v;
         ArrayList<Gusto> gustoselegidos = new ArrayList<>();
-        CheckBox cb;
+
         for (int i = 0; i < lv.getCount(); i++) {
+            Gusto g= (Gusto)gadapter.getItem(i);
             v = lv.getChildAt(i);
             cb = (CheckBox) v.findViewById(R.id.gustocb);
             if(cb.isChecked()){
                 algunocheckeado=true;
-                Gusto g= (Gusto)gadapter.getItem(i);
+
                 gustoselegidos.add(g);
+                g.setCheckeado(true);
+            }else{
+                g.setCheckeado(false);
             }
         }
-        if(algunocheckeado==true) {
+        if(algunocheckeado) {
             FragmentBuscar fb = (FragmentBuscar) getTargetFragment();
             fb.setGustosElegidos(gustoselegidos);
             dismiss();
         }else{
+            FragmentBuscar fb = (FragmentBuscar) getTargetFragment();
+            fb.setGustosElegidos(null);
             dismiss();
         }
 

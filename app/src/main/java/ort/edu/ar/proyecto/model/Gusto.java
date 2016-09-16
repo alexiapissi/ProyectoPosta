@@ -8,6 +8,15 @@ import java.io.Serializable;
 public class Gusto implements Serializable {
     int Id;
     String Nombre;
+    boolean checkeado;
+
+    public boolean isCheckeado() {
+        return checkeado;
+    }
+
+    public void setCheckeado(boolean checkeado) {
+        this.checkeado = checkeado;
+    }
 
     public Gusto(int id, String nombre) {
         Id = id;

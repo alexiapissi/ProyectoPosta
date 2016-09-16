@@ -31,6 +31,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import ort.edu.ar.proyecto.MainActivity;
 import ort.edu.ar.proyecto.R;
@@ -51,7 +52,7 @@ public class FragmentBuscar extends Fragment {
     ListView listviewt;
     TextView mensaje;
     boolean iswaiting =false;
-    String gustosElegidos="";
+    ArrayList<Gusto> gustoselegidosarray;
     String busqueda="";
 
 
@@ -66,6 +67,7 @@ public class FragmentBuscar extends Fragment {
         View view = inflater.inflate(R.layout.layoutbusqueda, container, false);
         cargando = (ProgressBar) view.findViewById(R.id.progress);
         cargando.setVisibility(View.GONE);
+        gustoselegidosarray=new ArrayList<>();
         inputSearch = (EditText) view.findViewById(R.id.inputSearch);
         listviewt = (ListView) view.findViewById(R.id.lv);
         noresult=(TextView)view.findViewById(R.id.noresult);
@@ -85,11 +87,12 @@ public class FragmentBuscar extends Fragment {
                 noresult.setVisibility(View.GONE);
                 busqueda=cs.toString();
                 if(cs.length()>=3){
-                    new ToursTask().execute("http://viajarort.azurewebsites.net/busqueda.php?q="+cs);
                     cargando.setVisibility(View.VISIBLE);
                     iswaiting=true;
                     mensaje.setVisibility(View.GONE);
                     busqueda=cs.toString();
+
+                    correrBusqueda(busqueda,gustoselegidosarray);
                 }
                 if(cs.length()==0){
 
@@ -156,14 +159,33 @@ public class FragmentBuscar extends Fragment {
     }
 
     public void setGustosElegidos(ArrayList<Gusto> gustose) {
-        gustosElegidos="";
-        for(Gusto g:gustose){
-            gustosElegidos += g.getId() + ",";
-        }
-        gustosElegidos=gustosElegidos.substring(0,gustosElegidos.length()-1);
-            //new ToursTask().execute("http://viajarort.azurewebsites.net/busqueda.php?q="+busqueda+"&gustos=["+gustosElegidos+"]");
-        new ToursTask().execute("http://viajarort.azurewebsites.net/toursxgusto.php?Idgusto="+gustosElegidos+"");
+        if (gustose==null){
+            gustoselegidosarray=gustose;
+            gustoselegidosarray=null;
+            correrBusqueda(busqueda, gustoselegidosarray);
+        }else {
+            gustoselegidosarray = gustose;
 
+            correrBusqueda(busqueda, gustoselegidosarray);
+        }
+    }
+
+
+    public void correrBusqueda(String buscar,ArrayList<Gusto> gustosel){
+
+        String gustosElegidos="";
+        if(gustosel==null) {
+            gustosElegidos="";
+        }else{
+            for (Gusto g : gustosel) {
+                gustosElegidos += g.getId() + ",";
+            }
+            if (!gustosElegidos.equals("")) {
+                gustosElegidos = gustosElegidos.substring(0, gustosElegidos.length() - 1);
+            }
+        }
+        //new ToursTask().execute("http://viajarort.azurewebsites.net/busqueda.php?q="+busqueda+"&gustos=["+gustosElegidos+"]");
+        new ToursTask().execute("http://viajarort.azurewebsites.net/busqueda.php?q="+buscar+"&gusto="+gustosElegidos+"");
     }
 
 
