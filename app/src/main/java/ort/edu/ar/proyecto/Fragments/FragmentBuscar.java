@@ -92,6 +92,7 @@ public class FragmentBuscar extends Fragment {
                     mensaje.setVisibility(View.GONE);
                     busqueda=cs.toString();
 
+
                     correrBusqueda(busqueda,gustoselegidosarray);
                 }
                 if(cs.length()==0){
@@ -115,6 +116,7 @@ public class FragmentBuscar extends Fragment {
 
             }
 
+
             @Override
             public void afterTextChanged(Editable editable) {
 
@@ -131,6 +133,8 @@ public class FragmentBuscar extends Fragment {
         return view;
 
     }
+
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
