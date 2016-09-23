@@ -52,20 +52,19 @@ public class MainActivity extends AppCompatActivity {
     TextView navUsuario;
     Tour tour;
     ArrayList<Tour> tours;
+    ArrayList<Gusto> gustos;
     ArrayList<Tour> toursUsuarioAL;
-    //int posicion;
     ArrayList<Punto> puntos;
     Usuario usuario;
     SessionManager session;
     NavigationView navigationView;
-    MenuItem usu, login, logout;
-    Fragment Busquedafragment;
     String miId;
     int idUsuario;
     ArrayList<Tour> ToursLikeadosUsuario;
     Fragment HomeFragment;
     FragmentBuscar fbusqueda;
     boolean estado;
+    Tour tourcreando;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -83,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
         String url = "http://viajarort.azurewebsites.net/gustos.php";
         new GustosTask().execute(url);
+
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
                 .replace(R.id.contenido, HomeFragment)
@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void IraBusqueda() {
+     public void IraBusqueda() {
 
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
@@ -260,6 +260,17 @@ public class MainActivity extends AppCompatActivity {
 
     public void setTours(ArrayList<Tour> tourss) {
         tours = tourss;
+    }
+
+    public void setTourCreando(Tour t){
+        tourcreando=t;
+    }
+    public Tour getTourcreando(){
+        return tourcreando;
+    }
+
+    public ArrayList<Gusto> getGustos(){
+        return gustos;
     }
 
     public void IraLogin() {
@@ -435,7 +446,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Convierte un JSON en un ArrayList de Direccion
         ArrayList<Gusto> parsearResultado(String JSONstr) throws JSONException {
-            ArrayList<Gusto> gustos = new ArrayList<>();
+            gustos = new ArrayList<>();
             JSONArray jsonGustos = new JSONArray(JSONstr);
             for (int i = 0; i < jsonGustos.length(); i++) {
                 JSONObject jsonResultado = jsonGustos.getJSONObject(i);

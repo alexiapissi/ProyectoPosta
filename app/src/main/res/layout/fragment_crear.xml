@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true">
+
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,6 +17,13 @@
         android:padding="10dp"
         android:id="@+id/linearLayout">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Crear Tour"
+            android:textColor="@color/colorproyecto"
+            android:textSize="20dp"/>
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -19,7 +32,8 @@
             android:padding="10dp"
             android:id="@+id/nombreTour"
             android:textColorHint="#bbbbbb"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:layout_marginTop="20dp"/>
 
         <EditText
             android:layout_width="match_parent"
@@ -43,15 +57,38 @@
             android:padding="10dp"
             android:textColorHint="#bbbbbb" />
 
-        <CheckBox
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/gustos"/>
+            android:text="Gustos:"
+            android:layout_marginTop="20dp"
+            />
+
+        <ort.edu.ar.proyecto.model.NonScrollListView
+            android:id="@+id/listGustos"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/header_button">
+
+        </ort.edu.ar.proyecto.model.NonScrollListView>
 
         <ImageButton
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:id="@+id/foto"/>
+            android:layout_marginTop="20dp"
+            android:id="@+id/foto"
+            android:scaleType="fitCenter"
+            android:src="@drawable/camara"
+        />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/uritv"
+            android:visibility="gone"/>
 
         <Button
             android:layout_width="wrap_content"
@@ -65,3 +102,4 @@
     </LinearLayout>
 
 </RelativeLayout>
+</ScrollView>
