@@ -49,7 +49,7 @@
                 android:textColor="@android:color/white"
                 android:theme="@style/MyButton"
                 android:layout_margin="4dp"
-                android:text="Sign In"
+                android:text="Ingresar"
                 android:onClick="btnIngresar"
                 android:id="@+id/ingresar"
                 />

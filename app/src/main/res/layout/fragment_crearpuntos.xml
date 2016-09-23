@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/nombrePunto"
+            android:hint="Nombre Punto"
+            android:background="@drawable/edittext_top_bg"
+            android:padding="10dp"
+            android:textColorHint="#bbbbbb"
+            android:singleLine="true"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/direccionPunto"
+            android:hint="Direccion"
+            android:drawableLeft="@drawable/ubicacion"
+            android:background="@drawable/edittext_default_bg"
+            android:padding="10dp"
+            android:textColorHint="#bbbbbb"
+            android:singleLine="true"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/diaPunto"
+            android:hint="Día"
+            android:background="@drawable/edittext_default_bg"
+            android:padding="10dp"
+            android:textColorHint="#bbbbbb"
+            android:singleLine="true"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLength="1000"
+            android:maxLines="10"
+            android:id="@+id/descripcionPunto"
+            android:hint="Descripción"
+            android:background="@drawable/edittext_bottom_bg"
+            android:padding="10dp"
+            android:textColorHint="#bbbbbb"
+            android:singleLine="true"/>
+
+        <ImageButton
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:id="@+id/fotoPunto"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:id="@+id/uri"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Agregar"
+            android:id="@+id/agregar"
+            android:textColor="@android:color/white"
+            android:theme="@style/MyButton"/>
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="14dp">
+    
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:text="Nombre Tour"
+        android:textSize="30dp"
+        android:textColor="@android:color/black"/>
+    
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/listVWPuntos"></ListView>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Agregar Punto"
+        android:id="@+id/agregarpunto"
+        android:drawableLeft="@drawable/mas"
+        android:onClick="btnAgregarPunto"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:theme="@style/MyButton"
+        android:text="Finalizar"
+        android:id="@+id/finalizar"
+        android:onClick="btnFinalizar"/>
+
+
+</LinearLayout>

@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import ort.edu.ar.proyecto.MainActivity;
 import ort.edu.ar.proyecto.R;
 import ort.edu.ar.proyecto.model.CircleTransform;
+import ort.edu.ar.proyecto.model.NonScrollListView;
 import ort.edu.ar.proyecto.model.Punto;
 import ort.edu.ar.proyecto.model.PuntosAdapter;
 import ort.edu.ar.proyecto.model.SessionManager;
@@ -47,7 +48,7 @@ public class FragmentDetalle extends Fragment {
     TextView nombreUsuario;
     ImageButton darlike;
     TextView cantLikes;
-    ListView listPuntosVW;
+    NonScrollListView listPuntosVW;
     PuntosAdapter puntosAdapter;
     ArrayList<Punto> puntos;
     Tour tour;
@@ -79,12 +80,13 @@ public class FragmentDetalle extends Fragment {
         nombreUsuario = (TextView) view.findViewById(R.id.NombreUsuariod);
         cantLikes = (TextView) view.findViewById(R.id.cantlikesd);
         darlike = (ImageButton) view.findViewById(R.id.Liked);
-        listPuntosVW = (ListView) view.findViewById(R.id.listPuntos);
+        listPuntosVW = (NonScrollListView) view.findViewById(R.id.listPuntos);
 
         session = new SessionManager(getContext());
 
         puntos = new ArrayList<>();
         puntosAdapter = new PuntosAdapter(getActivity().getApplicationContext(), puntos);
+
         listPuntosVW.setAdapter(puntosAdapter);
         ma = (MainActivity) getActivity();
         tour = ma.getTour();

@@ -37,6 +37,9 @@ import java.util.HashMap;
 import ort.edu.ar.proyecto.Fragments.Detalle_Tour;
 import ort.edu.ar.proyecto.Fragments.FHome;
 import ort.edu.ar.proyecto.Fragments.FragmentBuscar;
+import ort.edu.ar.proyecto.Fragments.FragmentCrear;
+import ort.edu.ar.proyecto.Fragments.FragmentCrearPuntos;
+import ort.edu.ar.proyecto.Fragments.FragmentPrevisualizar;
 import ort.edu.ar.proyecto.Fragments.Perfil_Usuario;
 import ort.edu.ar.proyecto.model.Gusto;
 import ort.edu.ar.proyecto.model.Punto;
@@ -121,6 +124,33 @@ public class MainActivity extends AppCompatActivity {
         Detalle_Tour fragment = new Detalle_Tour();
         //fragment.setTour(tour);
         this.tour = tour;
+        FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.contenido, fragment)
+                .commit();
+    }
+
+    public void IraCrearPuntos(){
+        FragmentCrearPuntos fragment = new FragmentCrearPuntos();
+        FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.contenido, fragment)
+                .commit();
+    }
+
+    public void IraPrevisualizar(){
+        FragmentPrevisualizar fragment = new FragmentPrevisualizar();
+        FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.contenido, fragment)
+                .commit();
+    }
+
+    public void IraCrear(){
+        FragmentCrear fragment = new FragmentCrear();
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
                 .addToBackStack(null)
@@ -300,6 +330,10 @@ public class MainActivity extends AppCompatActivity {
                         //mostrar cuando ya inicio sesion
                         Log.d("Choose:", "Logout");
                         IraCerrarSesion();
+                        break;
+                    case R.id.crear:
+                        Log.d("Choose:", "Crear");
+                        IraCrear();
                         break;
                 }
 

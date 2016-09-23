@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:id="@+id/linearLayout">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre Tour"
+            android:background="@drawable/edittext_top_bg"
+            android:padding="10dp"
+            android:id="@+id/nombreTour"
+            android:textColorHint="#bbbbbb"
+            android:singleLine="true"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Ubicación"
+            android:id="@+id/ubicacionTour"
+            android:background="@drawable/edittext_default_bg"
+            android:padding="10dp"
+            android:textColorHint="#bbbbbb"
+            android:singleLine="true"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLength="1000"
+            android:maxLines="10"
+            android:id="@+id/descripcionTour"
+            android:hint="Descripción"
+            android:background="@drawable/edittext_bottom_bg"
+            android:padding="10dp"
+            android:textColorHint="#bbbbbb" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/gustos"/>
+
+        <ImageButton
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:id="@+id/foto"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Crear"
+            android:textColor="@android:color/white"
+            android:theme="@style/MyButton"
+            android:onClick="btnCrear"
+            android:id="@+id/crear"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
