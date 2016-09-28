@@ -28,6 +28,7 @@ import java.util.Date;
 import ort.edu.ar.proyecto.MainActivity;
 import ort.edu.ar.proyecto.R;
 import ort.edu.ar.proyecto.model.Punto;
+import ort.edu.ar.proyecto.model.Tour;
 
 /**
  * Created by 41400475 on 16/9/2016.
@@ -44,7 +45,7 @@ public class FragmentCrearPuntos extends Fragment {
     String mCurrentPhotoPath;
     MainActivity ma;
     Punto punto;
-    ArrayList<Punto> puntos;
+    Punto puntocreando;
 
     @Override
     public void onCreate(Bundle savedInstantState) {
@@ -57,7 +58,6 @@ public class FragmentCrearPuntos extends Fragment {
         View view = inflater.inflate(R.layout.fragment_crearpuntos, container, false);
 
         ma = (MainActivity) getActivity();
-        puntos = new ArrayList<>();
         agregar = (Button) view.findViewById(R.id.agregar);
         nombre = (EditText) view.findViewById(R.id.nombrePunto);
         direccion = (EditText) view.findViewById(R.id.direccionPunto);
@@ -69,7 +69,15 @@ public class FragmentCrearPuntos extends Fragment {
         agregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ma.IraPrevisualizar();
+                if(isEmpty(nombre) || isEmpty(direccion)|| isEmpty(dia)|| isEmpty(descripcion)|| foto.getDrawable() == null){
+                    Toast.makeText(getContext(), "Campos incompletos", Toast.LENGTH_SHORT).show();
+                }else {
+                    puntocreando= new Punto(-1,0,0,direccion.getText().toString(),null,nombre.getText().toString(),-1,null,null,descripcion.getText().toString(),Integer.parseInt(dia.getText().toString()));
+                    //falta usuario y validar foto y sacar foto
+                    ma.agregarPuntoCreando(puntocreando);
+                    ma.IraPrevisualizar();
+
+                }
             }
         });
 
@@ -122,6 +130,10 @@ public class FragmentCrearPuntos extends Fragment {
         });
 
         return view;
+    }
+
+    private boolean isEmpty(EditText myeditText) {
+        return myeditText.getText().toString().trim().length() == 0;
     }
 
     private File createImageFile() throws IOException {

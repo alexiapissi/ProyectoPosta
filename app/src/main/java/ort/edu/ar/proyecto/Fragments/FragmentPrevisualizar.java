@@ -8,19 +8,25 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import ort.edu.ar.proyecto.MainActivity;
 import ort.edu.ar.proyecto.R;
+import ort.edu.ar.proyecto.model.NonScrollListView;
+import ort.edu.ar.proyecto.model.Punto;
+import ort.edu.ar.proyecto.model.PuntoCreandoAdapter;
 import ort.edu.ar.proyecto.model.Tour;
 
-/**
- * Created by 41400475 on 16/9/2016.
- */
+
 public class FragmentPrevisualizar extends Fragment implements View.OnClickListener {
 
     Button agregarpunto, finalizar;
     MainActivity ma;
     Tour tourcreando;
     TextView nombretour;
+    ArrayList<Punto> puntoscreando;
+    PuntoCreandoAdapter puntocadapter;
+    NonScrollListView lvPuntos;
 
     @Override
     public void onCreate(Bundle savedInstantState) {
@@ -33,6 +39,16 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
         View view = inflater.inflate(R.layout.fragment_previsualizar, container, false);
 
         ma = (MainActivity) getActivity();
+        lvPuntos=(NonScrollListView) view.findViewById(R.id.lvPuntos);
+        puntoscreando = new ArrayList<>();
+        puntoscreando.addAll(ma.getListaPuntoscreando());
+        puntocadapter = new PuntoCreandoAdapter(getActivity(), puntoscreando);
+        lvPuntos.setAdapter(puntocadapter);
+        if(puntoscreando!=null){
+            puntoscreando.clear();
+            puntoscreando.addAll(ma.getListaPuntoscreando());
+            puntocadapter.notifyDataSetChanged();
+        }
         agregarpunto = (Button) view.findViewById(R.id.agregarpunto);
         agregarpunto.setOnClickListener(this);
         finalizar = (Button) view.findViewById(R.id.finalizar);
@@ -40,6 +56,8 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
         tourcreando= ma.getTourcreando();
         nombretour=(TextView) view.findViewById(R.id.ntour);
         nombretour.setText(tourcreando.getNombre());
+
+
         return view;
     }
 

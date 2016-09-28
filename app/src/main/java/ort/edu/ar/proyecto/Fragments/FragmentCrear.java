@@ -32,7 +32,9 @@ import ort.edu.ar.proyecto.R;
 import ort.edu.ar.proyecto.model.Gusto;
 import ort.edu.ar.proyecto.model.GustosAdapter;
 import ort.edu.ar.proyecto.model.NonScrollListView;
+import ort.edu.ar.proyecto.model.SessionManager;
 import ort.edu.ar.proyecto.model.Tour;
+import ort.edu.ar.proyecto.model.Usuario;
 
 public class FragmentCrear extends Fragment implements View.OnClickListener {
 
@@ -51,6 +53,8 @@ public class FragmentCrear extends Fragment implements View.OnClickListener {
     //static final int REQUEST_TAKE_PHOTO = 3;
     String mCurrentPhotoPath;
     TextView uriTV;
+    Usuario usu;
+    SessionManager session;
 
 
     @Override
@@ -81,6 +85,10 @@ public class FragmentCrear extends Fragment implements View.OnClickListener {
             Toast toast = Toast.makeText(getContext(),"Hubo un error, intente más adelante", Toast.LENGTH_SHORT);
             toast.show();
         }
+
+        session = new SessionManager(getContext());
+        int idUsuario = Integer.parseInt(session.getUserDetails().get(100)[2]);
+        usu = new Usuario("", "", idUsuario, "", null, null);
         return view;
     }
 
@@ -96,7 +104,7 @@ public class FragmentCrear extends Fragment implements View.OnClickListener {
                 if(isEmpty(nombre) || isEmpty(ubicacion)|| isEmpty(descripcion)|| ibfoto.getDrawable() == null || !gustoscheckeados()){
                     Toast.makeText(getContext(), "Campos incompletos", Toast.LENGTH_SHORT).show();
                 }else {
-                    tourcreando= new Tour(nombre.getText().toString(),descripcion.getText().toString(),null,ubicacion.getText().toString(),-1,"0",null,null,gustoselegidoscrear);
+                    tourcreando= new Tour(nombre.getText().toString(),descripcion.getText().toString(),null,ubicacion.getText().toString(),-1,"0",usu,null,gustoselegidoscrear);
                     //falta usuario y validar foto y sacar foto
                     ma.setTourCreando(tourcreando);
                     ma = (MainActivity) getActivity();

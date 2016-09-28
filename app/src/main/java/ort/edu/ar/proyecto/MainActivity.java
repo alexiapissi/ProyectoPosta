@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     String miId;
     int idUsuario;
     ArrayList<Tour> ToursLikeadosUsuario;
+    ArrayList<Punto> arraypuntoscreando;
     Fragment HomeFragment;
     FragmentBuscar fbusqueda;
     boolean estado;
@@ -79,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         inicializarToolbar();
         fbusqueda = new FragmentBuscar();
         HomeFragment = new FHome();
+        arraypuntoscreando=new ArrayList<>();
 
         String url = "http://viajarort.azurewebsites.net/gustos.php";
         new GustosTask().execute(url);
@@ -183,6 +185,13 @@ public class MainActivity extends AppCompatActivity {
     }*/
     public void setPuntos(ArrayList<Punto> puntos) {
         tour.setPuntos(puntos);
+    }
+    public void agregarPuntoCreando(Punto punto){
+        arraypuntoscreando.add(punto);
+    }
+
+    public ArrayList<Punto> getListaPuntoscreando(){
+        return  arraypuntoscreando;
     }
 
     public ArrayList<Punto> getPuntos() {

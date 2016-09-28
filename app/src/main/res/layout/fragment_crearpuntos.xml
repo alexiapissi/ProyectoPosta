@@ -39,7 +39,8 @@
             android:background="@drawable/edittext_default_bg"
             android:padding="10dp"
             android:textColorHint="#bbbbbb"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:inputType="number"/>
 
         <EditText
             android:layout_width="match_parent"
