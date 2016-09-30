@@ -5,11 +5,15 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +25,8 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -65,7 +71,32 @@ public class FragmentCrearPuntos extends Fragment {
         descripcion = (EditText) view.findViewById(R.id.descripcionPunto);
         foto = (ImageButton) view.findViewById(R.id.imagenPunto);
         uriTV = (TextView) view.findViewById(R.id.uri);
+/*
+        direccion.addTextChangedListener(new TextWatcher() {
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // TODO Auto-generated method stub
+
+                placesTask = new PlacesTask();
+                String[] toPass = new String[2];
+                toPass[0] = s.toString();
+                placesTask.execute(toPass);
+
+            }
+        });
+*/
         agregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -207,5 +238,56 @@ public class FragmentCrearPuntos extends Fragment {
         Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
         foto.setImageBitmap(bitmap);
     }
+
+    /*
+    // Fetches all places from GooglePlaces AutoComplete Web Service
+    private class PlacesTask extends AsyncTask<String, Void, String> {
+
+        private String val = "";
+        @Override
+        protected String doInBackground(String... place) {
+            // For storing data from web service
+            String data = "";
+
+            // Obtain browser key from https://code.google.com/apis/console
+            String key = "key="+getResources().getString(R.string.google_server_key);
+
+            String input="";
+
+            try {
+                input = "input=" + URLEncoder.encode(place[0], "utf-8");
+            } catch (UnsupportedEncodingException e1) {
+                e1.printStackTrace();
+            }
+
+            String parameters = input+"&"+key + "&components=country:in";
+            // Output format +gpsTracker.getLatitude() + "," + gpsTracker.getLongitude() + "&radius=20000
+            String output = "json";
+
+            // Building the url to the web service
+            String url = "https://maps.googleapis.com/maps/api/place/autocomplete/"+output+"?"+parameters;
+
+            try{
+                // Fetching the data from we service
+                data = Webservices.ApiCallGet(url);
+            }catch(Exception e){
+                Log.d("Background Task", e.toString());
+            }
+            return data;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            // Creating ParserTask
+            parserTask = new ParserTask();
+
+            String[] strData = new String[2];
+            strData[0] = result;
+            // Starting Parsing the JSON string returned by Web Service
+            parserTask.execute(strData);
+        }
+    }*/
 
 }
