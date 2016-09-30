@@ -71,7 +71,7 @@ public class FragmentCrearPuntos extends Fragment {
         descripcion = (EditText) view.findViewById(R.id.descripcionPunto);
         foto = (ImageButton) view.findViewById(R.id.imagenPunto);
         uriTV = (TextView) view.findViewById(R.id.uri);
-/*
+/*sjadlas
         direccion.addTextChangedListener(new TextWatcher() {
 
             @Override
