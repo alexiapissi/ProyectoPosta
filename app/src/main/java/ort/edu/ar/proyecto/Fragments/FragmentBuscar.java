@@ -1,6 +1,9 @@
 package ort.edu.ar.proyecto.Fragments;
 
 
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -75,7 +78,6 @@ public class FragmentBuscar extends Fragment {
         mensaje=(TextView) view.findViewById(R.id.msj);
         toursAdapter = new ToursAdapter(getActivity(), tours);
         listviewt.setAdapter(toursAdapter);
-        setHasOptionsMenu(true);
         inputSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence cs, int i, int i1, int i2) {

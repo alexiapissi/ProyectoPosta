@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -45,6 +46,7 @@ public class FragmentCrearPuntos extends Fragment {
     EditText nombre, direccion, dia, descripcion;
     TextView uriTV;
     ImageButton foto;
+    Drawable camara;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static public int REQUEST_IMAGE_GET = 2;
     static final int REQUEST_TAKE_PHOTO = 3;
@@ -71,6 +73,7 @@ public class FragmentCrearPuntos extends Fragment {
         descripcion = (EditText) view.findViewById(R.id.descripcionPunto);
         foto = (ImageButton) view.findViewById(R.id.imagenPunto);
         uriTV = (TextView) view.findViewById(R.id.uri);
+        camara=foto.getDrawable();
 /*
         direccion.addTextChangedListener(new TextWatcher() {
 
@@ -100,7 +103,7 @@ public class FragmentCrearPuntos extends Fragment {
         agregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isEmpty(nombre) || isEmpty(direccion)|| isEmpty(dia)|| isEmpty(descripcion)|| foto.getDrawable() == null){
+                if(isEmpty(nombre) || isEmpty(direccion)|| isEmpty(dia)|| isEmpty(descripcion)|| foto.getDrawable() == null|| foto.getDrawable()==camara){
                     Toast.makeText(getContext(), "Campos incompletos", Toast.LENGTH_SHORT).show();
                 }else {
                     puntocreando= new Punto(-1,0,0,direccion.getText().toString(),null,nombre.getText().toString(),-1,null,null,descripcion.getText().toString(),Integer.parseInt(dia.getText().toString()));
