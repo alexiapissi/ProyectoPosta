@@ -1,7 +1,7 @@
 package ort.edu.ar.proyecto.Fragments;
 
 
-import android.app.ProgressDialog;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -101,7 +101,7 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
                 ma.IraCrearPuntos();
                 break;
             case R.id.finalizar:
-                String url = "http://viajarort.azurewebsites.net/RegistroUsuario.php";
+                String url = "http://viajarort.azurewebsites.net/AgregarTour.php";
                 new CrearTourTask().execute(url);
                 break;
         }
@@ -109,18 +109,20 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
 
     private class CrearTourTask extends AsyncTask<String, Void, String> {
         private OkHttpClient client = new OkHttpClient();
-        private final ProgressDialog dialog = new ProgressDialog(getContext());
 
         @Override
         protected void onPostExecute(String resultado) {
             super.onPostExecute(resultado);
             Toast registro;
             if (!resultado.isEmpty()) {
-                if (resultado.equals("0")) {
+                if (resultado.equals("No se agrego correctamente")) {
+                    registro = Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT);
 
                 } else {
+                    registro = Toast.makeText(getContext(), "OK", Toast.LENGTH_SHORT);
                     //ir al inicio
                 }
+                registro.show();
             }
         }
 
@@ -141,7 +143,7 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
             }
         }
 
-
+/*
         RequestBody generarJSON() {
             MultipartBuilder mpb = new MultipartBuilder()
                     .type(MultipartBuilder.FORM);
@@ -149,7 +151,7 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
             //json.put("Foto", foto);
             try {
 
-                MultipartBuilder mpb = new MultipartBuilder()
+                    mpb = new MultipartBuilder()
                         .type(MultipartBuilder.FORM);
 
                 addMultipartField(mpb,t.getNombre(),"Nombre");
@@ -188,83 +190,49 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
                 return null;
             }
 
-            return mpb.build();
 
-            JSONArray gustos = new JSONArray();
-            JSONObject[] innerObjectGusto = new JSONObject[listagustos.size()];
+
+            //JSONObject[] innerObjectGusto = new JSONObject[listagustos.size()];
             for (int i = 0; i < listagustos.size(); i++) {
-                innerObjectGusto[i] = new JSONObject();
-                innerObjectGusto[i].put("IdGusto", listagustos.get(i).getId());
-                gustos.add(innerObjectGusto[i]);
+                addMultipartField(mpb, String.valueOf(listagustos.get(i).getId()),"IdGusto"+ i);
             }
-            json.put("Gustos", gustos);
+            //addMultipartField(mpb,gustos,"Gustos");
 
-            JSONArray puntos = new JSONArray();
-            JSONObject[] innerObjectPunto = new JSONObject[puntoscreando.size()];
             for (int i = 0; i < puntoscreando.size(); i++) {
-                innerObjectPunto[i] = new JSONObject();
-                innerObjectPunto[i].put("Nombre", puntoscreando.get(i).getNombre());
-                innerObjectPunto[i].put("Descripcion", puntoscreando.get(i).getDescripcion());
-                innerObjectPunto[i].put("Dia", puntoscreando.get(i).getDia());
-                innerObjectPunto[i].put("Direccion", puntoscreando.get(i).getDireccion());
-                innerObjectPunto[i].put("Latitud", puntoscreando.get(i).getLatitud());
-                innerObjectPunto[i].put("Longitud", puntoscreando.get(i).getLongitud());
+                //innerObjectPunto[i] = new JSONObject();
+                addMultipartField(mpb, puntoscreando.get(i).getNombre(),"Nombre");
+                addMultipartField(mpb,puntoscreando.get(i).getDescripcion(),"Descripcion");
+                addMultipartField(mpb, String.valueOf(puntoscreando.get(i).getDia()),"Dia");
+                addMultipartField(mpb,puntoscreando.get(i).getDireccion(),"Direccion");
+                addMultipartField(mpb, String.valueOf(puntoscreando.get(i).getLatitud()),"Latitud");
+                addMultipartField(mpb, String.valueOf(puntoscreando.get(i).getLongitud()),"Longitud");
+
+                //FOTO
                 //innerObjectPunto[i].put("Foto", fotoPunto);
-
-                puntos.add(innerObjectPunto[i]);
             }
-            json.put("Puntos", puntos);
 
-            RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
+            //RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
 
-            return body;
+            return mpb.build();
+            //return body;
         }
 
+*/
 
-/*
         RequestBody generarJSON() {
             JSONObject json = new JSONObject();
             json.put("Nombre", t.getNombre());
             json.put("Descripcion", t.getDescripcion());
             json.put("Ubicacion", t.getUbicacion());
             json.put("Idusuario",t.getUsuario().getId());
+            json.put("Foto", "hola");
 
-            //json.put("Foto", foto);
-            try {
-                if (t.getFoto() != null && !t.getFoto().isEmpty()) {
-                    Bitmap finalImage;
-                    if (t.getFotoUri().getScheme().startsWith("http")) {
-                        finalImage = getBitmapFromURL(t.getFoto());
-                    } else {
-                        // Get Bitmap image from Uri
-                        ParcelFileDescriptor parcelFileDescriptor =
-                                getContext().getContentResolver().openFileDescriptor(t.getFotoUri(), "r");
-                        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-                        Bitmap originalImage = BitmapFactory.decodeFileDescriptor(fileDescriptor);
-                        parcelFileDescriptor.close();
-                        finalImage = originalImage;
-
-                    }
-                    // Convert bitmap to output string
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    finalImage.compress(Bitmap.CompressFormat.PNG, 100, stream);   // Compress to PNG lossless
-                    byte[] byteArray = stream.toByteArray();
-
-                    String fileName = UUID.randomUUID().toString() + ".png";
-                    json.put("Foto", Headers.of("Content-Disposition", "form-data; name=\"image\"; filename=\"" + fileName + "\""),
-                            RequestBody.create(MEDIA_TYPE_PNG, byteArray));
-                }
-            } catch (java.io.IOException |ArrayIndexOutOfBoundsException| JSONException e) {
-                e.printStackTrace();
-                Log.d("Error", e.getMessage());
-                return null;
-            }
 
             JSONArray gustos = new JSONArray();
             JSONObject[] innerObjectGusto = new JSONObject[listagustos.size()];
             for (int i = 0; i < listagustos.size(); i++) {
                 innerObjectGusto[i] = new JSONObject();
-                innerObjectGusto[i].put("IdGusto", listagustos.get(i).getId());
+                innerObjectGusto[i].put("Idgusto", listagustos.get(i).getId());
                 gustos.add(innerObjectGusto[i]);
             }
             json.put("Gustos", gustos);
@@ -277,9 +245,9 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
                 innerObjectPunto[i].put("Descripcion", puntoscreando.get(i).getDescripcion());
                 innerObjectPunto[i].put("Dia", puntoscreando.get(i).getDia());
                 innerObjectPunto[i].put("Direccion", puntoscreando.get(i).getDireccion());
-                innerObjectPunto[i].put("Latitud", puntoscreando.get(i).getLatitud());
-                innerObjectPunto[i].put("Longitud", puntoscreando.get(i).getLongitud());
-                //innerObjectPunto[i].put("Foto", fotoPunto);
+                innerObjectPunto[i].put("Latitud", 1/*puntoscreando.get(i).getLatitud()*/);
+                innerObjectPunto[i].put("Longitud", 2/*puntoscreando.get(i).getLongitud()*/);
+                innerObjectPunto[i].put("Foto", "fotopunto");
 
                 puntos.add(innerObjectPunto[i]);
             }
@@ -289,11 +257,11 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
 
             return body;
         }
-*/
+
         String parsearRespuesta(String JSONstr) throws JSONException {
             org.json.JSONObject respuesta = new org.json.JSONObject(JSONstr);
-            if (respuesta.has("Id")) {
-                String id = respuesta.getString("Id");
+            if (respuesta.has("id")) {
+                String id = respuesta.getString("id");
                 return id;
             } else {
                 String error = respuesta.getString("Error");
