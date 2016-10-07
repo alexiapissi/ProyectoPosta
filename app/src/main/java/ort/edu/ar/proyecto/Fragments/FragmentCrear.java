@@ -4,12 +4,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +48,7 @@ public class FragmentCrear extends Fragment implements View.OnClickListener {
     ImageButton ibfoto;
     ArrayList<Gusto> gustos;
     NonScrollListView gustoslv;
+    Drawable camara;
     ArrayList<Gusto>gustoselegidoscrear;
     Tour tourcreando;
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -74,6 +77,7 @@ public class FragmentCrear extends Fragment implements View.OnClickListener {
         ubicacion = (EditText)view.findViewById(R.id.ubicacionTour);
         descripcion = (EditText)view.findViewById(R.id.descripcionTour);
         ibfoto=(ImageButton)view.findViewById(R.id.foto);
+        camara= ibfoto.getDrawable();
         uriTV=(TextView)view.findViewById(R.id.uritv);
         ibfoto.setOnClickListener(this);
         ma = (MainActivity) getActivity();
@@ -101,11 +105,10 @@ public class FragmentCrear extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.crear:
-                if(isEmpty(nombre) || isEmpty(ubicacion)|| isEmpty(descripcion)|| ibfoto.getDrawable() == null || !gustoscheckeados()){
+                if(isEmpty(nombre) || isEmpty(ubicacion)|| isEmpty(descripcion)|| ibfoto.getDrawable() == null || ibfoto.getDrawable()==camara || !gustoscheckeados()){
                     Toast.makeText(getContext(), "Campos incompletos", Toast.LENGTH_SHORT).show();
                 }else {
-                    tourcreando= new Tour(nombre.getText().toString(),descripcion.getText().toString(),null,ubicacion.getText().toString(),-1,"0",usu,null,gustoselegidoscrear);
-                    //falta usuario y validar foto y sacar foto
+                    tourcreando= new Tour(nombre.getText().toString(),descripcion.getText().toString(),uriTV.getText().toString(),ubicacion.getText().toString(),-1,"0",usu,null,gustoselegidoscrear);
                     ma.setTourCreando(tourcreando);
                     ma = (MainActivity) getActivity();
                     ma.IraPrevisualizar();
@@ -178,23 +181,6 @@ public class FragmentCrear extends Fragment implements View.OnClickListener {
             return algunocheckeado;
     }
 
-   private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
-        return image;
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_GET && resultCode == ma.RESULT_OK && data != null && data.getData() != null) {
@@ -217,7 +203,25 @@ public class FragmentCrear extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void galleryAddPic() {
+
+  /* private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,
+    ".jpg",
+    storageDir
+    );
+
+    // Save a file: path for use with ACTION_VIEW intents
+    mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+    return image;
+}*/
+
+   /*private void galleryAddPic() {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File f = new File(mCurrentPhotoPath);
         Uri contentUri = Uri.fromFile(f);
@@ -248,6 +252,6 @@ public class FragmentCrear extends Fragment implements View.OnClickListener {
 
         Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
         ibfoto.setImageBitmap(bitmap);
-    }
+    }*/
 
 }

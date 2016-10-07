@@ -1,5 +1,7 @@
 package ort.edu.ar.proyecto.model;
 
+import android.net.Uri;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -49,6 +51,10 @@ public class Tour implements Serializable{
 
     public String getFoto() {
         return Foto;
+    }
+
+    public Uri getFotoUri() {
+        return Uri.parse(Foto);
     }
 
     public void setFoto(String foto) {

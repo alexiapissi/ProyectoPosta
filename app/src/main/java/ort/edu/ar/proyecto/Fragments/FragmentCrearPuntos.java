@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -12,8 +13,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +33,8 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,6 +44,7 @@ import ort.edu.ar.proyecto.MainActivity;
 import ort.edu.ar.proyecto.R;
 import ort.edu.ar.proyecto.model.DireccionArrayAdapter;
 import ort.edu.ar.proyecto.model.Punto;
+import ort.edu.ar.proyecto.model.Tour;
 
 /**
  * Created by 41400475 on 16/9/2016.
@@ -50,11 +56,13 @@ public class FragmentCrearPuntos extends Fragment {
     AutoCompleteTextView direccion;
     TextView uriTV;
     ImageButton foto;
+    Drawable camara;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static public int REQUEST_IMAGE_GET = 2;
     static final int REQUEST_TAKE_PHOTO = 3;
     String mCurrentPhotoPath;
     MainActivity ma;
+    Punto punto;
     Punto puntocreando;
     boolean iswaiting =false;
     ArrayList<Address> direccs;
@@ -80,6 +88,8 @@ public class FragmentCrearPuntos extends Fragment {
         descripcion = (EditText) view.findViewById(R.id.descripcionPunto);
         foto = (ImageButton) view.findViewById(R.id.imagenPunto);
         uriTV = (TextView) view.findViewById(R.id.uri);
+        camara=foto.getDrawable();
+
         listViewAutocomplete = (ListView) view.findViewById(R.id.listView);
 
         direccs = new ArrayList<>();
@@ -88,6 +98,7 @@ public class FragmentCrearPuntos extends Fragment {
         //direccion.setAdapter(adressAdapter);
 
         direccion.addTextChangedListener(new TextWatcher() {
+
             @Override
             public void beforeTextChanged(CharSequence cs, int i, int i1, int i2) {
 
@@ -120,7 +131,7 @@ public class FragmentCrearPuntos extends Fragment {
         agregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isEmpty(nombre) || isEmpty(direccion)|| isEmpty(dia)|| isEmpty(descripcion)|| foto.getDrawable() == null){
+                if(isEmpty(nombre) || isEmpty(direccion)|| isEmpty(dia)|| isEmpty(descripcion)|| foto.getDrawable() == null|| foto.getDrawable()==camara){
                     Toast.makeText(getContext(), "Campos incompletos", Toast.LENGTH_SHORT).show();
                 }else {
                     puntocreando= new Punto(-1,0,0,direccion.getText().toString(),null,nombre.getText().toString(),-1,null,null,descripcion.getText().toString(),Integer.parseInt(dia.getText().toString()));
@@ -298,6 +309,21 @@ public class FragmentCrearPuntos extends Fragment {
                 direccs.clear();
                 //adressAdapter.notifyDataSetChanged();
             }
+
+            String parameters = input+"&"+key + "&components=country:in";
+            // Output format +gpsTracker.getLatitude() + "," + gpsTracker.getLongitude() + "&radius=20000
+            String output = "json";
+
+            // Building the url to the web service
+            String url = "https://maps.googleapis.com/maps/api/place/autocomplete/"+output+"?"+parameters;
+
+            try{
+                // Fetching the data from we service
+                data = Webservices.ApiCallGet(url);
+            }catch(Exception e){
+                Log.d("Background Task", e.toString());
+            }
+            return data;
         }
 
         @Override
