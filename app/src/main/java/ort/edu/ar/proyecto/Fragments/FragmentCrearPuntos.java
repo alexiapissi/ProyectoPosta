@@ -4,37 +4,41 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import ort.edu.ar.proyecto.MainActivity;
 import ort.edu.ar.proyecto.R;
+import ort.edu.ar.proyecto.model.DireccionArrayAdapter;
 import ort.edu.ar.proyecto.model.Punto;
-import ort.edu.ar.proyecto.model.Tour;
 
 /**
  * Created by 41400475 on 16/9/2016.
@@ -42,7 +46,8 @@ import ort.edu.ar.proyecto.model.Tour;
 public class FragmentCrearPuntos extends Fragment {
 
     Button agregar;
-    EditText nombre, direccion, dia, descripcion;
+    EditText nombre, dia, descripcion;
+    AutoCompleteTextView direccion;
     TextView uriTV;
     ImageButton foto;
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -50,8 +55,11 @@ public class FragmentCrearPuntos extends Fragment {
     static final int REQUEST_TAKE_PHOTO = 3;
     String mCurrentPhotoPath;
     MainActivity ma;
-    Punto punto;
     Punto puntocreando;
+    boolean iswaiting =false;
+    ArrayList<Address> direccs;
+    DireccionArrayAdapter adressAdapter;
+    ListView listViewAutocomplete;
 
     @Override
     public void onCreate(Bundle savedInstantState) {
@@ -66,37 +74,49 @@ public class FragmentCrearPuntos extends Fragment {
         ma = (MainActivity) getActivity();
         agregar = (Button) view.findViewById(R.id.agregar);
         nombre = (EditText) view.findViewById(R.id.nombrePunto);
-        direccion = (EditText) view.findViewById(R.id.direccionPunto);
+        direccion = (AutoCompleteTextView) view.findViewById(R.id.direccionPunto);
+        direccion.setThreshold(1);
         dia = (EditText) view.findViewById(R.id.diaPunto);
         descripcion = (EditText) view.findViewById(R.id.descripcionPunto);
         foto = (ImageButton) view.findViewById(R.id.imagenPunto);
         uriTV = (TextView) view.findViewById(R.id.uri);
-/*
+        listViewAutocomplete = (ListView) view.findViewById(R.id.listView);
+
+        direccs = new ArrayList<>();
+        //adressAdapter = new ArrayAdapter<Address>(getContext(),
+          //      android.R.layout.simple_dropdown_item_1line, direccs);
+        //direccion.setAdapter(adressAdapter);
+
         direccion.addTextChangedListener(new TextWatcher() {
-
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            public void beforeTextChanged(CharSequence cs, int i, int i1, int i2) {
 
             }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
-                // TODO Auto-generated method stub
+            public void onTextChanged(CharSequence cs, int i, int i1, int i2) {
+
+                if(cs.length()>=2){
+                    iswaiting=true;
+                    consultarDireccion(cs.toString());
+                }
+                if(cs.length()==0){
+                   //h
+                }
+                if(cs.length()<2){
+                    direccs.clear();
+                    //adressAdapter.notifyDataSetChanged();
+                    iswaiting =false;
+                }
+
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-                // TODO Auto-generated method stub
-
-                placesTask = new PlacesTask();
-                String[] toPass = new String[2];
-                toPass[0] = s.toString();
-                placesTask.execute(toPass);
+            public void afterTextChanged(Editable editable) {
 
             }
         });
-*/
+
         agregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -157,6 +177,12 @@ public class FragmentCrearPuntos extends Fragment {
                     }
                 });
                 builder.show();
+            }
+        });
+
+        listViewAutocomplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> adapter, View V, int position, long l) {
+                //direccion es la seleccionada
             }
         });
 
@@ -239,55 +265,58 @@ public class FragmentCrearPuntos extends Fragment {
         foto.setImageBitmap(bitmap);
     }
 
-    /*
-    // Fetches all places from GooglePlaces AutoComplete Web Service
-    private class PlacesTask extends AsyncTask<String, Void, String> {
+    public void consultarDireccion(String dir) {
+        //String dirStr = direccion.getText().toString();
+        if (!dir.isEmpty()) {
+            new GeolocalizacionTask().execute(dir);  // Llamo a clase async con url
+        }
+    }
 
-        private String val = "";
+    // List<Address> - lo que devuelve doInBackground
+    private class GeolocalizacionTask extends AsyncTask<String, Void,List<Address>> {
+
         @Override
-        protected String doInBackground(String... place) {
-            // For storing data from web service
-            String data = "";
+        protected void onPostExecute(List<Address> direcciones) {
+            super.onPostExecute(direcciones);
 
-            // Obtain browser key from https://code.google.com/apis/console
-            String key = "key="+getResources().getString(R.string.google_server_key);
+            if (!direcciones.isEmpty() && iswaiting && direcciones != null) {
+                direccs.clear();
+                direccs.addAll(direcciones);
+                adressAdapter = new DireccionArrayAdapter(getContext(), R.layout.objlistview_autocomplete, direccs);
+                listViewAutocomplete.setAdapter(adressAdapter);
+                listViewAutocomplete.setVisibility(View.VISIBLE);
+                //adressAdapter.notifyDataSetChanged();
 
-            String input="";
+                /*
+                // Muestro coordenadas
+                double lat = dirRecibida.getLatitude(); //
+                double lng = dirRecibida.getLongitude();
+                String coordStr = lat+ "," + lng;
+                coordenadas.setText(coordStr);  // Muestro coordenadas en pantalla
+                */
+            } else {
+                direccs.clear();
+                //adressAdapter.notifyDataSetChanged();
+            }
+        }
 
+        @Override
+        protected List<Address> doInBackground(String... params) {
+            String address = params[0];
+
+            Geocoder geocoder = new Geocoder(getContext());
+            List<Address> addresses = null;
             try {
-                input = "input=" + URLEncoder.encode(place[0], "utf-8");
-            } catch (UnsupportedEncodingException e1) {
-                e1.printStackTrace();
+                boolean hola = geocoder.isPresent();
+                // Utilizo la clase Geocoder para buscar la direccion. Limito a 5 resultados
+                addresses = geocoder.getFromLocationName(address, 5, -54.928471, -73.283694, -22.595863, -54.475101);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
-            String parameters = input+"&"+key + "&components=country:in";
-            // Output format +gpsTracker.getLatitude() + "," + gpsTracker.getLongitude() + "&radius=20000
-            String output = "json";
-
-            // Building the url to the web service
-            String url = "https://maps.googleapis.com/maps/api/place/autocomplete/"+output+"?"+parameters;
-
-            try{
-                // Fetching the data from we service
-                data = Webservices.ApiCallGet(url);
-            }catch(Exception e){
-                Log.d("Background Task", e.toString());
-            }
-            return data;
+            return addresses;
         }
 
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-
-            // Creating ParserTask
-            parserTask = new ParserTask();
-
-            String[] strData = new String[2];
-            strData[0] = result;
-            // Starting Parsing the JSON string returned by Web Service
-            parserTask.execute(strData);
-        }
-    }*/
+    }
 
 }
