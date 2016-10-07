@@ -83,6 +83,8 @@ public class ToursAdapter  extends BaseAdapter {
                     //.resize(40,40)
                     .transform(new CircleTransform())
                     .into(fotoUsuarioTV);
+        } else {
+            fotoUsuarioTV.setImageResource(R.drawable.user);
         }
 
         Picasso

@@ -104,6 +104,8 @@ public class FragmentDetalle extends Fragment {
                     //.resize(40,40)
                     .transform(new CircleTransform())
                     .into(fotoUsuario);
+        }else {
+            fotoUsuario.setImageResource(R.drawable.user);
         }
         ubicacion.setText(tour.getUbicacion());
         nombreUsuario.setText(tour.getUsuario().getNombre());
