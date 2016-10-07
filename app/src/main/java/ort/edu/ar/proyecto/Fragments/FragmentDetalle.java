@@ -97,12 +97,14 @@ public class FragmentDetalle extends Fragment {
                 .load(tour.getFoto())
                 //.resize(700, 250)
                 .into(fototour);
-        Picasso
-                .with(getActivity().getApplicationContext())
-                .load(tour.getUsuario().getFoto())
-                //.resize(40,40)
-                .transform(new CircleTransform())
-                .into(fotoUsuario);
+        if (!tour.getUsuario().getFoto().equals("")) {
+            Picasso
+                    .with(getActivity().getApplicationContext())
+                    .load(tour.getUsuario().getFoto())
+                    //.resize(40,40)
+                    .transform(new CircleTransform())
+                    .into(fotoUsuario);
+        }
         ubicacion.setText(tour.getUbicacion());
         nombreUsuario.setText(tour.getUsuario().getNombre());
         cantLikes.setText(tour.getLikes());

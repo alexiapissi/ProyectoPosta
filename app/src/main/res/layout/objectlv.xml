@@ -61,7 +61,8 @@
             android:layout_height="40dp"
             android:layout_marginTop="290dp"
             android:scaleType="centerCrop"
-            android:id="@+id/FotoUsuario" />
+            android:id="@+id/FotoUsuario"
+            android:src="@drawable/user"/>
 
         <TextView
             android:layout_width="wrap_content"

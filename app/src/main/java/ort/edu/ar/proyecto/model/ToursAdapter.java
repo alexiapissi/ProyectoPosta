@@ -67,8 +67,6 @@ public class ToursAdapter  extends BaseAdapter {
         ubicacionTV.setText(t.getUbicacion());
         LikesTV.setText(t.getLikes());
 
-
-
         stringgustos="";
         for (Gusto g : t.getGustos()){
             stringgustos += g.getNombre() + ", ";
@@ -78,12 +76,15 @@ public class ToursAdapter  extends BaseAdapter {
 
         NombreuTV.setText(usu.getNombre());
 
-        Picasso
-                .with(context)
-                .load(usu.getFoto())
-                //.resize(40,40)
-                .transform(new CircleTransform())
-                .into(fotoUsuarioTV);
+        if (!usu.getFoto().equals("")) {
+            Picasso
+                    .with(context)
+                    .load(usu.getFoto())
+                    //.resize(40,40)
+                    .transform(new CircleTransform())
+                    .into(fotoUsuarioTV);
+        }
+
         Picasso
                 .with(context)
                 .load(t.getFoto())

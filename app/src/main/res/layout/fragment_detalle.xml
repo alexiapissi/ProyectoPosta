@@ -68,6 +68,7 @@
                 android:id="@+id/FotoUsuariod"
                 android:scaleType="centerCrop"
                 android:background="@drawable/selectable_button_bg"
+                android:src="@drawable/user"
                 />
 
             <TextView
