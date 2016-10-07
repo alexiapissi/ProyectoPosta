@@ -309,21 +309,6 @@ public class FragmentCrearPuntos extends Fragment {
                 direccs.clear();
                 //adressAdapter.notifyDataSetChanged();
             }
-
-            String parameters = input+"&"+key + "&components=country:in";
-            // Output format +gpsTracker.getLatitude() + "," + gpsTracker.getLongitude() + "&radius=20000
-            String output = "json";
-
-            // Building the url to the web service
-            String url = "https://maps.googleapis.com/maps/api/place/autocomplete/"+output+"?"+parameters;
-
-            try{
-                // Fetching the data from we service
-                data = Webservices.ApiCallGet(url);
-            }catch(Exception e){
-                Log.d("Background Task", e.toString());
-            }
-            return data;
         }
 
         @Override
