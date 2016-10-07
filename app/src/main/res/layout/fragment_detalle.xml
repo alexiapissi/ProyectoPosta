@@ -54,8 +54,18 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Puntos del tour:"
+                android:text="Gustos Tour"
                 android:layout_marginTop="240dp"
+                android:id="@+id/gustost"
+                android:textStyle="italic"
+                android:textColor="@android:color/black"
+                android:layout_marginRight="50dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Puntos del tour:"
+                android:layout_marginTop="270dp"
                 android:id="@+id/categoriastourd"
                 android:textColor="@android:color/black"
                 android:textSize="15dp"/>
@@ -107,6 +117,7 @@
                 android:shadowRadius="2"
                 android:textStyle="bold"/>
 
+
             <ProgressBar
                 android:id="@+id/progress"
                 android:layout_width="wrap_content"
@@ -121,7 +132,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_marginTop="265dp"
+                android:layout_marginTop="285dp"
                 android:layout_below="@+id/header_button"></ort.edu.ar.proyecto.model.NonScrollListView>
 
         </FrameLayout>

@@ -12,7 +12,7 @@
         android:hint=" Buscar Tours..."
         android:layout_margin="5dp"
         android:inputType="textVisiblePassword"
-        android:digits="abcdefghijklmnopqrstuvwxyz1234567890 "
+        android:digits="abcdefghijklmnñopqrstuvwxyz1234567890 ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"
         android:drawableLeft="@drawable/blacklupa"/>
 
 

@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -101,8 +103,14 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
                 ma.IraCrearPuntos();
                 break;
             case R.id.finalizar:
-                String url = "http://viajarort.azurewebsites.net/AgregarTour.php";
-                new CrearTourTask().execute(url);
+                if(puntoscreando.size()>=1 && puntoscreando.size()<=10) {
+                    String url = "http://viajarort.azurewebsites.net/AgregarTour.php";
+                    new CrearTourTask().execute(url);
+                    //ma.IraHome();
+                }else{
+                    Toast toast = Toast.makeText(getContext(), "Ingrese entre 2 y 10 puntos", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
                 break;
         }
     }
@@ -119,8 +127,10 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
                     registro = Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT);
 
                 } else {
-                    registro = Toast.makeText(getContext(), "OK", Toast.LENGTH_SHORT);
-                    //ir al inicio
+                    registro = Toast.makeText(getContext(), "Tour creado", Toast.LENGTH_SHORT);
+                    puntoscreando.clear();
+                    ma.setPuntoscreando(puntoscreando);
+                    ma.IraHome();
                 }
                 registro.show();
             }
@@ -225,8 +235,40 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
             json.put("Descripcion", t.getDescripcion());
             json.put("Ubicacion", t.getUbicacion());
             json.put("Idusuario",t.getUsuario().getId());
-            json.put("Foto", "hola");
 
+            if (t.getFoto() != null && !t.getFoto().isEmpty()) {
+                Bitmap finalImage;
+                if (t.getFotoUri().getScheme().startsWith("http")) {
+                    finalImage = getBitmapFromURL(t.getFoto());
+                } else {
+                    // Get Bitmap image from Uri
+                    try {
+                        ParcelFileDescriptor parcelFileDescriptor =
+                                getContext().getContentResolver().openFileDescriptor(t.getFotoUri(), "r");
+                        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+                        Bitmap originalImage = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+                        parcelFileDescriptor.close();
+                        finalImage = originalImage;
+                    } catch (java.io.IOException e){
+                        e.getMessage();
+                        return null;
+                    }
+
+                }
+                // Convert bitmap to output string
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                finalImage.compress(Bitmap.CompressFormat.PNG, 100, stream);   // Compress to PNG lossless
+                byte[] byteArray = stream.toByteArray();
+
+                String fileName = UUID.randomUUID().toString() + ".png";
+
+
+                String base64pic = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                json.put("Foto",base64pic);
+               //mpb.addPart(Headers.of("Content-Disposition", "form-data; name=\"image\"; filename=\"" + fileName + "\""),
+                 //  RequestBody.create(MEDIA_TYPE_PNG, byteArray));
+
+            }
 
             JSONArray gustos = new JSONArray();
             JSONObject[] innerObjectGusto = new JSONObject[listagustos.size()];

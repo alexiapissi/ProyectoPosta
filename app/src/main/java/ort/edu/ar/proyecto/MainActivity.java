@@ -193,6 +193,9 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<Punto> getListaPuntoscreando(){
         return  arraypuntoscreando;
     }
+    public void setPuntoscreando(ArrayList<Punto> puntos){
+        arraypuntoscreando=puntos;
+    }
 
     public ArrayList<Punto> getPuntos() {
 

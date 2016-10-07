@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import ort.edu.ar.proyecto.MainActivity;
 import ort.edu.ar.proyecto.R;
 import ort.edu.ar.proyecto.model.CircleTransform;
+import ort.edu.ar.proyecto.model.Gusto;
 import ort.edu.ar.proyecto.model.NonScrollListView;
 import ort.edu.ar.proyecto.model.Punto;
 import ort.edu.ar.proyecto.model.PuntosAdapter;
@@ -57,6 +58,8 @@ public class FragmentDetalle extends Fragment {
     int cantidadLikes;
     SessionManager session;
     String accion;
+    String stringgustos;
+    TextView gustost;
 
     public FragmentDetalle() {
     }
@@ -80,6 +83,7 @@ public class FragmentDetalle extends Fragment {
         nombreUsuario = (TextView) view.findViewById(R.id.NombreUsuariod);
         cantLikes = (TextView) view.findViewById(R.id.cantlikesd);
         darlike = (ImageButton) view.findViewById(R.id.Liked);
+        gustost=(TextView) view.findViewById(R.id.gustost);
         listPuntosVW = (NonScrollListView) view.findViewById(R.id.listPuntos);
 
         session = new SessionManager(getContext());
@@ -110,6 +114,13 @@ public class FragmentDetalle extends Fragment {
         ubicacion.setText(tour.getUbicacion());
         nombreUsuario.setText(tour.getUsuario().getNombre());
         cantLikes.setText(tour.getLikes());
+
+        stringgustos="";
+        for (Gusto g : tour.getGustos()){
+            stringgustos += g.getNombre() + ", ";
+        }
+        stringgustos=stringgustos.substring(0,stringgustos.length()-2);
+        gustost.setText(stringgustos);
 
         if (session.checkLogin() == 1) {
             String url = "http://viajarort.azurewebsites.net/traerlikes.php";
