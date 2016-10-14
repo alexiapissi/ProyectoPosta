@@ -17,8 +17,12 @@
         android:text="Nombre Tour"
         android:id="@+id/nomTourUsu"
         android:layout_marginTop="-25dp"
-        android:layout_marginLeft="60dp"
+
         android:textColor="@android:color/white"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:shadowDx="-1"
+        android:shadowColor="@android:color/black"
+        android:shadowDy="-1"
+        android:shadowRadius="1"/>
 
 </LinearLayout>
