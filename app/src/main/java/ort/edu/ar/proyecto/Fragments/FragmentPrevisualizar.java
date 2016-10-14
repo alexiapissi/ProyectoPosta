@@ -289,7 +289,37 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
                 innerObjectPunto[i].put("Direccion", puntoscreando.get(i).getDireccion());
                 innerObjectPunto[i].put("Latitud", 1/*puntoscreando.get(i).getLatitud()*/);
                 innerObjectPunto[i].put("Longitud", 2/*puntoscreando.get(i).getLongitud()*/);
-                innerObjectPunto[i].put("Foto", "fotopunto");
+                if (puntoscreando.get(i).getFoto() != null && !puntoscreando.get(i).getFoto().isEmpty()) {
+                    Bitmap finalImage;
+                    if (puntoscreando.get(i).getFotoUri().getScheme().startsWith("http")) {
+                        finalImage = getBitmapFromURL(puntoscreando.get(i).getFoto());
+                    } else {
+                        // Get Bitmap image from Uri
+                        try {
+                            ParcelFileDescriptor parcelFileDescriptor =
+                                    getContext().getContentResolver().openFileDescriptor(puntoscreando.get(i).getFotoUri(), "r");
+                            FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+                            Bitmap originalImage = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+                            parcelFileDescriptor.close();
+                            finalImage = originalImage;
+                        } catch (java.io.IOException e){
+                            e.getMessage();
+                            return null;
+                        }
+
+                    }
+                    // Convert bitmap to output string
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    finalImage.compress(Bitmap.CompressFormat.PNG, 100, stream);   // Compress to PNG lossless
+                    byte[] byteArray = stream.toByteArray();
+
+                    String fileName = UUID.randomUUID().toString() + ".png";
+                    String base64pic = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    innerObjectPunto[i].put("Foto",base64pic);
+                    //mpb.addPart(Headers.of("Content-Disposition", "form-data; name=\"image\"; filename=\"" + fileName + "\""),
+                    //  RequestBody.create(MEDIA_TYPE_PNG, byteArray));
+
+                }
 
                 puntos.add(innerObjectPunto[i]);
             }

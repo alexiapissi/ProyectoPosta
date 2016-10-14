@@ -1,5 +1,7 @@
 package ort.edu.ar.proyecto.model;
 
+import android.net.Uri;
+
 import java.io.Serializable;
 
 /**
@@ -78,6 +80,10 @@ public class Punto implements Serializable {
 
     public void setNombre(String nombre) {
         Nombre = nombre;
+    }
+
+    public Uri getFotoUri() {
+        return Uri.parse(Foto);
     }
 
     public String getFotoGoogle() {

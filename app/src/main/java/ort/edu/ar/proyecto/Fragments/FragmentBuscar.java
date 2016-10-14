@@ -75,6 +75,7 @@ public class FragmentBuscar extends Fragment {
         listviewt = (ListView) view.findViewById(R.id.lv);
         noresult=(TextView)view.findViewById(R.id.noresult);
         tours = new ArrayList<>();
+        setHasOptionsMenu(true);
         mensaje=(TextView) view.findViewById(R.id.msj);
         toursAdapter = new ToursAdapter(getActivity(), tours);
         listviewt.setAdapter(toursAdapter);
@@ -112,10 +113,6 @@ public class FragmentBuscar extends Fragment {
                     noresult.setVisibility(View.GONE);
 
                 }
-
-
-
-
             }
 
 
@@ -145,24 +142,25 @@ public class FragmentBuscar extends Fragment {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (!busqueda.equals("") && busqueda.length()>=3) {
+    public boolean onOptionsItemSelected(MenuItem item) { {
             switch (item.getItemId()) {
                 case R.id.nav_opciones:
                     Log.d("opciones", "ison");
-                    FragmentManager fm = getActivity().getSupportFragmentManager();
-                    GustosDialog gustosDialog = new GustosDialog();
-                    gustosDialog.Setgustos(gustos);
-                    gustosDialog.show(fm, "fragment_gustos");
-                    gustosDialog.setTargetFragment(this, 1);
-                    break;
+                    if (busqueda.length() >= 3) {
+                        FragmentManager fm = getActivity().getSupportFragmentManager();
+                        GustosDialog gustosDialog = new GustosDialog();
+                        gustosDialog.Setgustos(gustos);
+                        gustosDialog.show(fm, "fragment_gustos");
+                        gustosDialog.setTargetFragment(this, 1);
+                        break;
+                    } else {
+                        Toast toast = Toast.makeText(getContext(), "Primero busque su tour.", Toast.LENGTH_SHORT);
+                        toast.show();
+                        break;
+                    }
             }
-        }else{
-            Toast toast = Toast.makeText(getContext(),"Primero busque su tour.", Toast.LENGTH_SHORT);
-            toast.show();
-        }
         return true;
-    }
+    }}
 
     public void setGustosElegidos(ArrayList<Gusto> gustose) {
         if (gustose==null){
