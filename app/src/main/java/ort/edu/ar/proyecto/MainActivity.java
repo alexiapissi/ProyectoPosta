@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     int idUsuario;
     ArrayList<Tour> ToursLikeadosUsuario;
     ArrayList<Punto> arraypuntoscreando;
-    Fragment HomeFragment;
+    FHome HomeFragment;
     FragmentBuscar fbusqueda;
     boolean estado;
     Tour tourcreando;
@@ -238,6 +239,14 @@ public class MainActivity extends AppCompatActivity {
                 .addToBackStack(null)
                 .replace(R.id.contenido, HomeFragment)
                 .commit();
+    }
+    public void IraHomeRefresh() {
+        FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.contenido, HomeFragment)
+                .commit();
+        HomeFragment.refrescar();
     }
 
      public void IraBusqueda() {

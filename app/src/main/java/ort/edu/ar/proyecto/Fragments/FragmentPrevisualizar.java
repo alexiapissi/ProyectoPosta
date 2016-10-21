@@ -111,7 +111,7 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
                 if(puntoscreando.size()>=1 && puntoscreando.size()<=10) {
                     String url = "http://viajarort.azurewebsites.net/AgregarTour.php";
                     new CrearTourTask().execute(url);
-                    //ma.IraHome();
+
                 }else{
                     Toast toast = Toast.makeText(getContext(), "Ingrese entre 2 y 10 puntos", Toast.LENGTH_SHORT);
                     toast.show();
@@ -143,7 +143,7 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
                     registro = Toast.makeText(getContext(), "Tour creado", Toast.LENGTH_SHORT);
                     puntoscreando.clear();
                     ma.setPuntoscreando(puntoscreando);
-                    ma.IraHome();
+                    ma.IraHomeRefresh();
                 }
                 registro.show();
             }

@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -61,9 +62,16 @@ public class FHome extends Fragment {
     SwipeRefreshLayout swipeLayout;
     boolean actualiza=false;
     View v;
+    boolean flag_loading;
 
     public FHome(){
 
+    }
+
+    public void refrescar() {
+        swipeLayout.setRefreshing(true);
+        actualiza=true;
+        new ToursTask().execute("http://viajarort.azurewebsites.net/tours.php");
     }
 
     @Override
@@ -89,7 +97,8 @@ public class FHome extends Fragment {
             cantLikes = (TextView) v.findViewById(R.id.cantlikes);
             cargando = (ProgressBar) v.findViewById(R.id.progress);
 
-            swipeLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
+            swipeLayout.setColorSchemeResources(
+                    android.R.color.holo_blue_bright,
                     android.R.color.holo_green_light,
                     android.R.color.holo_orange_light,
                     android.R.color.holo_red_light);
@@ -99,6 +108,12 @@ public class FHome extends Fragment {
                 public void onRefresh() {
                     actualiza=true;
                     new ToursTask().execute("http://viajarort.azurewebsites.net/tours.php");
+                }
+            });
+            swipeLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipeLayout.setRefreshing(true);
                 }
             });
 
@@ -113,6 +128,27 @@ public class FHome extends Fragment {
                     ma.IraDetalle(tours.get(position));
                 }
             });
+
+           /* listVW.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+                public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+
+                }
+
+                public void onScroll(AbsListView view, int firstVisibleItem,
+                                     int visibleItemCount, int totalItemCount) {
+
+                    if(firstVisibleItem+visibleItemCount == totalItemCount && totalItemCount!=0)
+                    {
+                        if(flag_loading == false)
+                        {
+                            flag_loading = true;
+                            additems();
+                        }
+                    }
+                }
+            });*/
 
             tours = new ArrayList<>();
             toursAdapter = new ToursAdapter(getActivity(), tours);
@@ -212,5 +248,7 @@ public class FHome extends Fragment {
         }
 
     }
+
+
 
 }
