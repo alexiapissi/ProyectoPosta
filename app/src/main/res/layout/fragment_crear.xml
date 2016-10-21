@@ -53,9 +53,20 @@
             android:maxLines="10"
             android:id="@+id/descripcionTour"
             android:hint="Descripción"
-            android:background="@drawable/edittext_bottom_bg"
+            android:background="@drawable/edittext_default_bg"
             android:padding="10dp"
             android:textColorHint="#bbbbbb" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/cantDias"
+            android:hint="Cantidad Dias"
+            android:background="@drawable/edittext_bottom_bg"
+            android:padding="10dp"
+            android:textColorHint="#bbbbbb"
+            android:singleLine="true"
+            android:inputType="number"/>
 
         <TextView
             android:layout_width="wrap_content"

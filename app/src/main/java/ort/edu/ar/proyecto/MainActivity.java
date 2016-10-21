@@ -42,6 +42,7 @@ import ort.edu.ar.proyecto.Fragments.FragmentBuscar;
 import ort.edu.ar.proyecto.Fragments.FragmentCrear;
 import ort.edu.ar.proyecto.Fragments.FragmentCrearPuntos;
 import ort.edu.ar.proyecto.Fragments.FragmentPrevisualizar;
+import ort.edu.ar.proyecto.Fragments.FragmentPrevisualizarPuntos;
 import ort.edu.ar.proyecto.Fragments.Perfil_Usuario;
 import ort.edu.ar.proyecto.model.AutocompleteCustomArrayAdapter;
 import ort.edu.ar.proyecto.model.CustomAutoCompleteView;
@@ -78,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
     AutocompleteCustomArrayAdapter adapterAutocomplete;
     CustomAutoCompleteView myAutocomplete;
     static Address dirPunto;
+    int cantDias;
+    String Dia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -258,6 +261,23 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
+    public void IraPrevisualizarPuntos(){
+        FragmentPrevisualizarPuntos fragment = new FragmentPrevisualizarPuntos();
+        FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction()
+                .addToBackStack(null)
+                .replace(R.id.contenido, fragment)
+                .commit();
+    }
+
+    public void setDia(String dia){
+        Dia = dia;
+    }
+
+    public String getDia (){
+        return Dia;
+    }
+
 
     public void mandarUsuario() {
         Perfil_Usuario fragment = new Perfil_Usuario();
@@ -324,6 +344,14 @@ public class MainActivity extends AppCompatActivity {
         return dirPunto;
     }
 
+    public void setCantidadDiasTour(int cant){
+        cantDias = cant;
+    }
+
+    public int getCantidadDiasTour(){
+        return cantDias;
+    }
+
     public void IraLogin() {
         Intent intent = new Intent(this, Login.class);
         startActivity(intent);
@@ -333,7 +361,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CerrarSesion.class);
         startActivity(intent);
     }
-
 
     public void IraMiPerfil() {
         idUsuario = Integer.parseInt(session.getUserDetails().get(100)[2]);

@@ -17,7 +17,7 @@
         android:textColor="@android:color/black"/>
 
     <ort.edu.ar.proyecto.model.NonScrollListView
-    android:id="@+id/lvPuntos"
+    android:id="@+id/lvDias"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentLeft="true"
@@ -25,16 +25,7 @@
     android:layout_marginTop="20dp"
     android:layout_below="@+id/header_button">
 
-</ort.edu.ar.proyecto.model.NonScrollListView>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Agregar Punto"
-        android:id="@+id/agregarpunto"
-        android:drawableLeft="@drawable/mas"
-        android:onClick="btnAgregarPunto"
-        android:layout_marginTop="20dp"/>
+    </ort.edu.ar.proyecto.model.NonScrollListView>
 
     <Button
         android:layout_width="wrap_content"

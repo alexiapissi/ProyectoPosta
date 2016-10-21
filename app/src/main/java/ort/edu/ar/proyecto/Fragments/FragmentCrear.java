@@ -44,7 +44,7 @@ public class FragmentCrear extends Fragment implements View.OnClickListener {
     MainActivity ma;
     CheckBox cb;
     GustosAdapter gadapter;
-    EditText nombre, ubicacion, descripcion;
+    EditText nombre, ubicacion, descripcion, dias;
     ImageButton ibfoto;
     ArrayList<Gusto> gustos;
     NonScrollListView gustoslv;
@@ -58,7 +58,7 @@ public class FragmentCrear extends Fragment implements View.OnClickListener {
     TextView uriTV;
     Usuario usu;
     SessionManager session;
-
+    int cantDias;
 
     @Override
     public void onCreate(Bundle savedInstantState) {
@@ -76,6 +76,7 @@ public class FragmentCrear extends Fragment implements View.OnClickListener {
         nombre = (EditText)view.findViewById(R.id.nombreTour);
         ubicacion = (EditText)view.findViewById(R.id.ubicacionTour);
         descripcion = (EditText)view.findViewById(R.id.descripcionTour);
+        dias = (EditText)view.findViewById(R.id.cantDias);
         ibfoto=(ImageButton)view.findViewById(R.id.foto);
         camara= ibfoto.getDrawable();
         uriTV=(TextView)view.findViewById(R.id.uritv);
@@ -105,13 +106,19 @@ public class FragmentCrear extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.crear:
-                if(isEmpty(nombre) || isEmpty(ubicacion)|| isEmpty(descripcion)|| ibfoto.getDrawable() == null || ibfoto.getDrawable()==camara || !gustoscheckeados()){
+                if(isEmpty(nombre) || isEmpty(ubicacion)|| isEmpty(descripcion)|| isEmpty(dias)|| ibfoto.getDrawable() == null || ibfoto.getDrawable()==camara || !gustoscheckeados()){
                     Toast.makeText(getContext(), "Campos incompletos", Toast.LENGTH_SHORT).show();
                 }else {
-                    tourcreando= new Tour(nombre.getText().toString(),descripcion.getText().toString(),uriTV.getText().toString(),ubicacion.getText().toString(),-1,"0",usu,null,gustoselegidoscrear);
-                    ma.setTourCreando(tourcreando);
-                    ma = (MainActivity) getActivity();
-                    ma.IraPrevisualizar();
+                    cantDias = Integer.parseInt(dias.getText().toString());
+                    if (cantDias <= 15) {
+                        tourcreando = new Tour(nombre.getText().toString(), descripcion.getText().toString(), uriTV.getText().toString(), ubicacion.getText().toString(), -1, "0", usu, null, gustoselegidoscrear);
+                        ma.setTourCreando(tourcreando);
+                        ma.setCantidadDiasTour(cantDias);
+                        ma = (MainActivity) getActivity();
+                        ma.IraPrevisualizar();
+                    }else {
+                        Toast.makeText(getContext(), "La cantidad máxima de dias es 15", Toast.LENGTH_SHORT).show();
+                    }
 
                 }
                 break;

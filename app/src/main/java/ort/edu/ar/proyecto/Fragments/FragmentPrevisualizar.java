@@ -43,6 +43,7 @@ import java.util.UUID;
 
 import ort.edu.ar.proyecto.MainActivity;
 import ort.edu.ar.proyecto.R;
+import ort.edu.ar.proyecto.model.DiaAdapter;
 import ort.edu.ar.proyecto.model.Gusto;
 import ort.edu.ar.proyecto.model.Punto;
 import ort.edu.ar.proyecto.model.Tour;
@@ -52,17 +53,19 @@ import ort.edu.ar.proyecto.model.PuntoCreandoAdapter;
 
 public class FragmentPrevisualizar extends Fragment implements View.OnClickListener {
 
-    Button agregarpunto, finalizar;
+    Button finalizar;
     MainActivity ma;
     Tour t;
     ArrayList<Punto> puntoscreando;
     ArrayList<Gusto> listagustos;
     Tour tourcreando;
     TextView nombretour;
-    PuntoCreandoAdapter puntocadapter;
-    NonScrollListView lvPuntos;
+    NonScrollListView lvDias;
     private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
     ProgressBar progressBar;
+    int cantDias;
+    ArrayList<String> dias;
+    DiaAdapter diaAdapter;
 
     @Override
     public void onCreate(Bundle savedInstantState) {
@@ -75,18 +78,16 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
         View view = inflater.inflate(R.layout.fragment_previsualizar, container, false);
 
         ma = (MainActivity) getActivity();
-        lvPuntos=(NonScrollListView) view.findViewById(R.id.lvPuntos);
-        puntoscreando = new ArrayList<>();
-        puntoscreando.addAll(ma.getListaPuntoscreando());
-        puntocadapter = new PuntoCreandoAdapter(getActivity(), puntoscreando);
-        lvPuntos.setAdapter(puntocadapter);
-        if(puntoscreando!=null){
-            puntoscreando.clear();
-            puntoscreando.addAll(ma.getListaPuntoscreando());
-            puntocadapter.notifyDataSetChanged();
+        lvDias = (NonScrollListView)view.findViewById(R.id.lvDias);
+        cantDias = ma.getCantidadDiasTour();
+        dias = new ArrayList<>();
+        for (int i =1; i<=cantDias; i++){
+            String dia = "Dia " + (i);
+            dias.add(dia);
         }
-        agregarpunto = (Button) view.findViewById(R.id.agregarpunto);
-        agregarpunto.setOnClickListener(this);
+        diaAdapter = new DiaAdapter(getContext(), dias);
+        lvDias.setAdapter(diaAdapter);
+
         finalizar = (Button) view.findViewById(R.id.finalizar);
         finalizar.setEnabled(true);
         finalizar.setOnClickListener(this);
@@ -103,9 +104,6 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
 
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.agregarpunto:
-                ma.IraCrearPuntos();
-                break;
             case R.id.finalizar:
                 //cambiar a dos cuando dejemos de crear tour cada dos por tres
                 if(puntoscreando.size()>=1 && puntoscreando.size()<=10) {
