@@ -25,23 +25,16 @@
             android:textColorHint="#bbbbbb"
             android:singleLine="true"/>
 
-
-        <AutoCompleteTextView
+        <ort.edu.ar.proyecto.model.CustomAutoCompleteView
+            android:id="@+id/myautocomplete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/direccionPunto"
-            android:hint="Direccion"
-            android:drawableLeft="@drawable/ubicacion"
-            android:background="@drawable/edittext_default_bg"
             android:padding="10dp"
+            android:hint="Direccion"
             android:textColorHint="#bbbbbb"
-            android:singleLine="true"/>
-
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/listView"
-            android:visibility="gone"></ListView>
+            android:background="@android:color/white"
+            android:drawableLeft="@drawable/ubicacion"
+            android:completionThreshold="1" />
 
         <EditText
             android:layout_width="match_parent"

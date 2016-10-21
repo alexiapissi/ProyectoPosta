@@ -10,8 +10,6 @@
     tools:context=".Fragments.Perfil_Usuario"
     android:orientation="vertical">
 
-
-
         <ImageView
             android:layout_width="80dp"
             android:layout_height="80dp"

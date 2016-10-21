@@ -1,6 +1,7 @@
 package ort.edu.ar.proyecto;
 
 import android.content.Intent;
+import android.location.Address;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.design.widget.NavigationView;
@@ -41,6 +42,8 @@ import ort.edu.ar.proyecto.Fragments.FragmentCrear;
 import ort.edu.ar.proyecto.Fragments.FragmentCrearPuntos;
 import ort.edu.ar.proyecto.Fragments.FragmentPrevisualizar;
 import ort.edu.ar.proyecto.Fragments.Perfil_Usuario;
+import ort.edu.ar.proyecto.model.AutocompleteCustomArrayAdapter;
+import ort.edu.ar.proyecto.model.CustomAutoCompleteView;
 import ort.edu.ar.proyecto.model.Gusto;
 import ort.edu.ar.proyecto.model.Punto;
 import ort.edu.ar.proyecto.model.SessionManager;
@@ -71,6 +74,9 @@ public class MainActivity extends AppCompatActivity {
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+    AutocompleteCustomArrayAdapter adapterAutocomplete;
+    CustomAutoCompleteView myAutocomplete;
+    static Address dirPunto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -283,6 +289,30 @@ public class MainActivity extends AppCompatActivity {
 
     public ArrayList<Gusto> getGustos(){
         return gustos;
+    }
+
+    public void setAdapterAutocomplete(AutocompleteCustomArrayAdapter adapter){
+        adapterAutocomplete = adapter;
+    }
+
+    public AutocompleteCustomArrayAdapter getAdapterAutocomplete(){
+        return adapterAutocomplete;
+    }
+
+    public void setAutocomplete(CustomAutoCompleteView autocomplete){
+        myAutocomplete = autocomplete;
+    }
+
+    public CustomAutoCompleteView getAutocomplete(){
+        return myAutocomplete;
+    }
+
+    public static void setDireccionPunto (Address dir){
+        dirPunto = dir;
+    }
+
+    public static Address getDireccionPunto(){
+        return dirPunto;
     }
 
     public void IraLogin() {

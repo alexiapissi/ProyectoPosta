@@ -1,141 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:fillViewport="true">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
         tools:context=".Fragments.Detalle_Tour">
 
         <TabWidget
             android:id="@android:id/tabs"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"/>
-        <FrameLayout
-            android:layout_width="wrap_content"
+            android:layout_gravity="bottom" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="14dp"
-            android:paddingRight="14dp"
-            android:paddingTop="14dp"
-            android:paddingBottom="14dp">
-            <ImageView
-                android:layout_width="360dp"
-                android:scaleType="centerCrop"
-                android:layout_height="200dp"
-                android:id="@+id/Fototourd" />
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="8dp">
+
+                    <ImageView
+                        android:layout_width="360dp"
+                        android:scaleType="centerCrop"
+                        android:layout_height="200dp"
+                        android:id="@+id/Fototourd" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="-35dp"
+                        android:layout_marginLeft="3dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Nombre Tour"
+                            android:id="@+id/NombreTourd"
+                            android:textColor="@android:color/white"
+                            android:shadowColor="@android:color/black"
+                            android:shadowDx="-1"
+                            android:shadowDy="-1"
+                            android:shadowRadius="1"
+                            android:textStyle="bold"
+                            android:textSize="18dp"
+                            />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:layout_marginRight="8dp">
+
+                                <View
+                                    android:layout_width="0dp"
+                                    android:layout_height="0dp"
+                                    android:layout_weight="1" />
+
+                                <ImageButton
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/Liked"
+                                    android:src="@drawable/nolike"
+                                    android:onClick="darLike"
+                                    android:tag="nolike"
+                                    android:background="@android:color/transparent"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Likes"
+                                    android:gravity="center_vertical"
+                                    android:layout_marginTop="3dp"
+                                    android:layout_marginLeft="3dp"
+                                    android:id="@+id/cantlikesd"
+                                    android:textColor="@android:color/white"
+                                    android:shadowColor="@android:color/black"
+                                    android:shadowDx="1"
+                                    android:shadowDy="1"
+                                    android:shadowRadius="2"
+                                    android:textStyle="bold"/>
+                            </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Nombre Tour"
-                android:layout_marginTop="165dp"
-                android:layout_marginLeft="10dp"
-                android:id="@+id/NombreTourd"
-                android:textColor="@android:color/white"
-                android:shadowColor="@android:color/black"
-                android:shadowDx="-1"
-                android:shadowDy="-1"
-                android:shadowRadius="1"
-                android:textStyle="bold"
-                android:textSize="18dp"
-                />
+                android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ubicacion Tour"
-                android:layout_marginTop="210dp"
-                android:id="@+id/UbicacionTourd"
-                android:textColor="@android:color/holo_blue_light"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ubicacion Tour"
+                    android:id="@+id/UbicacionTourd"
+                    android:textColor="@android:color/holo_blue_light"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Gustos Tour"
-                android:layout_marginTop="240dp"
-                android:id="@+id/gustost"
-                android:textStyle="italic"
-                android:textColor="@android:color/black"
-                android:layout_marginRight="50dp"/>
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Puntos del tour:"
-                android:layout_marginTop="270dp"
-                android:id="@+id/categoriastourd"
-                android:textColor="@android:color/black"
-                android:textSize="15dp"/>
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
 
-            <ImageButton
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginTop="220dp"
-                android:layout_marginLeft="250dp"
-                android:id="@+id/FotoUsuariod"
-                android:scaleType="centerCrop"
-                android:background="@drawable/selectable_button_bg"
-                android:src="@drawable/user"
-                />
+                    <ImageButton
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:id="@+id/FotoUsuariod"
+                        android:scaleType="centerCrop"
+                        android:background="@drawable/selectable_button_bg"
+                        android:src="@drawable/user"
+                        />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nombre Usuario"
-                android:layout_marginTop="222dp"
-                android:layout_marginLeft="295dp"
-                android:id="@+id/NombreUsuariod"
-                android:textColor="@android:color/black"
-                android:clickable="true"
-                android:textSize="12dp"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/FotoUsuariod"
+                        android:layout_centerVertical="true"
+                        android:gravity="center_vertical|right"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="10dp"
+                        android:text="Nombre Usuario"
+                        android:id="@+id/NombreUsuariod"
+                        android:textColor="@android:color/black"
+                        android:clickable="true"
+                        android:textSize="12dp"/>
 
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/Liked"
-                android:src="@drawable/nolike"
-                android:layout_marginLeft="285dp"
-                android:layout_marginTop="165dp"
-                android:onClick="darLike"
-                android:tag="nolike"
-                android:background="@android:color/transparent"/>
+                </LinearLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Likes"
-                android:layout_marginLeft="315dp"
-                android:layout_marginTop="168dp"
-                android:id="@+id/cantlikesd"
-                android:textColor="@android:color/white"
-                android:shadowColor="@android:color/black"
-                android:shadowDx="1"
-                android:shadowDy="1"
-                android:shadowRadius="2"
-                android:textStyle="bold"/>
+            </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Gustos Tour"
+                    android:layout_marginTop="-15dp"
+                    android:layout_marginBottom="5dp"
+                    android:id="@+id/gustost"
+                    android:textStyle="italic"
+                    android:textColor="@android:color/black"
+                    android:layout_marginRight="50dp"/>
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Puntos del tour:"
+                    android:id="@+id/categoriastourd"
+                    android:textColor="@android:color/black"
+                    android:textSize="15dp"/>
 
-            <ProgressBar
-                android:id="@+id/progress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="-25dp">
-            </ProgressBar>
+                <ProgressBar
+                    android:id="@+id/progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="-25dp">
+                </ProgressBar>
 
-            <ort.edu.ar.proyecto.model.NonScrollListView
-                android:id="@+id/listPuntos"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="285dp"
-                android:layout_below="@+id/header_button"></ort.edu.ar.proyecto.model.NonScrollListView>
+                <ort.edu.ar.proyecto.model.NonScrollListView
+                    android:id="@+id/listPuntos"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/header_button"></ort.edu.ar.proyecto.model.NonScrollListView>
 
-        </FrameLayout>
+        </LinearLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 </ScrollView>

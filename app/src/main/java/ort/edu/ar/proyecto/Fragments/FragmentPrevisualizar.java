@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
@@ -61,6 +62,7 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
     PuntoCreandoAdapter puntocadapter;
     NonScrollListView lvPuntos;
     private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+    ProgressBar progressBar;
 
     @Override
     public void onCreate(Bundle savedInstantState) {
@@ -86,10 +88,12 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
         agregarpunto = (Button) view.findViewById(R.id.agregarpunto);
         agregarpunto.setOnClickListener(this);
         finalizar = (Button) view.findViewById(R.id.finalizar);
+        finalizar.setEnabled(true);
         finalizar.setOnClickListener(this);
         tourcreando= ma.getTourcreando();
         nombretour=(TextView) view.findViewById(R.id.ntour);
         nombretour.setText(tourcreando.getNombre());
+        progressBar=(ProgressBar) view.findViewById(R.id.progress);
 
         t = ma.getTourcreando();
         listagustos = t.getGustos();
@@ -103,6 +107,7 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
                 ma.IraCrearPuntos();
                 break;
             case R.id.finalizar:
+                //cambiar a dos cuando dejemos de crear tour cada dos por tres
                 if(puntoscreando.size()>=1 && puntoscreando.size()<=10) {
                     String url = "http://viajarort.azurewebsites.net/AgregarTour.php";
                     new CrearTourTask().execute(url);
@@ -119,13 +124,21 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
         private OkHttpClient client = new OkHttpClient();
 
         @Override
+        protected void onPreExecute() {
+            // SHOW THE SPINNER WHILE LOADING FEEDS
+            progressBar.setVisibility(View.VISIBLE);
+            finalizar.setEnabled(false);
+        }
+
+        @Override
         protected void onPostExecute(String resultado) {
             super.onPostExecute(resultado);
+            progressBar.setVisibility(View.GONE);
             Toast registro;
             if (!resultado.isEmpty()) {
                 if (resultado.equals("No se agrego correctamente")) {
-                    registro = Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT);
-
+                    registro = Toast.makeText(getContext(), "Hubo un error, intente en un instante", Toast.LENGTH_SHORT);
+                    finalizar.setEnabled(true);
                 } else {
                     registro = Toast.makeText(getContext(), "Tour creado", Toast.LENGTH_SHORT);
                     puntoscreando.clear();

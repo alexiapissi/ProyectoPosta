@@ -3,25 +3,20 @@ package ort.edu.ar.proyecto.Fragments;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.FileProvider;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,20 +26,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import ort.edu.ar.proyecto.MainActivity;
 import ort.edu.ar.proyecto.R;
-import ort.edu.ar.proyecto.model.DireccionArrayAdapter;
+import ort.edu.ar.proyecto.model.AutocompleteCustomArrayAdapter;
+import ort.edu.ar.proyecto.model.CustomAutoCompleteTextChangedListener;
+import ort.edu.ar.proyecto.model.CustomAutoCompleteView;
 import ort.edu.ar.proyecto.model.Punto;
-import ort.edu.ar.proyecto.model.Tour;
 
 /**
  * Created by 41400475 on 16/9/2016.
@@ -53,7 +44,6 @@ public class FragmentCrearPuntos extends Fragment {
 
     Button agregar;
     EditText nombre, dia, descripcion;
-    AutoCompleteTextView direccion;
     TextView uriTV;
     ImageButton foto;
     Drawable camara;
@@ -63,10 +53,9 @@ public class FragmentCrearPuntos extends Fragment {
     String mCurrentPhotoPath;
     MainActivity ma;
     Punto puntocreando;
-    boolean iswaiting =false;
+    CustomAutoCompleteView myAutoComplete;
+    AutocompleteCustomArrayAdapter myAdapter;
     ArrayList<Address> direccs;
-    DireccionArrayAdapter adressAdapter;
-    ListView listViewAutocomplete;
 
     @Override
     public void onCreate(Bundle savedInstantState) {
@@ -81,60 +70,53 @@ public class FragmentCrearPuntos extends Fragment {
         ma = (MainActivity) getActivity();
         agregar = (Button) view.findViewById(R.id.agregar);
         nombre = (EditText) view.findViewById(R.id.nombrePunto);
-        direccion = (AutoCompleteTextView) view.findViewById(R.id.direccionPunto);
-        direccion.setThreshold(1);
         dia = (EditText) view.findViewById(R.id.diaPunto);
         descripcion = (EditText) view.findViewById(R.id.descripcionPunto);
         foto = (ImageButton) view.findViewById(R.id.imagenPunto);
         uriTV = (TextView) view.findViewById(R.id.uri);
         camara=foto.getDrawable();
 
-        listViewAutocomplete = (ListView) view.findViewById(R.id.listView);
+        try{
+            direccs = new ArrayList<>();
+            myAutoComplete = (CustomAutoCompleteView) view.findViewById(R.id.myautocomplete);
 
-        direccs = new ArrayList<>();
-        //adressAdapter = new ArrayAdapter<Address>(getContext(),
-          //      android.R.layout.simple_dropdown_item_1line, direccs);
-        //direccion.setAdapter(adressAdapter);
+            myAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-        direccion.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence cs, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence cs, int i, int i1, int i2) {
-
-                if(cs.length()>=2){
-                    iswaiting=true;
-                    consultarDireccion(cs.toString());
-                }
-                if(cs.length()==0){
-                   //h
-                }
-                if(cs.length()<2){
-                    direccs.clear();
-                    //adressAdapter.notifyDataSetChanged();
-                    iswaiting =false;
+                @Override
+                public void onItemClick(AdapterView<?> parent, View arg1, int pos, long id) {
+                    RelativeLayout rl = (RelativeLayout) arg1;
+                    TextView tv = (TextView) rl.getChildAt(0);
+                    myAutoComplete.setText(tv.getText().toString());
                 }
 
-            }
+            });
 
-            @Override
-            public void afterTextChanged(Editable editable) {
+            // add the listener so it will tries to suggest while the user types
+            myAutoComplete.addTextChangedListener(new CustomAutoCompleteTextChangedListener(getContext()));
 
-            }
-        });
+            // ObjectItemData has no value at first
+            ArrayList<Address> ObjectItemData = new ArrayList<>();
+
+            // set the custom ArrayAdapter
+            myAdapter = new AutocompleteCustomArrayAdapter(getContext(), R.layout.list_view_row, ObjectItemData);
+            myAutoComplete.setAdapter(myAdapter);
+            ma.setAdapterAutocomplete(myAdapter);
+            ma.setAutocomplete(myAutoComplete);
+
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         agregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isEmpty(nombre) || isEmpty(direccion)|| isEmpty(dia)|| isEmpty(descripcion)|| foto.getDrawable() == null|| foto.getDrawable()==camara){
+                if(isEmpty(nombre) || isEmpty(myAutoComplete)|| isEmpty(dia)|| isEmpty(descripcion)|| foto.getDrawable() == null|| foto.getDrawable()==camara){
                     Toast.makeText(getContext(), "Campos incompletos", Toast.LENGTH_SHORT).show();
                 }else {
-                    puntocreando= new Punto(-1,0,0,direccion.getText().toString(),uriTV.getText().toString(),nombre.getText().toString(),-1,null,null,descripcion.getText().toString(),Integer.parseInt(dia.getText().toString()));
-
+                    Address direccion = ma.getDireccionPunto();
+                    puntocreando= new Punto(-1,direccion.getLongitude(),direccion.getLatitude(),direccion.getAddressLine(0),"",nombre.getText().toString(),-1,null,null,descripcion.getText().toString(),Integer.parseInt(dia.getText().toString()));
                     //falta usuario y validar foto y sacar foto
                     ma.agregarPuntoCreando(puntocreando);
                     ma.IraPrevisualizar();
@@ -191,12 +173,6 @@ public class FragmentCrearPuntos extends Fragment {
             }
         });
 
-        listViewAutocomplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> adapter, View V, int position, long l) {
-                //direccion es la seleccionada
-            }
-        });
-
         return view;
     }
 
@@ -225,60 +201,6 @@ public class FragmentCrearPuntos extends Fragment {
             //setPic();
             //galleryAddPic();
         }
-    }
-
-    public void consultarDireccion(String dir) {
-        //String dirStr = direccion.getText().toString();
-        if (!dir.isEmpty()) {
-            new GeolocalizacionTask().execute(dir);  // Llamo a clase async con url
-        }
-    }
-
-    // List<Address> - lo que devuelve doInBackground
-    private class GeolocalizacionTask extends AsyncTask<String, Void,List<Address>> {
-
-        @Override
-        protected void onPostExecute(List<Address> direcciones) {
-            super.onPostExecute(direcciones);
-
-            if (!direcciones.isEmpty() && iswaiting && direcciones != null) {
-                direccs.clear();
-                direccs.addAll(direcciones);
-                adressAdapter = new DireccionArrayAdapter(getContext(), R.layout.objlistview_autocomplete, direccs);
-                listViewAutocomplete.setAdapter(adressAdapter);
-                listViewAutocomplete.setVisibility(View.VISIBLE);
-                //adressAdapter.notifyDataSetChanged();
-
-                /*
-                // Muestro coordenadas
-                double lat = dirRecibida.getLatitude(); //
-                double lng = dirRecibida.getLongitude();
-                String coordStr = lat+ "," + lng;
-                coordenadas.setText(coordStr);  // Muestro coordenadas en pantalla
-                */
-            } else {
-                direccs.clear();
-                //adressAdapter.notifyDataSetChanged();
-            }
-        }
-
-        @Override
-        protected List<Address> doInBackground(String... params) {
-            String address = params[0];
-
-            Geocoder geocoder = new Geocoder(getContext());
-            List<Address> addresses = null;
-            try {
-                boolean hola = geocoder.isPresent();
-                // Utilizo la clase Geocoder para buscar la direccion. Limito a 5 resultados
-                addresses = geocoder.getFromLocationName(address, 5, -54.928471, -73.283694, -22.595863, -54.475101);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return addresses;
-        }
-
     }
 
 }
