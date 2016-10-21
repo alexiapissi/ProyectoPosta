@@ -116,7 +116,12 @@ public class FragmentCrearPuntos extends Fragment {
                     Toast.makeText(getContext(), "Campos incompletos", Toast.LENGTH_SHORT).show();
                 }else {
                     Address direccion = ma.getDireccionPunto();
-                    puntocreando= new Punto(-1,direccion.getLongitude(),direccion.getLatitude(),direccion.getAddressLine(0),uriTV.getText().toString(),nombre.getText().toString(),-1,null,null,descripcion.getText().toString(),Integer.parseInt(dia.getText().toString()));
+                    if (direccion != null){
+                        puntocreando= new Punto(-1,direccion.getLongitude(),direccion.getLatitude(),direccion.getAddressLine(0),uriTV.getText().toString(),nombre.getText().toString(),-1,null,null,descripcion.getText().toString(),Integer.parseInt(dia.getText().toString()));
+                    } else {
+                        puntocreando= new Punto(-1,1,2,myAutoComplete.getText().toString(),uriTV.getText().toString(),nombre.getText().toString(),-1,null,null,descripcion.getText().toString(),Integer.parseInt(dia.getText().toString()));
+                    }
+
                     //falta usuario y validar foto y sacar foto
                     ma.agregarPuntoCreando(puntocreando);
                     ma.IraPrevisualizar();
