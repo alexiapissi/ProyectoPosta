@@ -129,26 +129,7 @@ public class FHome extends Fragment {
                 }
             });
 
-           /* listVW.setOnScrollListener(new AbsListView.OnScrollListener() {
 
-                public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-
-                }
-
-                public void onScroll(AbsListView view, int firstVisibleItem,
-                                     int visibleItemCount, int totalItemCount) {
-
-                    if(firstVisibleItem+visibleItemCount == totalItemCount && totalItemCount!=0)
-                    {
-                        if(flag_loading == false)
-                        {
-                            flag_loading = true;
-                            additems();
-                        }
-                    }
-                }
-            });j*/
 
             tours = new ArrayList<>();
             toursAdapter = new ToursAdapter(getActivity(), tours);
@@ -162,6 +143,7 @@ public class FHome extends Fragment {
         }
         return v;
     }
+
 
 
 
@@ -249,6 +231,39 @@ public class FHome extends Fragment {
 
     }
 
+   /*public class EndlessScrollListener implements AbsListView.OnScrollListener {
 
+        private int visibleThreshold = 5;
+        private int currentPage = 0;
+        private int previousTotal = 0;
+        private boolean loading = true;
+
+        public EndlessScrollListener() {
+        }
+        public EndlessScrollListener(int visibleThreshold) {
+            this.visibleThreshold = visibleThreshold;
+        }
+
+        @Override
+        public void onScroll(AbsListView view, int firstVisibleItem,
+                             int visibleItemCount, int totalItemCount) {
+            if (loading) {
+                if (totalItemCount > previousTotal) {
+                    loading = false;
+                    previousTotal = totalItemCount;
+                    currentPage++;
+                }
+            }
+            if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
+                String url = "http://viajarort.azurewebsites.net/tours.php?page"+currentPage+1;
+                new ToursTask().execute(url);
+                loading = true;
+            }
+        }
+
+        @Override
+        public void onScrollStateChanged(AbsListView view, int scrollState) {
+        }
+    }*/
 
 }

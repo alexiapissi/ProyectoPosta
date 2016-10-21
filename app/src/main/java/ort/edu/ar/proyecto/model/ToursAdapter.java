@@ -67,13 +67,16 @@ public class ToursAdapter  extends BaseAdapter {
         ubicacionTV.setText(t.getUbicacion());
         LikesTV.setText(t.getLikes());
 
-        stringgustos="";
-        for (Gusto g : t.getGustos()){
-            stringgustos += g.getNombre() + ", ";
+        if(t.getGustos().size()>0) {
+            stringgustos = "";
+            for (Gusto g : t.getGustos()) {
+                stringgustos += g.getNombre() + ", ";
+            }
+            stringgustos = stringgustos.substring(0, stringgustos.length() - 2);
+            GustosTour.setText(stringgustos);
+        }else{
+            GustosTour.setText("");
         }
-        stringgustos=stringgustos.substring(0,stringgustos.length()-2);
-        GustosTour.setText(stringgustos);
-
         NombreuTV.setText(usu.getNombre());
 
         if (!usu.getFoto().equals("")) {

@@ -39,7 +39,7 @@ import ort.edu.ar.proyecto.model.SessionManager;
 import ort.edu.ar.proyecto.model.Tour;
 
 
-public class FragmentDetalle extends Fragment {
+public class FragmentDetalle extends Fragment implements View.OnClickListener {
 
 
     ImageView fototour;
@@ -60,6 +60,7 @@ public class FragmentDetalle extends Fragment {
     String accion;
     String stringgustos;
     TextView gustost;
+    ImageButton tacho;
 
     public FragmentDetalle() {
     }
@@ -77,6 +78,7 @@ public class FragmentDetalle extends Fragment {
         progressbar=(ProgressBar) view.findViewById(R.id.progress);
         fotoUsuario = (ImageButton) view.findViewById(R.id.FotoUsuariod);
         addListenerOnButton();
+
         nombre = (TextView) view.findViewById(R.id.NombreTourd);
         //descripcion = (TextView) findViewById(R.id.DescripcionTourd);
         ubicacion = (TextView) view.findViewById(R.id.UbicacionTourd);
@@ -87,7 +89,11 @@ public class FragmentDetalle extends Fragment {
         listPuntosVW = (NonScrollListView) view.findViewById(R.id.listPuntos);
 
         session = new SessionManager(getContext());
-
+        tacho=(ImageButton)view.findViewById(R.id.tacho);
+        tacho.setOnClickListener(this);
+        if (session.checkLogin() == 1){
+            tacho.setVisibility(View.VISIBLE);
+        }
         puntos = new ArrayList<>();
         puntosAdapter = new PuntosAdapter(getActivity().getApplicationContext(), puntos);
 
@@ -115,12 +121,16 @@ public class FragmentDetalle extends Fragment {
         nombreUsuario.setText(tour.getUsuario().getNombre());
         cantLikes.setText(tour.getLikes());
 
-        stringgustos="";
-        for (Gusto g : tour.getGustos()){
-            stringgustos += g.getNombre() + ", ";
+        if(tour.getGustos().size()>0) {
+            stringgustos = "";
+            for (Gusto g : tour.getGustos()) {
+                stringgustos += g.getNombre() + ", ";
+            }
+            stringgustos = stringgustos.substring(0, stringgustos.length() - 2);
+            gustost.setText(stringgustos);
+        }else{
+            gustost.setText("");
         }
-        stringgustos=stringgustos.substring(0,stringgustos.length()-2);
-        gustost.setText(stringgustos);
 
         if (session.checkLogin() == 1) {
             String url = "http://viajarort.azurewebsites.net/traerlikes.php";
@@ -150,6 +160,15 @@ public class FragmentDetalle extends Fragment {
         return view;
     }
 
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tacho:
+                //eliminar tour
+                Toast mensaje = Toast.makeText(getContext(), "Eliminar", Toast.LENGTH_SHORT);
+                mensaje.show();
+                break;
+        }
+    }
     public void addListenerOnButton() {
         fotoUsuario.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,6 +180,7 @@ public class FragmentDetalle extends Fragment {
         });
 
     }
+
     public void addListenerOnText() {
         nombreUsuario.setOnClickListener(new View.OnClickListener() {
             @Override
