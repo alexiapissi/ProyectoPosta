@@ -148,7 +148,7 @@ public class FHome extends Fragment {
                         }
                     }
                 }
-            });*/
+            });j*/
 
             tours = new ArrayList<>();
             toursAdapter = new ToursAdapter(getActivity(), tours);
