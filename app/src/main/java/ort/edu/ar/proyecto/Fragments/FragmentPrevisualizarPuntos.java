@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import ort.edu.ar.proyecto.MainActivity;
 import ort.edu.ar.proyecto.R;
+import ort.edu.ar.proyecto.model.Dia;
 import ort.edu.ar.proyecto.model.NonScrollListView;
 import ort.edu.ar.proyecto.model.Punto;
 import ort.edu.ar.proyecto.model.PuntoCreandoAdapter;
@@ -25,7 +26,9 @@ public class FragmentPrevisualizarPuntos extends Fragment {
     PuntoCreandoAdapter puntocadapter;
     NonScrollListView lvPuntos;
     ArrayList<Punto> puntoscreando;
-    String dia;
+    Dia dia;
+    ArrayList<Dia> dias;
+    int d;
 
     @Override
     public void onCreate(Bundle savedInstantState) {
@@ -38,27 +41,41 @@ public class FragmentPrevisualizarPuntos extends Fragment {
         View view = inflater.inflate(R.layout.fragment_previsualizarpuntos, container, false);
 
         ma = (MainActivity) getActivity();
+        dias = ma.getArrayDias();
         dia = ma.getDia();
-
-        Button agregarpunto = (Button)view.findViewById(R.id.agregarpunto);
-        TextView numerodia = (TextView)view.findViewById(R.id.dia);
-        numerodia.setText(dia);
 
         lvPuntos=(NonScrollListView) view.findViewById(R.id.lvPuntos);
         puntoscreando = new ArrayList<>();
         puntoscreando.addAll(ma.getListaPuntoscreando());
-        puntocadapter = new PuntoCreandoAdapter(getActivity(), puntoscreando);
-        lvPuntos.setAdapter(puntocadapter);
-        if(puntoscreando!=null){
-            puntoscreando.clear();
-            puntoscreando.addAll(ma.getListaPuntoscreando());
-            puntocadapter.notifyDataSetChanged();
+        if (!dia.getPuntos().isEmpty() && dia.getPuntos().size() > 0) {
+            puntocadapter = new PuntoCreandoAdapter(getActivity(), dia.getPuntos());
+            lvPuntos.setAdapter(puntocadapter);
+            if(puntoscreando!=null){
+                puntoscreando.clear();
+                puntoscreando.addAll(ma.getListaPuntoscreando());
+                puntocadapter.notifyDataSetChanged();
+            }
         }
+
+        Button guardar = (Button)view.findViewById(R.id.guardar);
+        Button agregarpunto = (Button)view.findViewById(R.id.agregarpunto);
+        TextView numerodia = (TextView)view.findViewById(R.id.dia);
+        numerodia.setText("Dia " + dia.getDia());
+        d = dia.getDia();
 
         agregarpunto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ma.IraCrearPuntos();
+            }
+        });
+
+        guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dia.setPuntos(puntoscreando);
+                ma.getAdapterDias().notifyDataSetChanged();
+                ma.IraPrevisualizar();
             }
         });
 

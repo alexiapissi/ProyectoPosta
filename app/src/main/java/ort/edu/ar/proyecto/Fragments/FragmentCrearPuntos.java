@@ -35,6 +35,7 @@ import ort.edu.ar.proyecto.R;
 import ort.edu.ar.proyecto.model.AutocompleteCustomArrayAdapter;
 import ort.edu.ar.proyecto.model.CustomAutoCompleteTextChangedListener;
 import ort.edu.ar.proyecto.model.CustomAutoCompleteView;
+import ort.edu.ar.proyecto.model.Dia;
 import ort.edu.ar.proyecto.model.Punto;
 
 /**
@@ -70,7 +71,6 @@ public class FragmentCrearPuntos extends Fragment {
         ma = (MainActivity) getActivity();
         agregar = (Button) view.findViewById(R.id.agregar);
         nombre = (EditText) view.findViewById(R.id.nombrePunto);
-        dia = (EditText) view.findViewById(R.id.diaPunto);
         descripcion = (EditText) view.findViewById(R.id.descripcionPunto);
         foto = (ImageButton) view.findViewById(R.id.imagenPunto);
         uriTV = (TextView) view.findViewById(R.id.uri);
@@ -112,19 +112,23 @@ public class FragmentCrearPuntos extends Fragment {
         agregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isEmpty(nombre) || isEmpty(myAutoComplete)|| isEmpty(dia)|| isEmpty(descripcion)|| foto.getDrawable() == null|| foto.getDrawable()==camara){
+                if(isEmpty(nombre) || isEmpty(myAutoComplete)|| isEmpty(descripcion)|| foto.getDrawable() == null|| foto.getDrawable()==camara){
                     Toast.makeText(getContext(), "Campos incompletos", Toast.LENGTH_SHORT).show();
                 }else {
                     Address direccion = ma.getDireccionPunto();
+                    Dia dia = ma.getDia();
+                    int d = dia.getDia();
                     if (direccion != null){
-                        puntocreando= new Punto(-1,direccion.getLongitude(),direccion.getLatitude(),direccion.getAddressLine(0),uriTV.getText().toString(),nombre.getText().toString(),-1,null,null,descripcion.getText().toString(),Integer.parseInt(dia.getText().toString()));
+                        puntocreando= new Punto(-1,direccion.getLongitude(),direccion.getLatitude(),direccion.getAddressLine(0),uriTV.getText().toString(),nombre.getText().toString(),-1,null,null,descripcion.getText().toString(),d);
                     } else {
-                        puntocreando= new Punto(-1,1,2,myAutoComplete.getText().toString(),uriTV.getText().toString(),nombre.getText().toString(),-1,null,null,descripcion.getText().toString(),Integer.parseInt(dia.getText().toString()));
+                        puntocreando= new Punto(-1,1,2,myAutoComplete.getText().toString(),uriTV.getText().toString(),nombre.getText().toString(),-1,null,null,descripcion.getText().toString(),d);
                     }
+                    dia.getPuntos().add(puntocreando);
+                    ma.getAdapterDias().notifyDataSetChanged();
 
                     //falta usuario y validar foto y sacar foto
                     ma.agregarPuntoCreando(puntocreando);
-                    ma.IraPrevisualizar();
+                    ma.IraPrevisualizarPuntos();
 
                 }
             }

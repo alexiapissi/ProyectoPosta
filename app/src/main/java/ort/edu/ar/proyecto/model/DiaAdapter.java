@@ -18,11 +18,11 @@ import ort.edu.ar.proyecto.R;
  */
 public class DiaAdapter extends BaseAdapter {
 
-    ArrayList<String> dias;
+    ArrayList<Dia> dias;
     MainActivity ma;
 
     Context context;
-    public DiaAdapter(Context context, ArrayList<String> diass) {
+    public DiaAdapter(Context context, ArrayList<Dia> diass) {
         this.context = context;
         this.dias=diass;
     }
@@ -63,7 +63,7 @@ public class DiaAdapter extends BaseAdapter {
             }
         });
 
-        lvnombre.setText(dias.get(position));
+        lvnombre.setText("Dia " + dias.get(position).getDia());
         return view;
     }
 }
