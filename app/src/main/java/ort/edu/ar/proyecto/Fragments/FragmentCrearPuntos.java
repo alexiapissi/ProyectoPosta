@@ -138,36 +138,13 @@ public class FragmentCrearPuntos extends Fragment {
             @Override
             public void onClick(View view) {
 
-                final CharSequence[] items = {"Sacar foto", "Elegir desde la galeria", "Cancelar"};
+                final CharSequence[] items = {"Elegir desde la galeria", "Cancelar"};
                 android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ma);
                 builder.setTitle("Agregar foto");
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int item) {
-
-                        if (items[item].equals("Sacar foto")) {
-                            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            if (takePictureIntent.resolveActivity(ma.getPackageManager()) != null) {
-                                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                                /*
-                                File photoFile = null;
-                                try {
-                                    photoFile = createImageFile();
-                                } catch (IOException ex) {
-                                    // Error occurred while creating the File
-                                    Toast mensj = Toast.makeText(getContext(), "Hubo un error", Toast.LENGTH_SHORT);
-                                    mensj.show();
-                                }
-                                // Continue only if the File was successfully created
-                                if (photoFile != null) {
-                                    Uri photoURI = FileProvider.getUriForFile(getContext(),
-                                            "ort.edu.ar.proyecto.fileprovider",
-                                            photoFile);
-                                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-                                }*/
-                            }
-                        } else if (items[item].equals("Elegir desde la galeria")) {
+                        if (items[item].equals("Elegir desde la galeria")) {
                             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                             intent.setType("image/*");
                             if (intent.resolveActivity(ma.getPackageManager()) != null) {

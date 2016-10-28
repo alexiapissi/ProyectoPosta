@@ -28,7 +28,7 @@ public class FragmentPrevisualizarPuntos extends Fragment {
     ArrayList<Punto> puntoscreando;
     Dia dia;
     ArrayList<Dia> dias;
-    int d;
+    ArrayList<Punto> PuntosDia;
 
     @Override
     public void onCreate(Bundle savedInstantState) {
@@ -41,18 +41,25 @@ public class FragmentPrevisualizarPuntos extends Fragment {
         View view = inflater.inflate(R.layout.fragment_previsualizarpuntos, container, false);
 
         ma = (MainActivity) getActivity();
+        PuntosDia = new ArrayList<>();
         dias = ma.getArrayDias();
         dia = ma.getDia();
 
+        for (Punto p : ma.getListaPuntoscreando()){
+            if (p.getDia() == dia.getDia()){
+                PuntosDia.add(p);
+            }
+        }
+
         lvPuntos=(NonScrollListView) view.findViewById(R.id.lvPuntos);
-        puntoscreando = new ArrayList<>();
-        puntoscreando.addAll(ma.getListaPuntoscreando());
         if (!dia.getPuntos().isEmpty() && dia.getPuntos().size() > 0) {
+            puntoscreando = new ArrayList<>();
+            puntoscreando.addAll(PuntosDia);
             puntocadapter = new PuntoCreandoAdapter(getActivity(), dia.getPuntos());
             lvPuntos.setAdapter(puntocadapter);
             if(puntoscreando!=null){
                 puntoscreando.clear();
-                puntoscreando.addAll(ma.getListaPuntoscreando());
+                puntoscreando.addAll(PuntosDia);
                 puntocadapter.notifyDataSetChanged();
             }
         }
@@ -61,7 +68,6 @@ public class FragmentPrevisualizarPuntos extends Fragment {
         Button agregarpunto = (Button)view.findViewById(R.id.agregarpunto);
         TextView numerodia = (TextView)view.findViewById(R.id.dia);
         numerodia.setText("Dia " + dia.getDia());
-        d = dia.getDia();
 
         agregarpunto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,7 +79,7 @@ public class FragmentPrevisualizarPuntos extends Fragment {
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dia.setPuntos(puntoscreando);
+                dia.setPuntos(PuntosDia);
                 ma.getAdapterDias().notifyDataSetChanged();
                 ma.IraPrevisualizar();
             }
