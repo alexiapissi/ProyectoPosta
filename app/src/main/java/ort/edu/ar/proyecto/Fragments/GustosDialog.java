@@ -13,7 +13,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import ort.edu.ar.proyecto.R;
 import ort.edu.ar.proyecto.model.Gusto;
