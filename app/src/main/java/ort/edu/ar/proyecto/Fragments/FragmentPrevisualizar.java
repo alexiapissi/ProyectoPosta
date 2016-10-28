@@ -43,6 +43,7 @@ import java.util.UUID;
 
 import ort.edu.ar.proyecto.MainActivity;
 import ort.edu.ar.proyecto.R;
+import ort.edu.ar.proyecto.model.Dia;
 import ort.edu.ar.proyecto.model.DiaAdapter;
 import ort.edu.ar.proyecto.model.Gusto;
 import ort.edu.ar.proyecto.model.Punto;
@@ -64,8 +65,11 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
     private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
     ProgressBar progressBar;
     int cantDias;
-    ArrayList<String> dias;
+    ArrayList<Dia> dias;
     DiaAdapter diaAdapter;
+    ArrayList<Punto> puntos;
+    int cantPuntos;
+    ArrayList<Punto> todosPuntos;
 
     @Override
     public void onCreate(Bundle savedInstantState) {
@@ -81,12 +85,24 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
         lvDias = (NonScrollListView)view.findViewById(R.id.lvDias);
         cantDias = ma.getCantidadDiasTour();
         dias = new ArrayList<>();
-        for (int i =1; i<=cantDias; i++){
-            String dia = "Dia " + (i);
-            dias.add(dia);
+        cantPuntos = 0;
+        todosPuntos = new ArrayList<>();
+
+        if (ma.getArrayDias().size() == 0) {
+            for (int i = 1; i <= cantDias; i++) {
+                int dia = i;
+                puntos = new ArrayList<>();
+                Dia d = new Dia(dia, puntos);
+                dias.add(d);
+            }
+            ma.setArrayDias(dias);
+        }
+        else {
+            dias = ma.getArrayDias();
         }
         diaAdapter = new DiaAdapter(getContext(), dias);
         lvDias.setAdapter(diaAdapter);
+        ma.setAdapterDias(diaAdapter);
 
         finalizar = (Button) view.findViewById(R.id.finalizar);
         finalizar.setEnabled(true);
@@ -105,14 +121,22 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.finalizar:
-                //cambiar a dos cuando dejemos de crear tour cada dos por tres
-                if(puntoscreando.size()>=1 && puntoscreando.size()<=10) {
-                    String url = "http://viajarort.azurewebsites.net/AgregarTour.php";
-                    new CrearTourTask().execute(url);
-
-                }else{
-                    Toast toast = Toast.makeText(getContext(), "Ingrese entre 2 y 10 puntos", Toast.LENGTH_SHORT);
-                    toast.show();
+                for (Dia d : dias){
+                    if (d.getPuntos().size() == 0){
+                        Toast.makeText(getContext(), "Ingrese al menos 2 puntos por cada día", Toast.LENGTH_SHORT).show();
+                    } else {
+                        for (Punto p : d.getPuntos()){
+                            cantPuntos++;
+                            todosPuntos.add(p);
+                        }
+                        //cambiar a dos cuando dejemos de crear tour cada dos por tres
+                        if (cantPuntos >= 1 && cantPuntos <= 10 ){
+                            String url = "http://viajarort.azurewebsites.net/AgregarTour.php";
+                            new CrearTourTask().execute(url);
+                        }else{
+                            Toast.makeText(getContext(), "Ingrese entre 2 y 10 puntos por cada día", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
                 break;
         }
@@ -291,24 +315,24 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
             json.put("Gustos", gustos);
 
             JSONArray puntos = new JSONArray();
-            JSONObject[] innerObjectPunto = new JSONObject[puntoscreando.size()];
-            for (int i = 0; i < puntoscreando.size(); i++) {
+            JSONObject[] innerObjectPunto = new JSONObject[todosPuntos.size()];
+            for (int i = 0; i < todosPuntos.size(); i++) {
                 innerObjectPunto[i] = new JSONObject();
-                innerObjectPunto[i].put("Nombre", puntoscreando.get(i).getNombre());
-                innerObjectPunto[i].put("Descripcion", puntoscreando.get(i).getDescripcion());
-                innerObjectPunto[i].put("Dia", puntoscreando.get(i).getDia());
-                innerObjectPunto[i].put("Direccion", puntoscreando.get(i).getDireccion());
-                innerObjectPunto[i].put("Latitud", 1/*puntoscreando.get(i).getLatitud()*/);
-                innerObjectPunto[i].put("Longitud", 2/*puntoscreando.get(i).getLongitud()*/);
-                if (puntoscreando.get(i).getFoto() != null && !puntoscreando.get(i).getFoto().isEmpty()) {
+                innerObjectPunto[i].put("Nombre", todosPuntos.get(i).getNombre());
+                innerObjectPunto[i].put("Descripcion", todosPuntos.get(i).getDescripcion());
+                innerObjectPunto[i].put("Dia", todosPuntos.get(i).getDia());
+                innerObjectPunto[i].put("Direccion", todosPuntos.get(i).getDireccion());
+                innerObjectPunto[i].put("Latitud", todosPuntos.get(i).getLatitud());
+                innerObjectPunto[i].put("Longitud", todosPuntos.get(i).getLongitud());
+                if (todosPuntos.get(i).getFoto() != null && !todosPuntos.get(i).getFoto().isEmpty()) {
                     Bitmap finalImage;
-                    if (puntoscreando.get(i).getFotoUri().getScheme().startsWith("http")) {
-                        finalImage = getBitmapFromURL(puntoscreando.get(i).getFoto());
+                    if (todosPuntos.get(i).getFotoUri().getScheme().startsWith("http")) {
+                        finalImage = getBitmapFromURL(todosPuntos.get(i).getFoto());
                     } else {
                         // Get Bitmap image from Uri
                         try {
                             ParcelFileDescriptor parcelFileDescriptor =
-                                    getContext().getContentResolver().openFileDescriptor(puntoscreando.get(i).getFotoUri(), "r");
+                                    getContext().getContentResolver().openFileDescriptor(todosPuntos.get(i).getFotoUri(), "r");
                             FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
                             Bitmap originalImage = BitmapFactory.decodeFileDescriptor(fileDescriptor);
                             parcelFileDescriptor.close();

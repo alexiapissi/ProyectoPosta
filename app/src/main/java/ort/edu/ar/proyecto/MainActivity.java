@@ -46,6 +46,8 @@ import ort.edu.ar.proyecto.Fragments.FragmentPrevisualizarPuntos;
 import ort.edu.ar.proyecto.Fragments.Perfil_Usuario;
 import ort.edu.ar.proyecto.model.AutocompleteCustomArrayAdapter;
 import ort.edu.ar.proyecto.model.CustomAutoCompleteView;
+import ort.edu.ar.proyecto.model.Dia;
+import ort.edu.ar.proyecto.model.DiaAdapter;
 import ort.edu.ar.proyecto.model.Gusto;
 import ort.edu.ar.proyecto.model.Punto;
 import ort.edu.ar.proyecto.model.SessionManager;
@@ -80,7 +82,9 @@ public class MainActivity extends AppCompatActivity {
     CustomAutoCompleteView myAutocomplete;
     static Address dirPunto;
     int cantDias;
-    String Dia;
+    ort.edu.ar.proyecto.model.Dia Dia;
+    ArrayList<Dia> dias;
+    DiaAdapter adapterDia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
         toursUsuarioAL = new ArrayList<>();
         ToursLikeadosUsuario = new ArrayList<>();
+        dias = new ArrayList<>();
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -270,14 +275,21 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
-    public void setDia(String dia){
+    public void setDia(Dia dia){
         Dia = dia;
     }
 
-    public String getDia (){
+    public Dia getDia (){
         return Dia;
     }
 
+    public void setArrayDias(ArrayList<Dia> diass){
+        dias = diass;
+    }
+
+    public ArrayList<Dia> getArrayDias(){
+        return dias;
+    }
 
     public void mandarUsuario() {
         Perfil_Usuario fragment = new Perfil_Usuario();
@@ -350,6 +362,14 @@ public class MainActivity extends AppCompatActivity {
 
     public int getCantidadDiasTour(){
         return cantDias;
+    }
+
+    public void setAdapterDias(DiaAdapter adap){
+        adapterDia = adap;
+    }
+
+    public DiaAdapter getAdapterDias(){
+        return adapterDia;
     }
 
     public void IraLogin() {
