@@ -5,9 +5,7 @@ import android.location.Address;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -17,7 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +31,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import ort.edu.ar.proyecto.Fragments.Detalle_Tour;
 import ort.edu.ar.proyecto.Fragments.FHome;
@@ -131,9 +127,6 @@ public class MainActivity extends AppCompatActivity {
         toursUsuarioAL = new ArrayList<>();
         ToursLikeadosUsuario = new ArrayList<>();
         dias = new ArrayList<>();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
@@ -218,10 +211,6 @@ public class MainActivity extends AppCompatActivity {
         return puntos;
     }
 
-    /*public void setPos (int pos){
-        posicion=pos;
-    }*/
-
     public void setToursUsuarioAL(ArrayList<Tour> toursUsuario) {
         toursUsuarioAL = toursUsuario;
     }
@@ -241,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void IraHome() {
 
-        //fragment.setTour(tour);
+
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
                 .addToBackStack(null)
@@ -392,6 +381,9 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.contenido, fragment)
                 .commit();
     }
+
+
+
 
 
     private void inicializarToolbar() {

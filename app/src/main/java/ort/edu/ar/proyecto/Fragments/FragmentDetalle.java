@@ -1,5 +1,8 @@
 package ort.edu.ar.proyecto.Fragments;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +39,7 @@ import ort.edu.ar.proyecto.model.Punto;
 import ort.edu.ar.proyecto.model.PuntosAdapter;
 import ort.edu.ar.proyecto.model.SessionManager;
 import ort.edu.ar.proyecto.model.Tour;
+import ort.edu.ar.proyecto.model.Usuario;
 
 
 public class FragmentDetalle extends Fragment implements View.OnClickListener {
@@ -74,32 +77,34 @@ public class FragmentDetalle extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle saveInstantState) {
         View view = inflater.inflate(R.layout.fragment_detalle, container, false);
+        ma = (MainActivity) getActivity();
+        tour = ma.getTour();
         fototour = (ImageView) view.findViewById(R.id.Fototourd);
-        progressbar=(ProgressBar) view.findViewById(R.id.progress);
+        progressbar = (ProgressBar) view.findViewById(R.id.progress);
         fotoUsuario = (ImageButton) view.findViewById(R.id.FotoUsuariod);
         addListenerOnButton();
 
         nombre = (TextView) view.findViewById(R.id.NombreTourd);
-        //descripcion = (TextView) findViewById(R.id.DescripcionTourd);
         ubicacion = (TextView) view.findViewById(R.id.UbicacionTourd);
         nombreUsuario = (TextView) view.findViewById(R.id.NombreUsuariod);
         cantLikes = (TextView) view.findViewById(R.id.cantlikesd);
         darlike = (ImageButton) view.findViewById(R.id.Liked);
-        gustost=(TextView) view.findViewById(R.id.gustost);
+        gustost = (TextView) view.findViewById(R.id.gustost);
         listPuntosVW = (NonScrollListView) view.findViewById(R.id.listPuntos);
 
         session = new SessionManager(getContext());
-        tacho=(ImageButton)view.findViewById(R.id.tacho);
+        tacho = (ImageButton) view.findViewById(R.id.tacho);
         tacho.setOnClickListener(this);
-        if (session.checkLogin() == 1){
+        if (session.checkLogin() == 1 && Integer.parseInt(session.getUserDetails().get(100)[2])==tour.getUsuario().getId()) {
             tacho.setVisibility(View.VISIBLE);
+        }else{
+            tacho.setVisibility(View.GONE);
         }
         puntos = new ArrayList<>();
         puntosAdapter = new PuntosAdapter(getActivity().getApplicationContext(), puntos);
 
         listPuntosVW.setAdapter(puntosAdapter);
-        ma = (MainActivity) getActivity();
-        tour = ma.getTour();
+
 
         nombre.setText(tour.getNombre());
         Picasso
@@ -114,21 +119,21 @@ public class FragmentDetalle extends Fragment implements View.OnClickListener {
                     //.resize(40,40)
                     .transform(new CircleTransform())
                     .into(fotoUsuario);
-        }else {
+        } else {
             fotoUsuario.setImageResource(R.drawable.user);
         }
         ubicacion.setText(tour.getUbicacion());
         nombreUsuario.setText(tour.getUsuario().getNombre());
         cantLikes.setText(tour.getLikes());
 
-        if(tour.getGustos().size()>0) {
+        if (tour.getGustos().size() > 0) {
             stringgustos = "";
             for (Gusto g : tour.getGustos()) {
                 stringgustos += g.getNombre() + ", ";
             }
             stringgustos = stringgustos.substring(0, stringgustos.length() - 2);
             gustost.setText(stringgustos);
-        }else{
+        } else {
             gustost.setText("");
         }
 
@@ -140,8 +145,8 @@ public class FragmentDetalle extends Fragment implements View.OnClickListener {
         darlike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (session.checkLogin() == 1){
-                    if (darlike.getTag().equals("nolike")){
+                if (session.checkLogin() == 1) {
+                    if (darlike.getTag().equals("nolike")) {
                         accion = "insertar";
                         String url2 = "http://viajarort.azurewebsites.net/accionlikexusuario.php";
                         new CrearEliminarLike().execute(url2);
@@ -164,11 +169,12 @@ public class FragmentDetalle extends Fragment implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.tacho:
                 //eliminar tour
-                Toast mensaje = Toast.makeText(getContext(), "Eliminar", Toast.LENGTH_SHORT);
-                mensaje.show();
+                AlertDialog().show();
+
                 break;
         }
     }
+
     public void addListenerOnButton() {
         fotoUsuario.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -181,7 +187,7 @@ public class FragmentDetalle extends Fragment implements View.OnClickListener {
 
     }
 
-    public void addListenerOnText() {
+   /* public void addListenerOnText() {
         nombreUsuario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -190,7 +196,7 @@ public class FragmentDetalle extends Fragment implements View.OnClickListener {
             }
         });
 
-    }
+    }*/
 
     @Override
     public void onStart() {
@@ -203,6 +209,7 @@ public class FragmentDetalle extends Fragment implements View.OnClickListener {
 
     private class DetalleTask extends AsyncTask<String, Void, ArrayList<Punto>> {
         private OkHttpClient client = new OkHttpClient();
+
         @Override
         protected void onPreExecute() {
             // SHOW THE SPINNER WHILE LOADING FEEDS
@@ -272,7 +279,7 @@ public class FragmentDetalle extends Fragment implements View.OnClickListener {
         protected void onPostExecute(String resultado) {
             super.onPostExecute(resultado);
             if (!resultado.isEmpty()) {
-                if (resultado.equals("Se actualizo el like correctamente")){
+                if (resultado.equals("Se actualizo el like correctamente")) {
                     //asdas
                 } else {
                     Toast mensaje = Toast.makeText(getContext(), "No se pudo actualizar el like", Toast.LENGTH_SHORT);
@@ -292,13 +299,13 @@ public class FragmentDetalle extends Fragment implements View.OnClickListener {
             try {
                 Response response = client.newCall(request).execute();
                 return parsearRespuesta(response.body().string());
-            } catch (IOException | JSONException  e) {
+            } catch (IOException | JSONException e) {
                 Log.d("Error", e.getMessage());
                 return "";
             }
         }
 
-        RequestBody generarJSON (){
+        RequestBody generarJSON() {
             org.json.simple.JSONObject json = new org.json.simple.JSONObject();
             json.put("Id", tour.getId());
             json.put("Likes", tour.getLikes());
@@ -320,7 +327,7 @@ public class FragmentDetalle extends Fragment implements View.OnClickListener {
         protected void onPostExecute(String resultado) {
             super.onPostExecute(resultado);
             if (!resultado.isEmpty()) {
-                switch (resultado){
+                switch (resultado) {
                     case "true":
                         darlike.setImageResource(R.drawable.likes);
                         darlike.setTag("like");
@@ -344,13 +351,13 @@ public class FragmentDetalle extends Fragment implements View.OnClickListener {
             try {
                 Response response = client.newCall(request).execute();
                 return parsearRespuesta(response.body().string());
-            } catch (IOException | JSONException  e) {
+            } catch (IOException | JSONException e) {
                 Log.d("Error", e.getMessage());
                 return "";
             }
         }
 
-        RequestBody generarJSON (){
+        RequestBody generarJSON() {
             org.json.simple.JSONObject json = new org.json.simple.JSONObject();
             int idusu = Integer.parseInt(session.getUserDetails().get(100)[2]);
             json.put("idtour", tour.getId());
@@ -373,7 +380,7 @@ public class FragmentDetalle extends Fragment implements View.OnClickListener {
         protected void onPostExecute(String resultado) {
             super.onPostExecute(resultado);
             if (!resultado.isEmpty()) {
-                switch (resultado){
+                switch (resultado) {
                     case "eliminado":
                         darlike.setImageResource(R.drawable.nolike);
                         darlike.setTag("nolike");
@@ -412,13 +419,13 @@ public class FragmentDetalle extends Fragment implements View.OnClickListener {
             try {
                 Response response = client.newCall(request).execute();
                 return parsearRespuesta(response.body().string());
-            } catch (IOException | JSONException  e) {
+            } catch (IOException | JSONException e) {
                 Log.d("Error", e.getMessage());
                 return "";
             }
         }
 
-        RequestBody generarJSON (){
+        RequestBody generarJSON() {
             org.json.simple.JSONObject json = new org.json.simple.JSONObject();
             int idusu = Integer.parseInt(session.getUserDetails().get(100)[2]);
             json.put("accion", accion);
@@ -435,5 +442,74 @@ public class FragmentDetalle extends Fragment implements View.OnClickListener {
         }
     }
 
+    private class EliminarTourTask extends AsyncTask<String, Void, String> {
+        private OkHttpClient client = new OkHttpClient();
+
+        @Override
+        protected void onPostExecute(String resultado) {
+            super.onPostExecute(resultado);
+            if (!resultado.isEmpty()) {
+                Toast mensaje = Toast.makeText(getContext(), "Tour eliminado", Toast.LENGTH_SHORT);
+                mensaje.show();
+                ma.IraHomeRefresh();
+
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String url = params[0];
+            RequestBody body = generarJSON();
+            Request request = new Request.Builder()
+                    .url(url)
+                    .post(body)
+                    .build();
+            try {
+                Response response = client.newCall(request).execute();
+                return parsearRespuestaEliminar(response.body().string());
+            } catch (IOException | JSONException e) {
+                Log.d("Error", e.getMessage());
+                return "";
+            }
+        }
+
+        RequestBody generarJSON() {
+            org.json.simple.JSONObject json = new org.json.simple.JSONObject();
+            json.put("Id", tour.getId());
+            RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
+            return body;
+        }
+
+        String parsearRespuestaEliminar(String JSONstr) throws JSONException {
+            org.json.JSONObject respuesta = new org.json.JSONObject(JSONstr);
+            String resul;
+            if (respuesta.has("mensaje")) {
+                resul = respuesta.getString("mensaje");
+            } else {
+                 resul = String.valueOf(respuesta.getInt("Id"));
+            }
+            return resul;
+        }
+    }
+
+    private Dialog AlertDialog() {
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this.getContext());
+        dialogBuilder.setTitle("Alerta");
+        dialogBuilder.setMessage("¿Está seguro de que desea eliminar este tour?");
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+            }
+        });
+        dialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                String url="http://viajarort.azurewebsites.net/EliminarTour.php";
+                new EliminarTourTask().execute(url);
+
+            }
+        });
+        return dialogBuilder.create();
+    }
 }
+
 

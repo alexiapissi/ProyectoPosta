@@ -62,7 +62,6 @@ public class FHome extends Fragment {
     SwipeRefreshLayout swipeLayout;
     boolean actualiza=false;
     View v;
-    boolean flag_loading;
 
     public FHome(){
 
