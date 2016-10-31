@@ -64,6 +64,7 @@ public class FragmentDetalle extends Fragment implements View.OnClickListener {
     String stringgustos;
     TextView gustost;
     ImageButton tacho;
+    ProgressBar pbareliminar;
 
     public FragmentDetalle() {
     }
@@ -81,6 +82,7 @@ public class FragmentDetalle extends Fragment implements View.OnClickListener {
         tour = ma.getTour();
         fototour = (ImageView) view.findViewById(R.id.Fototourd);
         progressbar = (ProgressBar) view.findViewById(R.id.progress);
+        pbareliminar=(ProgressBar)view.findViewById(R.id.pbar);
         fotoUsuario = (ImageButton) view.findViewById(R.id.FotoUsuariod);
         addListenerOnButton();
 
@@ -446,13 +448,24 @@ public class FragmentDetalle extends Fragment implements View.OnClickListener {
         private OkHttpClient client = new OkHttpClient();
 
         @Override
+        protected void onPreExecute() {
+            // SHOW THE SPINNER WHILE LOADING FEEDS
+            pbareliminar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
         protected void onPostExecute(String resultado) {
             super.onPostExecute(resultado);
+            pbareliminar.setVisibility(View.GONE);
             if (!resultado.isEmpty()) {
-                Toast mensaje = Toast.makeText(getContext(), "Tour eliminado", Toast.LENGTH_SHORT);
-                mensaje.show();
-                ma.IraHomeRefresh();
-
+                if (resultado.equals("NO")){
+                    Toast mensaje = Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT);
+                    mensaje.show();
+                } else {
+                    Toast mensaje = Toast.makeText(getContext(), "Tour eliminado", Toast.LENGTH_SHORT);
+                    mensaje.show();
+                    ma.IraHomeRefresh();
+                }
             }
         }
 
@@ -475,7 +488,7 @@ public class FragmentDetalle extends Fragment implements View.OnClickListener {
 
         RequestBody generarJSON() {
             org.json.simple.JSONObject json = new org.json.simple.JSONObject();
-            json.put("Id", tour.getId());
+            json.put("id", tour.getId());
             RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
             return body;
         }
