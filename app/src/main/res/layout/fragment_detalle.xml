@@ -50,6 +50,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Nombre Tour"
+                            android:layout_marginLeft="3dp"
                             android:id="@+id/NombreTourd"
                             android:textColor="@android:color/white"
                             android:shadowColor="@android:color/black"
@@ -64,7 +65,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
-                                android:layout_marginRight="8dp">
+                                android:layout_marginRight="10dp">
 
                                 <View
                                     android:layout_width="0dp"
@@ -186,7 +187,7 @@
                 android:src="@drawable/tachito"
                 android:layout_gravity="center"
                 android:visibility="gone"
-                android:background="@android:color/white"
+                android:background="?android:colorBackground"
                 android:id="@+id/tacho"/>
 
         </LinearLayout>

@@ -16,8 +16,8 @@
         android:layout_height="wrap_content"
         android:text="Nombre Tour"
         android:id="@+id/nomTourUsu"
+        android:layout_gravity="center"
         android:layout_marginTop="-25dp"
-
         android:textColor="@android:color/white"
         android:textStyle="bold"
         android:shadowDx="-1"

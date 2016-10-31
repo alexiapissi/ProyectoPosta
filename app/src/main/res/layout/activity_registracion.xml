@@ -3,23 +3,6 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:fillViewport="true">
-<!--
-   <ImageButton
-       android:layout_width="80dp"
-       android:layout_height="80dp"
-       android:id="@+id/fotoUsuario"
-       android:scaleType="centerCrop"
-       android:background="@drawable/selectable_button_bg"
-       android:layout_gravity="center"
-       android:src="@drawable/fotousuariodefault"
-       android:onClick="seleccionarFotoUsuario"/>
-
-   <TextView
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:visibility="gone"
-       android:id="@+id/uriFotoUsuario"/>
--->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
    xmlns:tools="http://schemas.android.com/tools"
@@ -38,6 +21,22 @@
     android:layout_centerInParent="true"
     android:padding="10dp"
     >
+
+   <ImageButton
+       android:layout_width="80dp"
+       android:layout_height="80dp"
+       android:id="@+id/fotoUsuario"
+       android:scaleType="centerCrop"
+       android:background="@drawable/selectable_button_bg"
+       android:layout_gravity="center"
+       android:src="@drawable/fotousuariodefault"
+       android:onClick="seleccionarFotoUsuario"/>
+
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:visibility="gone"
+       android:id="@+id/uriFotoUsuario"/>
 
 
    <EditText
