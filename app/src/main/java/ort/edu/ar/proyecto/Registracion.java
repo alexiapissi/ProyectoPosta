@@ -50,9 +50,9 @@ import ort.edu.ar.proyecto.model.Usuario;
 
 public class Registracion extends AppCompatActivity {
 
-    ImageButton fotoUsuario;
+    //ImageButton fotoUsuario;
     EditText nomUsuario, mailUsuario, residenciaUsuario, contraUsuario, repContraUsuario;
-    TextView uriTV;
+    //TextView uriTV;
     static public int REQUEST_IMAGE_GET = 1;
     String contraseña;
     String nombre;
@@ -67,18 +67,19 @@ public class Registracion extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registracion);
 
-        fotoUsuario = (ImageButton) findViewById(R.id.fotoUsuario);
+        //fotoUsuario = (ImageButton) findViewById(R.id.fotoUsuario);
         nomUsuario = (EditText) findViewById(R.id.nombreUsuario);
         residenciaUsuario = (EditText) findViewById(R.id.residenciaUsuario);
         contraUsuario = (EditText) findViewById(R.id.contraseñaUsuario);
         repContraUsuario = (EditText) findViewById(R.id.repContraseñaUsuario);
         mailUsuario = (EditText) findViewById(R.id.mailUsuario);
-        uriTV = (TextView) findViewById(R.id.uriFotoUsuario);
+        //uriTV = (TextView) findViewById(R.id.uriFotoUsuario);
 
         session = new SessionManager(getApplicationContext());
     }
 
 
+    /*
     public void seleccionarFotoUsuario(View view) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
@@ -105,7 +106,7 @@ public class Registracion extends AppCompatActivity {
             }
         }
     }
-
+    */
 
     public void btnAceptar(View view) {
         if (android.os.Build.VERSION.SDK_INT > 9) {
@@ -116,7 +117,7 @@ public class Registracion extends AppCompatActivity {
         contraseña = contraUsuario.getText().toString();
         repContraseña = repContraUsuario.getText().toString();
         nombre = nomUsuario.getText().toString();
-        foto = uriTV.getText().toString();
+        //foto = uriTV.getText().toString();
         mail = mailUsuario.getText().toString();
         residencia = residenciaUsuario.getText().toString();
 
@@ -199,6 +200,7 @@ public class Registracion extends AppCompatActivity {
             json.put("Email", mail);
             json.put("Contraseña", contraseña);
 
+            /*
             if (foto != null && !foto.isEmpty()) {
                 Bitmap finalImage;
                 if (Uri.parse(foto).getScheme().startsWith("http")) {
@@ -228,7 +230,7 @@ public class Registracion extends AppCompatActivity {
 
                 String base64pic = Base64.encodeToString(byteArray, Base64.DEFAULT);
                 json.put("Foto", base64pic);
-            }
+            } */
 
             RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
 
@@ -257,6 +259,7 @@ public class Registracion extends AppCompatActivity {
         }
     }
 
+    /*
     private Bitmap getBitmapFromURL(String src) {
         try {
             URL url = new URL(src);
@@ -271,6 +274,7 @@ public class Registracion extends AppCompatActivity {
             return null;
         }
     }
+    */
 
 
 }

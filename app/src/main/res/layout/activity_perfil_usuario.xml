@@ -10,13 +10,38 @@
     tools:context=".Fragments.Perfil_Usuario"
     android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:id="@+id/fotoUsu"
-            android:scaleType="centerCrop"
-            android:layout_gravity="center"
-            android:src="@drawable/user"/>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+                <ImageButton
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:id="@+id/fotoUsu"
+                    android:scaleType="centerCrop"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:src="@drawable/user" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/pincel"
+                    android:layout_toEndOf="@+id/fotoUsu"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center_horizontal|bottom"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="30dp"
+                    android:visibility="gone"
+                    android:id="@+id/editar"
+                    />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:id="@+id/uriFotoUsuario"/>
 
         <TextView
             android:layout_width="fill_parent"
