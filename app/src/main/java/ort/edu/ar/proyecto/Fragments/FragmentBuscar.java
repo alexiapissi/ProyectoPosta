@@ -204,7 +204,7 @@ public class FragmentBuscar extends Fragment {
         @Override
         protected void onPreExecute() {
             // SHOW THE SPINNER WHILE LOADING FEEDS
-
+            cargando.setVisibility(View.VISIBLE);
         }
 
 

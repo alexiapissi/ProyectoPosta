@@ -55,18 +55,23 @@ public class FragmentToursCreados extends Fragment {
         ma = (MainActivity) getActivity();
         estado = ma.getEstado();
 
-        toursUsuarioAL = new ArrayList<>();
-        toursUsuarioAL.clear();
-        toursUsuarioAL.addAll(ma.getToursUsuarioAL());
-
-        if (toursUsuarioAL != null && toursUsuarioAL.size() != 0) {
+        if (ma.getToursUsuarioAL() != null && ma.getToursUsuarioAL().size() != 0) {
             creados.setText("Tours creados:");
             //if (usu.getToursCreados() != null) {
+            toursUsuarioAL = new ArrayList<>();
+            toursUsuarioAL.clear();
+            toursUsuarioAL.addAll(ma.getToursUsuarioAL());
             adapter = new ToursUsuarioAdapter(getActivity(), toursUsuarioAL);
             toursUsuario.setAdapter(adapter);
             toursRecibidos = ma.getTours();
             //}
             adapter.notifyDataSetChanged();
+
+            if (toursUsuarioAL != null){
+                toursUsuarioAL.clear();
+                toursUsuarioAL.addAll(ma.getToursUsuarioAL());
+                adapter.notifyDataSetChanged();
+            }
 
             toursUsuario.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> adapter, View V, int position, long l) {

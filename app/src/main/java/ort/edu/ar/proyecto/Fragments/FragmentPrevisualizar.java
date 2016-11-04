@@ -83,16 +83,17 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
 
         ma = (MainActivity) getActivity();
         lvDias = (NonScrollListView)view.findViewById(R.id.lvDias);
+        cantDias = 0;
         cantDias = ma.getCantidadDiasTour();
         dias = new ArrayList<>();
         cantPuntos = 0;
         todosPuntos = new ArrayList<>();
         puntoscreando = new ArrayList<>();
+        puntos = new ArrayList<>();
 
         if (ma.getArrayDias().size() == 0) {
             for (int i = 1; i <= cantDias; i++) {
                 int dia = i;
-                puntos = new ArrayList<>();
                 Dia d = new Dia(dia, puntos);
                 dias.add(d);
             }

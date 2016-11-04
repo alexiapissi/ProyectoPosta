@@ -84,6 +84,9 @@ public class FragmentCrear extends Fragment implements View.OnClickListener {
         ma = (MainActivity) getActivity();
         gustos=ma.getGustos();
         if (gustos !=null){
+            for (Gusto g : gustos){
+                g.setCheckeado(false);
+            }
             gadapter = new GustosAdapter(getActivity(), gustos);
             gustoslv.setAdapter(gadapter);
         }else{

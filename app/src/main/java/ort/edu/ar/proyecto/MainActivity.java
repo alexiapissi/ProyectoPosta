@@ -227,7 +227,6 @@ public class MainActivity extends AppCompatActivity {
         return ToursLikeadosUsuario;
     }
 
-
     public void IraHome() {
 
 
@@ -434,6 +433,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.crear:
                         Log.d("Choose:", "Crear");
+                        dias = new ArrayList<>();
+                        cantDias = 0;
+                        setArrayDias(dias);
                         IraCrear();
                         break;
                 }

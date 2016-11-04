@@ -105,16 +105,15 @@ public class FHome extends Fragment {
 
                 @Override
                 public void onRefresh() {
-                    actualiza=true;
-                    new ToursTask().execute("http://viajarort.azurewebsites.net/tours.php");
+                   refrescar();
                 }
             });
-            swipeLayout.post(new Runnable() {
+            /*swipeLayout.post(new Runnable() {
                 @Override
                 public void run() {
                     swipeLayout.setRefreshing(true);
                 }
-            });
+            });*/
 
             listVW.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> adapter, View V, int position, long l) {
