@@ -181,15 +181,10 @@ public class FragmentDetalle extends Fragment implements View.OnClickListener {
         fotoUsuario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //dt.setUsuario(tour.getUsuario());
-               /* if (progressbar.getVisibility() == View.VISIBLE){
-                    Toast.makeText(getContext(), "Espere a que termine de cargar", Toast.LENGTH_SHORT).show();
-                } else { */
-                    ma.setIdUsuario(tour.getUsuario().getId());
-                    ma.getToursUsuarioAL().clear();
-                    ma.getToursLikeadosUsuario().clear();
-                    ma.mandarUsuario();
-               // }
+                ma.setIdUsuario(tour.getUsuario().getId());
+                ma.getToursUsuarioAL().clear();
+                ma.getToursLikeadosUsuario().clear();
+                ma.mandarUsuario();
             }
         });
 

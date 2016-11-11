@@ -427,9 +427,7 @@ public class MainActivity extends AppCompatActivity {
         dias = new ArrayList<>();
         setPuntoscreando(new ArrayList<Punto>());
         toursUsuarioAL = new ArrayList<>();
-        adapterCreados.notifyDataSetChanged();
         getToursLikeadosUsuario().clear();
-        adapterLikeados.notifyDataSetChanged();
     }
 
     public void btnHome(View v) {
@@ -438,9 +436,7 @@ public class MainActivity extends AppCompatActivity {
         setPuntoscreando(new ArrayList<Punto>());
         getAdapterDias().notifyDataSetChanged();
         getToursUsuarioAL().clear();
-        adapterCreados.notifyDataSetChanged();
         getToursLikeadosUsuario().clear();
-        adapterLikeados.notifyDataSetChanged();
     }
 
     public void btnMiPerfil(View v) {
@@ -457,9 +453,6 @@ public class MainActivity extends AppCompatActivity {
         getAdapterDias().notifyDataSetChanged();
         getToursLikeadosUsuario().clear();
         getToursUsuarioAL().clear();
-        adapterCreados.notifyDataSetChanged();
-        getToursLikeadosUsuario().clear();
-        adapterLikeados.notifyDataSetChanged();
     }
 
     private void setearListener(NavigationView navigationView) {

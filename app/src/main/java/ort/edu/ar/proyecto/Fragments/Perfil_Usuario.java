@@ -81,17 +81,21 @@ public class Perfil_Usuario extends Fragment {
 
         resid ="";
         usu = new Usuario("", "", 0, "", null, null);
+        toursUsuarioAL = new ArrayList<>();
+        toursLikeados = new ArrayList<>();
         ma= (MainActivity) getActivity();
         id = ma.getIdUsuario();
         estado = false;
         session = new SessionManager(getContext());
 
-        String url = "http://viajarort.azurewebsites.net/usuario.php?id=";
-        url += id;
-        new UsuarioTask().execute(url);
+        if (id != 0) {
+            String url = "http://viajarort.azurewebsites.net/usuario.php?id=";
+            url += id;
+            new UsuarioTask().execute(url);
+        } else {
+            Toast.makeText(getContext(), "Espere que termine de cargar", Toast.LENGTH_SHORT).show();
+        }
 
-        toursUsuarioAL = new ArrayList<>();
-        toursLikeados = new ArrayList<>();
         //progressbar=(ProgressBar)v.findViewById(R.id.progress);
         nombreUsuario = (TextView) v.findViewById(R.id.nomUsu);
         residenciaUsuario = (TextView) v.findViewById(R.id.residenciaUsu);
@@ -193,6 +197,7 @@ public class Perfil_Usuario extends Fragment {
             tabHost.setCurrentTab(1);
             tabHost.setCurrentTab(0);
 
+
             //progressbar.setVisibility(View.GONE);
         }
 
@@ -208,7 +213,7 @@ public class Perfil_Usuario extends Fragment {
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
                 Log.d("Error", e.getMessage());                          // Error de Network o al parsear JSON
-                return null;
+                return new Usuario("","",0,"",null,null);
             }
         }
 
@@ -251,10 +256,7 @@ public class Perfil_Usuario extends Fragment {
                 toursLikeadosLocal = null;
             }
 
-            if (jsonResidenciaUsuario != null) {
-                usu.setResidencia(jsonResidenciaUsuario);
-            }
-            //no muestra residencia, va al catch
+            usu.setResidencia(jsonResidenciaUsuario);
             usu.setNombre(jsonNombreUsuario);
             usu.setFoto(jsonFotoUsuario);
             usu.setToursCreados(toursLocal);
