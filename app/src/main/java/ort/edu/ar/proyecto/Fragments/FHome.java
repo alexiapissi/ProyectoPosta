@@ -61,6 +61,7 @@ public class FHome extends Fragment {
     ArrayList<Gusto> gustos;
     SwipeRefreshLayout swipeLayout;
     boolean actualiza=false;
+    boolean refresca=false;
     View v;
 
     public FHome(){
@@ -68,9 +69,11 @@ public class FHome extends Fragment {
     }
 
     public void refrescar() {
-        swipeLayout.setRefreshing(true);
-        actualiza=true;
-        new ToursTask().execute("http://viajarort.azurewebsites.net/tours.php");
+            swipeLayout.setRefreshing(true);
+            actualiza = true;
+            refresca=true;
+            new ToursTask().execute("http://viajarort.azurewebsites.net/tours.php?Pagina=1");
+
     }
 
     @Override
@@ -105,7 +108,8 @@ public class FHome extends Fragment {
 
                 @Override
                 public void onRefresh() {
-                   refrescar();
+                    actualiza=true;
+                    new ToursTask().execute("http://viajarort.azurewebsites.net/tours.php?Pagina=1");
                 }
             });
             /*swipeLayout.post(new Runnable() {
@@ -126,6 +130,9 @@ public class FHome extends Fragment {
                     ma.IraDetalle(tours.get(position));
                 }
             });
+
+
+            listVW.setOnScrollListener(new EndlessScrollListener());
 
 
 
@@ -229,15 +236,16 @@ public class FHome extends Fragment {
 
     }
 
-   /*public class EndlessScrollListener implements AbsListView.OnScrollListener {
+   public class EndlessScrollListener implements AbsListView.OnScrollListener {
 
-        private int visibleThreshold = 5;
-        private int currentPage = 0;
+        private int visibleThreshold = 1;
+        private int currentPage = 1;
         private int previousTotal = 0;
         private boolean loading = true;
 
-        public EndlessScrollListener() {
-        }
+       public EndlessScrollListener() {
+       }
+
         public EndlessScrollListener(int visibleThreshold) {
             this.visibleThreshold = visibleThreshold;
         }
@@ -253,7 +261,7 @@ public class FHome extends Fragment {
                 }
             }
             if (!loading && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
-                String url = "http://viajarort.azurewebsites.net/tours.php?page"+currentPage+1;
+                String url = "http://viajarort.azurewebsites.net/tours.php?Pagina"+currentPage+1;
                 new ToursTask().execute(url);
                 loading = true;
             }
@@ -262,6 +270,6 @@ public class FHome extends Fragment {
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
         }
-    }*/
+    }
 
 }

@@ -285,10 +285,32 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
                 } else {
                     // Get Bitmap image from Uri
                     try {
+
                         ParcelFileDescriptor parcelFileDescriptor =
                                 getContext().getContentResolver().openFileDescriptor(t.getFotoUri(), "r");
                         FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-                        Bitmap originalImage = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+
+
+/* esto reduce tamaño del bitmap */
+                        BitmapFactory.Options o = new BitmapFactory.Options();
+                        o.inJustDecodeBounds = true;
+                        BitmapFactory.decodeFileDescriptor(fileDescriptor, null, o);
+
+                        // The new size we want to scale to
+                        final int REQUIRED_SIZE=200;
+
+                        // Find the correct scale value. It should be the power of 2.
+                        int scale = 1;
+                        while(o.outWidth / scale / 2 >= REQUIRED_SIZE &&
+                                o.outHeight / scale / 2 >= REQUIRED_SIZE) {
+                            scale *= 2;
+                        }
+
+                        // Decode with inSampleSize
+                        BitmapFactory.Options o2 = new BitmapFactory.Options();
+                        o2.inSampleSize = scale;
+
+                        Bitmap originalImage =  BitmapFactory.decodeFileDescriptor(fileDescriptor, null, o2);
                         parcelFileDescriptor.close();
                         finalImage = originalImage;
                     } catch (java.io.IOException e){
@@ -338,10 +360,32 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
                     } else {
                         // Get Bitmap image from Uri
                         try {
+
                             ParcelFileDescriptor parcelFileDescriptor =
                                     getContext().getContentResolver().openFileDescriptor(todosPuntos.get(i).getFotoUri(), "r");
                             FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-                            Bitmap originalImage = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+
+
+/* esto reduce tamaño del bitmap */
+                            BitmapFactory.Options o = new BitmapFactory.Options();
+                            o.inJustDecodeBounds = true;
+                            BitmapFactory.decodeFileDescriptor(fileDescriptor, null, o);
+
+                            // The new size we want to scale to
+                            final int REQUIRED_SIZE=120;
+
+                            // Find the correct scale value. It should be the power of 2.
+                            int scale = 1;
+                            while(o.outWidth / scale / 2 >= REQUIRED_SIZE &&
+                                    o.outHeight / scale / 2 >= REQUIRED_SIZE) {
+                                scale *= 2;
+                            }
+
+                            // Decode with inSampleSize
+                            BitmapFactory.Options o2 = new BitmapFactory.Options();
+                            o2.inSampleSize = scale;
+
+                            Bitmap originalImage =  BitmapFactory.decodeFileDescriptor(fileDescriptor, null, o2);
                             parcelFileDescriptor.close();
                             finalImage = originalImage;
                         } catch (java.io.IOException e){

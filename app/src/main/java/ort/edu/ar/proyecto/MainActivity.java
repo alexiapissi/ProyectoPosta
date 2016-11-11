@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     FHome HomeFragment;
     FragmentBuscar fbusqueda;
     boolean estado;
+    public native void computeFoo();
     Tour tourcreando;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     DiaAdapter adapterDia;
     ToursUsuarioAdapter adapterCreados;
     ToursUsuarioAdapter adapterLikeados;
+    boolean refrescar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -248,8 +250,10 @@ public class MainActivity extends AppCompatActivity {
                 .addToBackStack(null)
                 .replace(R.id.contenido, HomeFragment)
                 .commit();
+
         HomeFragment.refrescar();
     }
+
 
      public void IraBusqueda() {
 
