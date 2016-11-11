@@ -80,6 +80,7 @@ public class Perfil_Usuario extends Fragment {
         View v=inflater.inflate(R.layout.activity_perfil_usuario,container,false);
 
         resid ="";
+        usu = new Usuario("", "", 0, "", null, null);
         ma= (MainActivity) getActivity();
         id = ma.getIdUsuario();
         estado = false;
@@ -134,8 +135,6 @@ public class Perfil_Usuario extends Fragment {
                 tabHost.newTabSpec("tab2").setIndicator("Tours Likeados", null),
                 FragmentToursLikeados.class, null);
 
-        usu = new Usuario("", "", 0, "", null, null);
-
         //Usuario usuario = ma.getUsuario();
         //usu = usuario;
 
@@ -163,7 +162,8 @@ public class Perfil_Usuario extends Fragment {
             estado = true;
             ma.setEstado(estado);
 
-            if (resultado.getResidencia() != null) {
+            String residencia = resultado.getResidencia();
+            if (residencia != null) {
                 resid = resultado.getResidencia();
                 residenciaUsuario.setText(resid);
             }
@@ -251,10 +251,9 @@ public class Perfil_Usuario extends Fragment {
                 toursLikeadosLocal = null;
             }
 
-            if (jsonResidenciaUsuario != null){
+            if (jsonResidenciaUsuario != null) {
                 usu.setResidencia(jsonResidenciaUsuario);
             }
-
             //no muestra residencia, va al catch
             usu.setNombre(jsonNombreUsuario);
             usu.setFoto(jsonFotoUsuario);

@@ -132,7 +132,7 @@ public class FHome extends Fragment {
             tours = new ArrayList<>();
             toursAdapter = new ToursAdapter(getActivity(), tours);
             listVW.setAdapter(toursAdapter);
-            String url = "http://viajarort.azurewebsites.net/tours.php";
+            String url = "http://viajarort.azurewebsites.net/tours.php?Pagina=1";
             new ToursTask().execute(url);  // Llamo a clase async con url
 
             MainActivity ma = (MainActivity)getActivity();

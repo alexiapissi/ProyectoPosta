@@ -47,7 +47,7 @@ public class FragmentToursLikeados extends Fragment {
         toursUsuario = (ListView)v.findViewById(R.id.listToursUsuLikeados);
         likeados = (TextView) v.findViewById(R.id.tourslikeados);
         progess = (ProgressBar)v.findViewById(R.id.progress);
-        progess.setVisibility(View.GONE);
+        progess.setVisibility(View.VISIBLE);
 
         ma = (MainActivity) getActivity();
         estado = ma.getEstado();
@@ -59,6 +59,7 @@ public class FragmentToursLikeados extends Fragment {
         toursUsuario.refreshDrawableState();
 
         if (toursUsuarioLikeadosAL != null && toursUsuarioLikeadosAL.size() != 0) {
+            progess.setVisibility(View.GONE);
             likeados.setText("Tours likeados:");
             //if (usu.getToursCreados() != null) {
             adapter = new ToursUsuarioAdapter(getActivity(), toursUsuarioLikeadosAL);
@@ -81,12 +82,15 @@ public class FragmentToursLikeados extends Fragment {
             });
         } else {
             if (estado) {
+                progess.setVisibility(View.GONE);
                 likeados.setText("Este usuario no ha likeado tours.");
             } else {
                 progess.setVisibility(View.VISIBLE);
                 //likeados.setText("Cargando...");
             }
         }
+
+        ma.setAdapterToursLikeados(adapter);
 
         return v;
     }

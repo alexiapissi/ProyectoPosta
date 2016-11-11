@@ -55,7 +55,7 @@ public class FragmentPrevisualizarPuntos extends Fragment {
         if (!dia.getPuntos().isEmpty() && dia.getPuntos().size() > 0) {
             puntoscreando = new ArrayList<>();
             puntoscreando.addAll(PuntosDia);
-            puntocadapter = new PuntoCreandoAdapter(getActivity(), dia.getPuntos());
+            puntocadapter = new PuntoCreandoAdapter(getActivity(), PuntosDia);
             lvPuntos.setAdapter(puntocadapter);
             if(puntoscreando!=null){
                 puntoscreando.clear();

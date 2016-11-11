@@ -48,6 +48,7 @@ import ort.edu.ar.proyecto.model.Gusto;
 import ort.edu.ar.proyecto.model.Punto;
 import ort.edu.ar.proyecto.model.SessionManager;
 import ort.edu.ar.proyecto.model.Tour;
+import ort.edu.ar.proyecto.model.ToursUsuarioAdapter;
 import ort.edu.ar.proyecto.model.Usuario;
 
 public class MainActivity extends AppCompatActivity {
@@ -81,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
     ort.edu.ar.proyecto.model.Dia Dia;
     ArrayList<Dia> dias;
     DiaAdapter adapterDia;
+    ToursUsuarioAdapter adapterCreados;
+    ToursUsuarioAdapter adapterLikeados;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +94,9 @@ public class MainActivity extends AppCompatActivity {
         fbusqueda = new FragmentBuscar();
         HomeFragment = new FHome();
         arraypuntoscreando=new ArrayList<>();
+        adapterCreados = new ToursUsuarioAdapter(getApplicationContext(), toursUsuarioAL);
+        adapterLikeados = new ToursUsuarioAdapter(getApplicationContext(), getToursLikeadosUsuario());
+        adapterDia = new DiaAdapter(getApplicationContext(), dias);
 
         String url = "http://viajarort.azurewebsites.net/gustos.php";
         new GustosTask().execute(url);
@@ -397,12 +403,41 @@ public class MainActivity extends AppCompatActivity {
         setearListener(navigationView);
     }
 
+    public void setAdapterToursCreados(ToursUsuarioAdapter t){
+        adapterCreados = t;
+    }
+
+    public ToursUsuarioAdapter getAdapterToursCreados(){
+        return adapterCreados;
+    }
+
+    public void setAdapterToursLikeados (ToursUsuarioAdapter t){
+        adapterLikeados = t;
+    }
+
+    public ToursUsuarioAdapter getAdapterToursLikeados(){
+        return adapterLikeados;
+    }
+
     public void btnBusqueda(View v) {
         IraBusqueda();
+        dias = new ArrayList<>();
+        setPuntoscreando(new ArrayList<Punto>());
+        toursUsuarioAL = new ArrayList<>();
+        adapterCreados.notifyDataSetChanged();
+        getToursLikeadosUsuario().clear();
+        adapterLikeados.notifyDataSetChanged();
     }
 
     public void btnHome(View v) {
         IraHome();
+        dias = new ArrayList<>();
+        setPuntoscreando(new ArrayList<Punto>());
+        getAdapterDias().notifyDataSetChanged();
+        getToursUsuarioAL().clear();
+        adapterCreados.notifyDataSetChanged();
+        getToursLikeadosUsuario().clear();
+        adapterLikeados.notifyDataSetChanged();
     }
 
     public void btnMiPerfil(View v) {
@@ -414,6 +449,14 @@ public class MainActivity extends AppCompatActivity {
             mensaje.show();
             IraLogin();
         }
+        dias = new ArrayList<>();
+        setPuntoscreando(new ArrayList<Punto>());
+        getAdapterDias().notifyDataSetChanged();
+        getToursLikeadosUsuario().clear();
+        getToursUsuarioAL().clear();
+        adapterCreados.notifyDataSetChanged();
+        getToursLikeadosUsuario().clear();
+        adapterLikeados.notifyDataSetChanged();
     }
 
     private void setearListener(NavigationView navigationView) {
