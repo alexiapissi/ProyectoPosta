@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
     FHome HomeFragment;
     FragmentBuscar fbusqueda;
     boolean estado;
-    public native void computeFoo();
     Tour tourcreando;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
