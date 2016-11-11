@@ -117,7 +117,8 @@ public class FHome extends Fragment {
                 public void run() {
                     swipeLayout.setRefreshing(true);
                 }
-            });*/
+            });
+            p*/
 
             listVW.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> adapter, View V, int position, long l) {
