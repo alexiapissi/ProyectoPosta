@@ -63,6 +63,8 @@ public class FHome extends Fragment {
     boolean actualiza=false;
     boolean refresca=false;
     View v;
+    //boolean flag_loading=false;
+    //int pagina=1;
 
     public FHome(){
 
@@ -72,7 +74,7 @@ public class FHome extends Fragment {
             swipeLayout.setRefreshing(true);
             actualiza = true;
             refresca=true;
-            new ToursTask().execute("http://viajarort.azurewebsites.net/tours.php?Pagina=1");
+            new ToursTask().execute("http://viajarort.azurewebsites.net/tours.php");
 
     }
 
@@ -109,7 +111,7 @@ public class FHome extends Fragment {
                 @Override
                 public void onRefresh() {
                     actualiza=true;
-                    new ToursTask().execute("http://viajarort.azurewebsites.net/tours.php?Pagina=1");
+                    new ToursTask().execute("http://viajarort.azurewebsites.net/tours.php");
                 }
             });
             /*swipeLayout.post(new Runnable() {
@@ -133,14 +135,34 @@ public class FHome extends Fragment {
             });
 
 
-            listVW.setOnScrollListener(new EndlessScrollListener());
+         /*   listVW.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+                public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+                }
+
+                public void onScroll(AbsListView view, int firstVisibleItem,
+                                     int visibleItemCount, int totalItemCount) {
+
+                    if(firstVisibleItem+visibleItemCount == totalItemCount && totalItemCount!=0)
+                    {
+
+                        if(flag_loading == false)
+                        {
+                            flag_loading = true;
+                            additems();
+                        }
+                    }
+                }
+            });*/
+
 
 
 
             tours = new ArrayList<>();
             toursAdapter = new ToursAdapter(getActivity(), tours);
             listVW.setAdapter(toursAdapter);
-            String url = "http://viajarort.azurewebsites.net/tours.php?Pagina=1";
+            String url = "http://viajarort.azurewebsites.net/tours.php?";
             new ToursTask().execute(url);  // Llamo a clase async con url
 
             MainActivity ma = (MainActivity)getActivity();
@@ -236,8 +258,27 @@ public class FHome extends Fragment {
         }
 
     }
+    /* 2) HAY QUE PENSARLO MASpublic void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        this.currentFirstVisibleItem = firstVisibleItem;
+        this.currentVisibleItemCount = visibleItemCount;
+    }
 
-   public class EndlessScrollListener implements AbsListView.OnScrollListener {
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        this.currentScrollState = scrollState;
+        this.isScrollCompleted();
+    }
+
+    private void isScrollCompleted() {
+        if (this.currentVisibleItemCount > 0 && this.currentScrollState == SCROLL_STATE_IDLE) {
+            /*** In this way I detect if there's been a scroll which has completed ***/
+            /*** do the work for load more date! ***/
+       //     if(!isLoading){
+       //         isLoading = true;
+       //         loadMoreData();
+        //    }
+        //}
+   // }
+  /* 1) public class EndlessScrollListener implements AbsListView.OnScrollListener {
 
         private int visibleThreshold = 1;
         private int currentPage = 1;
@@ -271,6 +312,15 @@ public class FHome extends Fragment {
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
         }
-    }
+    }*/
+
+    /*public void additems(){
+        pagina++;
+        String url = "http://viajarort.azurewebsites.net/tours.php?Pagina="+pagina;
+        new ToursTask().execute(url);
+        toursAdapter.notifyDataSetChanged();
+        flag_loading= false;
+        //SE HACE UN LOOP INFINITO Y QUEDA SOLAMENTE LO DE LA ULTIMA PAGINA Y NO TODO
+    }*/
 
 }

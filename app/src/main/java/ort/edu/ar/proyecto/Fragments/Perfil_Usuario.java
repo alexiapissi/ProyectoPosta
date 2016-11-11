@@ -74,6 +74,7 @@ public class Perfil_Usuario extends Fragment {
     static public int REQUEST_IMAGE_GET = 1;
     SessionManager session;
     ImageView editar;
+    ProgressBar progress;
 
     @Override
     public View onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
@@ -88,6 +89,17 @@ public class Perfil_Usuario extends Fragment {
         estado = false;
         session = new SessionManager(getContext());
 
+        toursUsuarioAL = new ArrayList<>();
+        toursLikeados = new ArrayList<>();
+        //progressbar=(ProgressBar)v.findViewById(R.id.progress);
+        nombreUsuario = (TextView) v.findViewById(R.id.nomUsu);
+        residenciaUsuario = (TextView) v.findViewById(R.id.residenciaUsu);
+        fotoUsuario = (ImageButton) v.findViewById(R.id.fotoUsu);
+        fotoUsuario.setEnabled(false);
+        editar = (ImageView)v.findViewById(R.id.editar);
+        progress = (ProgressBar)v.findViewById(R.id.progress);
+        editar.setVisibility(View.GONE);
+
         if (id != 0) {
             String url = "http://viajarort.azurewebsites.net/usuario.php?id=";
             url += id;
@@ -95,14 +107,6 @@ public class Perfil_Usuario extends Fragment {
         } else {
             Toast.makeText(getContext(), "Espere que termine de cargar", Toast.LENGTH_SHORT).show();
         }
-
-        //progressbar=(ProgressBar)v.findViewById(R.id.progress);
-        nombreUsuario = (TextView) v.findViewById(R.id.nomUsu);
-        residenciaUsuario = (TextView) v.findViewById(R.id.residenciaUsu);
-        fotoUsuario = (ImageButton) v.findViewById(R.id.fotoUsu);
-        fotoUsuario.setEnabled(false);
-        editar = (ImageView)v.findViewById(R.id.editar);
-        editar.setVisibility(View.GONE);
 
         fotoUsuario.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,12 +160,13 @@ public class Perfil_Usuario extends Fragment {
         @Override
         protected void onPreExecute() {
             // SHOW THE SPINNER WHILE LOADING FEEDS
-            //progressbar.setVisibility(View.VISIBLE);
+            progress.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onPostExecute(Usuario resultado) {
             super.onPostExecute(resultado);
+            progress.setVisibility(View.GONE);
 
             estado = true;
             ma.setEstado(estado);
@@ -199,6 +204,7 @@ public class Perfil_Usuario extends Fragment {
 
 
             //progressbar.setVisibility(View.GONE);
+            //bar.setVisibility(View.GONE);
         }
 
         @Override
@@ -268,6 +274,8 @@ public class Perfil_Usuario extends Fragment {
 
     private class CambiarFotoTask extends AsyncTask<String, Void, String> {
         private OkHttpClient client = new OkHttpClient();
+
+
 
         @Override
         protected void onPostExecute(String resultado) {

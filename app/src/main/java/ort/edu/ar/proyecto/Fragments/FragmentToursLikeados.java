@@ -46,6 +46,7 @@ public class FragmentToursLikeados extends Fragment {
 
         toursUsuario = (ListView)v.findViewById(R.id.listToursUsuLikeados);
         likeados = (TextView) v.findViewById(R.id.tourslikeados);
+        likeados.setText("");
         progess = (ProgressBar)v.findViewById(R.id.progress);
         progess.setVisibility(View.VISIBLE);
 
@@ -86,6 +87,7 @@ public class FragmentToursLikeados extends Fragment {
                 likeados.setText("Este usuario no ha likeado tours.");
             } else {
                 progess.setVisibility(View.VISIBLE);
+                likeados.setText("");
                 //likeados.setText("Cargando...");
             }
         }

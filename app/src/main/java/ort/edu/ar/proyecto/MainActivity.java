@@ -141,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
         Detalle_Tour fragment = new Detalle_Tour();
         //fragment.setTour(tour);
         this.tour = tour;
+        setTour(this.tour);
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction()
                 .addToBackStack(null)

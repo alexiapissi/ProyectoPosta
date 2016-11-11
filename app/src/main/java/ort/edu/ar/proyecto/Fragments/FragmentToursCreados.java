@@ -33,6 +33,7 @@ public class FragmentToursCreados extends Fragment {
     boolean estado;
     ProgressBar progess;
 
+
     public FragmentToursCreados() {
     }
 
@@ -49,15 +50,18 @@ public class FragmentToursCreados extends Fragment {
         toursUsuario.invalidateViews();
         toursUsuario.refreshDrawableState();
         creados = (TextView) v.findViewById(R.id.tourscreados);
+        creados.setText("");
         progess = (ProgressBar)v.findViewById(R.id.progress);
 
         ma = (MainActivity) getActivity();
         estado = ma.getEstado();
+        progess.setVisibility(View.VISIBLE);
 
         if (ma.getToursUsuarioAL() == null || ma.getToursUsuarioAL().size() == 0 ) {
             progess.setVisibility(View.VISIBLE);
             creados.setVisibility(View.INVISIBLE);
         }
+
 
         if (ma.getToursUsuarioAL() != null && ma.getToursUsuarioAL().size() != 0) {
             progess.setVisibility(View.GONE);
@@ -87,6 +91,7 @@ public class FragmentToursCreados extends Fragment {
                         if (t.getId() == toursUsuarioAL.get(position).getId()) {
                             Tourmandar = t;
                         }
+
                     }
                     ma.IraDetalle(Tourmandar);
                 }
@@ -98,13 +103,24 @@ public class FragmentToursCreados extends Fragment {
                 creados.setVisibility(View.VISIBLE);
                 creados.setText("Este usuario no ha creado tours.");
             } else {
-                progess.setVisibility(View.VISIBLE);
+                progess.setVisibility(View.GONE);
                 //creados.setText("Cargando...");
+                creados.setText("");
             }
         }
 
         ma.setAdapterToursCreados(adapter);
 
+        toursUsuario.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                toursUsuario.removeOnLayoutChangeListener(this);
+                progess.setVisibility(View.INVISIBLE);
+            }
+        });
+
         return v;
     }
+
+
 }
