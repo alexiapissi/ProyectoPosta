@@ -104,7 +104,7 @@ public class FragmentToursCreados extends Fragment {
             } else {
                 progess.setVisibility(View.GONE);
                 //creados.setText("Cargando...");
-                creados.setText("");
+                creados.setText(View.GONE);
             }
         }
 
