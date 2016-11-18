@@ -118,7 +118,7 @@ public class FragmentToursCreados extends Fragment {
             }
         });
 
-        return v;
+        return v;//f
     }
 
 
