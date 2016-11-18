@@ -133,7 +133,8 @@ public class FragmentCrearPuntos extends Fragment {
                         //falta usuario y validar foto y sacar foto
                         ma.agregarPuntoCreando(puntocreando);
                         int cant = ma.getCantPuntos();
-                        ma.setCantPuntos(cant++);
+                        cant++;
+                        ma.setCantPuntos(cant);
                         ma.IraPrevisualizarPuntos();
                     }
                 }
