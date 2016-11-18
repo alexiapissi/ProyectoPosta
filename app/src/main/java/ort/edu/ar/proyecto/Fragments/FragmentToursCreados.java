@@ -55,6 +55,7 @@ public class FragmentToursCreados extends Fragment {
         ma = (MainActivity) getActivity();
         estado = ma.getEstado();
         progess.setVisibility(View.VISIBLE);
+        creados.setVisibility(View.GONE);
 
         if (ma.getToursUsuarioAL() == null || ma.getToursUsuarioAL().size() == 0 ) {
             progess.setVisibility(View.VISIBLE);

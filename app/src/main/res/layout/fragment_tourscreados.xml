@@ -6,7 +6,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tourscreados" />
+        android:id="@+id/tourscreados"
+        android:layout_marginTop="15dp"/>
 
     <ProgressBar
         android:id="@+id/progress"
@@ -18,7 +19,7 @@
     </ProgressBar>
 
     <ListView
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/listToursUsu"></ListView>
 
