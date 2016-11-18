@@ -116,26 +116,27 @@ public class FragmentCrearPuntos extends Fragment {
         agregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isEmpty(nombre) || isEmpty(myAutoComplete)|| isEmpty(descripcion)|| foto.getDrawable() == null|| foto.getDrawable()==camara){
-                    Toast.makeText(getContext(), "Campos incompletos", Toast.LENGTH_SHORT).show();
-                }else {
-                    Address direccion = ma.getDireccionPunto();
-                    Dia dia = ma.getDia();
-                    int d = dia.getDia();
-                    if (direccion != null){
-                        puntocreando= new Punto(-1,direccion.getLongitude(),direccion.getLatitude(),direccion.getAddressLine(0),uriTV.getText().toString(),nombre.getText().toString(),-1,null,null,descripcion.getText().toString(),d);
-                    } else {
-                        puntocreando= new Punto(-1,1,2,myAutoComplete.getText().toString(),uriTV.getText().toString(),nombre.getText().toString(),-1,null,null,descripcion.getText().toString(),d);
+                    if(isEmpty(nombre) || isEmpty(myAutoComplete)|| isEmpty(descripcion)|| foto.getDrawable() == null|| foto.getDrawable()==camara){
+                        Toast.makeText(getContext(), "Campos incompletos", Toast.LENGTH_SHORT).show();
+                    }else {
+                        Address direccion = ma.getDireccionPunto();
+                        Dia dia = ma.getDia();
+                        int d = dia.getDia();
+                        if (direccion != null) {
+                            puntocreando = new Punto(-1, direccion.getLongitude(), direccion.getLatitude(), direccion.getAddressLine(0), uriTV.getText().toString(), nombre.getText().toString(), -1, null, null, descripcion.getText().toString(), d);
+                        } else {
+                            puntocreando = new Punto(-1, 1, 2, myAutoComplete.getText().toString(), uriTV.getText().toString(), nombre.getText().toString(), -1, null, null, descripcion.getText().toString(), d);
+                        }
+                        dia.getPuntos().add(puntocreando);
+                        ma.getAdapterDias().notifyDataSetChanged();
+
+                        //falta usuario y validar foto y sacar foto
+                        ma.agregarPuntoCreando(puntocreando);
+                        int cant = ma.getCantPuntos();
+                        ma.setCantPuntos(cant++);
+                        ma.IraPrevisualizarPuntos();
                     }
-                    dia.getPuntos().add(puntocreando);
-                    ma.getAdapterDias().notifyDataSetChanged();
-
-                    //falta usuario y validar foto y sacar foto
-                    ma.agregarPuntoCreando(puntocreando);
-                    ma.IraPrevisualizarPuntos();
-
                 }
-            }
         });
 
         foto.setOnClickListener(new View.OnClickListener() {

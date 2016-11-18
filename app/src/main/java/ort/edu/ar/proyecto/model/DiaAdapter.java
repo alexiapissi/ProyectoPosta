@@ -59,6 +59,7 @@ public class DiaAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 ma.setDia(dias.get(position));
+                ma.getAdapterDias().notifyDataSetChanged();
                 ma.IraPrevisualizarPuntos();
             }
         });

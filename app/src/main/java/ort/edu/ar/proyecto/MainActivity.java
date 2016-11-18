@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     ToursUsuarioAdapter adapterCreados;
     ToursUsuarioAdapter adapterLikeados;
     boolean refrescar;
+    int cantPuntos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
         toursUsuarioAL = new ArrayList<>();
         ToursLikeadosUsuario = new ArrayList<>();
         dias = new ArrayList<>();
+        cantPuntos = 0;
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
@@ -199,6 +201,15 @@ public class MainActivity extends AppCompatActivity {
     /*public int getPos(){
         return posicion;
     }*/
+
+    public void setCantPuntos(int cant){
+        cantPuntos = cant;
+    }
+
+    public int getCantPuntos(){
+        return cantPuntos;
+    }
+
     public void setPuntos(ArrayList<Punto> puntos) {
         tour.setPuntos(puntos);
     }

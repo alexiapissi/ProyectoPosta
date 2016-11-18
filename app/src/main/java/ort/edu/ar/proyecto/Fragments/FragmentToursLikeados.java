@@ -61,7 +61,7 @@ public class FragmentToursLikeados extends Fragment {
 
         if (toursUsuarioLikeadosAL != null && toursUsuarioLikeadosAL.size() != 0) {
             progess.setVisibility(View.GONE);
-            likeados.setText("Tours likeados:");
+            likeados.setVisibility(View.GONE);
             //if (usu.getToursCreados() != null) {
             adapter = new ToursUsuarioAdapter(getActivity(), toursUsuarioLikeadosAL);
             toursUsuario.setAdapter(adapter);

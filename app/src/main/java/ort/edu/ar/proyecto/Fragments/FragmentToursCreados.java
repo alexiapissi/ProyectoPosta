@@ -50,7 +50,6 @@ public class FragmentToursCreados extends Fragment {
         toursUsuario.invalidateViews();
         toursUsuario.refreshDrawableState();
         creados = (TextView) v.findViewById(R.id.tourscreados);
-        creados.setText("");
         progess = (ProgressBar)v.findViewById(R.id.progress);
 
         ma = (MainActivity) getActivity();
@@ -59,14 +58,13 @@ public class FragmentToursCreados extends Fragment {
 
         if (ma.getToursUsuarioAL() == null || ma.getToursUsuarioAL().size() == 0 ) {
             progess.setVisibility(View.VISIBLE);
-            creados.setVisibility(View.INVISIBLE);
+            creados.setVisibility(View.GONE);
         }
 
 
         if (ma.getToursUsuarioAL() != null && ma.getToursUsuarioAL().size() != 0) {
             progess.setVisibility(View.GONE);
-            creados.setVisibility(View.VISIBLE);
-            creados.setText("Tours creados:");
+            creados.setVisibility(View.GONE);
             //if (usu.getToursCreados() != null) {
             toursUsuarioAL = new ArrayList<>();
             toursUsuarioAL.clear();

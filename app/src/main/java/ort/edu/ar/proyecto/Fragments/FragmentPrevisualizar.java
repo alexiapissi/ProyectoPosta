@@ -87,6 +87,7 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
         cantDias = ma.getCantidadDiasTour();
         dias = new ArrayList<>();
         cantPuntos = 0;
+        ma.setCantPuntos(cantPuntos);
         todosPuntos = new ArrayList<>();
         puntoscreando = new ArrayList<>();
         puntos = new ArrayList<>();
@@ -123,23 +124,19 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.finalizar:
+                cantPuntos = ma.getCantPuntos();
                 for (Dia d : dias){
-                    if (d.getPuntos().size() == 0){
-                        Toast.makeText(getContext(), "Ingrese al menos un punto por cada día", Toast.LENGTH_SHORT).show();
-                    } else {
-                        for (Punto p : d.getPuntos()){
-                            cantPuntos++;
-                            todosPuntos.add(p);
-                        }
+                    for (Punto p : d.getPuntos()){
+                        todosPuntos.add(p);
+                    }
+                    if (cantPuntos >= 1 && cantPuntos <= 10 ){
+                        String url = "http://viajarort.azurewebsites.net/AgregarTour.php";
+                        new CrearTourTask().execute(url);
+                    } else{
+                        Toast.makeText(getContext(), "Ingrese entre 1 y 10 puntos", Toast.LENGTH_SHORT).show();
                     }
                 }
-                if (cantPuntos >= 1 && cantPuntos <= 10 ){
-                    String url = "http://viajarort.azurewebsites.net/AgregarTour.php";
-                    new CrearTourTask().execute(url);
-                }else{
-                    Toast.makeText(getContext(), "Ingrese entre 1 y 10 puntos", Toast.LENGTH_SHORT).show();
-                }
-                break;
+            break;
         }
     }
 
@@ -194,82 +191,6 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
                 return "";
             }
         }
-
-/*
-        RequestBody generarJSON() {
-            MultipartBuilder mpb = new MultipartBuilder()
-                    .type(MultipartBuilder.FORM);
-
-            //json.put("Foto", foto);
-            try {
-
-                    mpb = new MultipartBuilder()
-                        .type(MultipartBuilder.FORM);
-
-                addMultipartField(mpb,t.getNombre(),"Nombre");
-                addMultipartField(mpb,t.getDescripcion(),"Descripcion");
-                addMultipartField(mpb,t.getUbicacion(),"Ubicacion");
-                addMultipartField(mpb,String.valueOf(t.getUsuario().getId()),"Idusuario");
-
-
-                if (t.getFoto() != null && !t.getFoto().isEmpty()) {
-                    Bitmap finalImage;
-                    if (t.getFotoUri().getScheme().startsWith("http")) {
-                        finalImage = getBitmapFromURL(t.getFoto());
-                    } else {
-                        // Get Bitmap image from Uri
-                        ParcelFileDescriptor parcelFileDescriptor =
-                                getContext().getContentResolver().openFileDescriptor(t.getFotoUri(), "r");
-                        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-                        Bitmap originalImage = BitmapFactory.decodeFileDescriptor(fileDescriptor);
-                        parcelFileDescriptor.close();
-                        finalImage = originalImage;
-
-                    }
-                    // Convert bitmap to output string
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    finalImage.compress(Bitmap.CompressFormat.PNG, 100, stream);   // Compress to PNG lossless
-                    byte[] byteArray = stream.toByteArray();
-
-                    String fileName = UUID.randomUUID().toString() + ".png";
-                    mpb.addPart(Headers.of("Content-Disposition", "form-data; name=\"image\"; filename=\"" + fileName + "\""),
-                            RequestBody.create(MEDIA_TYPE_PNG, byteArray));
-
-                }
-            } catch (java.io.IOException |ArrayIndexOutOfBoundsException  e) {
-                e.printStackTrace();
-                Log.d("Error", e.getMessage());
-                return null;
-            }
-
-
-
-            //JSONObject[] innerObjectGusto = new JSONObject[listagustos.size()];
-            for (int i = 0; i < listagustos.size(); i++) {
-                addMultipartField(mpb, String.valueOf(listagustos.get(i).getId()),"IdGusto"+ i);
-            }
-            //addMultipartField(mpb,gustos,"Gustos");
-
-            for (int i = 0; i < puntoscreando.size(); i++) {
-                //innerObjectPunto[i] = new JSONObject();
-                addMultipartField(mpb, puntoscreando.get(i).getNombre(),"Nombre");
-                addMultipartField(mpb,puntoscreando.get(i).getDescripcion(),"Descripcion");
-                addMultipartField(mpb, String.valueOf(puntoscreando.get(i).getDia()),"Dia");
-                addMultipartField(mpb,puntoscreando.get(i).getDireccion(),"Direccion");
-                addMultipartField(mpb, String.valueOf(puntoscreando.get(i).getLatitud()),"Latitud");
-                addMultipartField(mpb, String.valueOf(puntoscreando.get(i).getLongitud()),"Longitud");
-
-                //FOTO
-                //innerObjectPunto[i].put("Foto", fotoPunto);
-            }
-
-            //RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString());
-
-            return mpb.build();
-            //return body;
-        }
-
-*/
 
         RequestBody generarJSON() {
             JSONObject json = new JSONObject();
