@@ -170,6 +170,7 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
                     ma.IraHomeRefresh();
                 }
                 registro.show();
+                //h
             }
         }
 
