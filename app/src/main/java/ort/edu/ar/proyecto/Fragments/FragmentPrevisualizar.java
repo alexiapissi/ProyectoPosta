@@ -86,8 +86,6 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
         cantDias = 0;
         cantDias = ma.getCantidadDiasTour();
         dias = new ArrayList<>();
-        cantPuntos = 0;
-        ma.setCantPuntos(cantPuntos);
         todosPuntos = new ArrayList<>();
         puntoscreando = new ArrayList<>();
         puntos = new ArrayList<>();
@@ -129,12 +127,12 @@ public class FragmentPrevisualizar extends Fragment implements View.OnClickListe
                     for (Punto p : d.getPuntos()){
                         todosPuntos.add(p);
                     }
-                    if (cantPuntos >= 1 && cantPuntos <= 10 ){
-                        String url = "http://viajarort.azurewebsites.net/AgregarTour.php";
-                        new CrearTourTask().execute(url);
-                    } else{
-                        Toast.makeText(getContext(), "Ingrese entre 1 y 10 puntos", Toast.LENGTH_SHORT).show();
-                    }
+                }
+                if (cantPuntos >= 1 && cantPuntos <= 10 ){
+                    String url = "http://viajarort.azurewebsites.net/AgregarTour.php";
+                    new CrearTourTask().execute(url);
+                } else{
+                    Toast.makeText(getContext(), "Ingrese entre 1 y 10 puntos", Toast.LENGTH_SHORT).show();
                 }
             break;
         }
