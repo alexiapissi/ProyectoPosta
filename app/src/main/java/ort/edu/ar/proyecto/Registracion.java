@@ -250,8 +250,9 @@ public class Registracion extends AppCompatActivity {
     }
 
     public String validateEmailAddress(String emailAddress) {
-        Pattern regexPattern = Pattern.compile("^[(a-zA-Z-0-9-\\_\\+\\.)]+@[(a-z-A-z)]+\\.[(a-zA-z)]{2,3}$");
-        Matcher regMatcher   = regexPattern.matcher(emailAddress);
+        String regex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+(?:\\.[a-zA-Z0-9_!#$%&'*+/=?`{|}~^-]+)*@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher regMatcher   = pattern.matcher(emailAddress);
         if(regMatcher.matches()){
             return "Valid Email Address";
         } else {
